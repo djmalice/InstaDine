@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <string name="group_name_hint">Group Name</string>
+    <string name="group_members_hint">List of people</string>
+    <string name="group_image_desc">Group Image</string>
+</resources>
