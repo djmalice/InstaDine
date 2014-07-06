@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.GroupArrayAdapter;
 import com.cpcrew.instadine.models.Group;
+
 
 public class GroupsListFragment extends Fragment{
 	
@@ -32,8 +34,14 @@ public class GroupsListFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View v = inflater.inflate(R.layout.fragment_group, container,
+				false);
+		lvGroups = (ListView) v.findViewById(R.id.lvGroups);
+		pb = (ProgressBar)v.findViewById(R.id.pbGroup);
+		// populateTimeline(1, -1); // OnScroll called onCreate
+		lvGroups.setAdapter(groupAdapter);
+
+		return v;
 	}
 	
 	public void showProgressBar() {

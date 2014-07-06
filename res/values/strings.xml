@@ -3,8 +3,8 @@
 
     <string name="app_name">Instadine</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_groups_list">GroupsListActivity</string>
-    <string name="title_activity_new_group">NewGroupActivity</string>
-    <string name="title_activity_add_contact">AddContactActivity</string>
+    <string name="title_activity_groups_list">InstaDine</string>
+    <string name="title_activity_new_group">New Group</string>
+    <string name="title_activity_add_contact">New Group</string>
 
 </resources>
