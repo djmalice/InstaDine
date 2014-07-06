@@ -11,12 +11,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.cpcrew.instadine.adapters.ContactArrayAdapter;
-import com.cpcrew.instadine.models.Contact;
+import com.cpcrew.instadine.models.User;
 
 public class ContactsListFragment extends Fragment{
 	
 	private static String TAG = ContactsListFragment.class.getSimpleName();
-	private ArrayList<Contact> contacts;
+	private ArrayList<User> contacts;
 	private ContactArrayAdapter contactAdapter;
 	protected ListView lvContacts;
 	private ProgressBar pb;
@@ -24,7 +24,7 @@ public class ContactsListFragment extends Fragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		contacts = new ArrayList<Contact>();
+		contacts = new ArrayList<User>();
 		contactAdapter = new ContactArrayAdapter(getActivity(), contacts);
 	}
 	
