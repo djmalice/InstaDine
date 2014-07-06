@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    tools:context="${packageName}.${activityClass}" >
+
+    <TextView
+        android:id="@+id/tvAddContactLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/group_add_contact"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <FrameLayout
+        android:id="@+id/flContactsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rlSearch"
+        android:layout_below="@+id/rlSearch"
+        android:layout_marginTop="20dp" >
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp" 
+        android:layout_marginRight="10dp"
+        android:layout_alignParentLeft="true" 
+        android:layout_below="@+id/tvAddContactLabel"
+        android:background="@drawable/customborder" >
+
+        <EditText
+            android:id="@+id/tvAddContact"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:ems="10"
+            android:gravity="left"
+            android:background="#00000000"
+            android:hint="@string/group_add_contact_hint" />
+
+        <ImageButton
+            android:id="@+id/btnOpenContacts"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/ic_add"
+            android:onClick="onOpenContacts"
+            android:text="@string/group_open_contacts" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

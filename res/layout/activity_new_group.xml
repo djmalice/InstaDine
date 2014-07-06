@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${packageName}.${activityClass}" >
+    
+   <ImageView
+        android:id="@+id/ivGroupImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_group" />
+   
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivGroupImage"
+        android:layout_toRightOf="@+id/ivGroupImage"
+        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:singleLine="false"
+        android:text="@string/group_name_instructions"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/etGroupName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ivGroupImage"
+        android:layout_below="@+id/tvLabel"
+        android:layout_marginTop="72dp"
+        android:layout_marginRight="15dp"
+        android:hint="@string/group_name_subject_hint"
+        android:textColorHint="@color/grey"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>

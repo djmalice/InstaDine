@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/ivGroup"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_group"
+        android:contentDescription="@string/group_image_desc" />
+
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivGroup"
+        android:layout_toRightOf="@+id/ivGroup"
+        android:layout_marginLeft="30dp"
+        android:text="@string/group_name_hint"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvGroupMembers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvGroupName"
+        android:layout_alignLeft="@+id/tvGroupName"
+        android:text="@string/group_members_hint"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageButton
+        android:id="@+id/ibGroupAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivGroup"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:contentDescription="@string/group_image_desc"
+        android:src="@drawable/ic_right_arrow" />
+
+</RelativeLayout>

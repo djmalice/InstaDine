@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-     <string name="group_name_hint">Group Name</string>
+    <string name="group_name_hint">Group Name</string>
     <string name="group_members_hint">List of people</string>
     <string name="group_image_desc">Group Image</string>
+    <string name="group_name_instructions">Please give dining experience a name and optional group icon</string>
+    <string name="group_name_subject_hint">Type dining group subject here...</string>
+    <string name="group_next">Next</string>
+    <string name="group_create">Create</string>
+    <string name="group_add_contact">ADD GROUP PARTICIPANTS</string>
+    <string name="group_add_contact_hint">Type contact name...</string>
+    <string name="group_open_contacts">Open contacts</string>
+    
+    <color name="white">@android:color/white</color>
+    <color name="grey">@android:color/black</color>
+    <color name="black">@android:color/black</color>
 </resources>
