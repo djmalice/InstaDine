@@ -48,9 +48,9 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 			viewHolder = (ViewHolder) convertView.getTag();
 			viewHolder.tvGroupName.setText(thisGroup.getGroupName());
 			// TODO Get the members name as a string
-			viewHolder.tvGroupMembers.setText("XXXX");
+			viewHolder.tvGroupMembers.setText("user.getMembers().toString()");
 			// Load the image
-			ParseFile photoFile = thisGroup.getParseFile("photo");
+			ParseFile photoFile = thisGroup.getPhotoFile();
 			if (photoFile != null) {
 				viewHolder.ivGroupPhoto.setParseFile(photoFile);
 				viewHolder.ivGroupPhoto.loadInBackground(new GetDataCallback() {

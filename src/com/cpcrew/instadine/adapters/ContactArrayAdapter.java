@@ -43,7 +43,7 @@ public class ContactArrayAdapter extends ArrayAdapter<User>{
 			viewHolder = (ViewHolder) convertView.getTag();
 			viewHolder.tvName.setText(user.getFirstName() + " " + user.getLastName());
 			// Load the image TODO - Verify the right API
-			ParseFile photoFile = user.getParseFile("photo");
+			ParseFile photoFile = user.getParseFile("profileImage");
 			if (photoFile != null) {
 				viewHolder.pivPhoto.setParseFile(photoFile);
 				viewHolder.pivPhoto.loadInBackground(new GetDataCallback() {
