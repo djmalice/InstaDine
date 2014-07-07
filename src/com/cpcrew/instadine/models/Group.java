@@ -1,6 +1,7 @@
 package com.cpcrew.instadine.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 @ParseClassName("Group")
@@ -32,5 +33,23 @@ public class Group extends ParseObject {
 		return getString("gname");
 	}
 
-	// TODO set group image
+	// From parse.com 
+	// We do not recommend storing large pieces of binary data 
+	// like images or documents using byte[] fields on ParseObject. 
+	// ParseObjectss should not exceed 128 kilobytes in size. To store more,
+	// we recommend you use ParseFile.
+	
+	public ParseFile getPhotoFile() {
+        return getParseFile("gimage");
+    }
+ 
+    public void setPhotoFile(ParseFile file) {
+        put("gimage", file);
+    }
+    
+
+	public void addUser(int uid ) {
+		addUnique("parent", ParseObject.createWithoutData("User", String.valueOf(uid)));
+	}
+
 }

@@ -31,5 +31,13 @@ public class User extends ParseObject {
 	public String getLastName() {
 		return getString("last");
 	}
+	
+	/**
+	 *  link Group and User using just their ids like so:
+	 * @param gid
+	 */
+	public void addToGroup(int gid ) {
+		addUnique("parent", ParseObject.createWithoutData("User", String.valueOf(gid)));
+	}
 
 }
