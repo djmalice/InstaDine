@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class ContactsListFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		contacts = new ArrayList<User>();
 		contactAdapter = new ContactArrayAdapter(getActivity(), contacts);
+		// TODO Fetch contacts
+		Log.d(TAG, "To implement : Fetch contacts from databse");
 	}
 	
 	

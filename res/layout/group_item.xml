@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/ivGroup"
+    <com.parse.ParseImageView
+        android:id="@+id/ivGroupPhoto"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
@@ -18,8 +18,8 @@
         android:id="@+id/tvGroupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivGroup"
-        android:layout_toRightOf="@+id/ivGroup"
+        android:layout_alignTop="@+id/ivGroupPhoto"
+        android:layout_toRightOf="@+id/ivGroupPhoto"
         android:layout_marginLeft="30dp"
         android:text="@string/group_name_hint"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -37,7 +37,7 @@
         android:id="@+id/ibGroupAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivGroup"
+        android:layout_alignBottom="@+id/ivGroupPhoto"
         android:layout_alignParentRight="true"
         android:background="@null"
         android:contentDescription="@string/group_image_desc"

@@ -1,19 +1,24 @@
 package com.cpcrew.instadine.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.fragments.ContactsListFragment;
 
-public class AddContactActivity extends Activity {
+public class AddContactActivity extends FragmentActivity {
+	
+	private String groupName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		groupName = getIntent().getStringExtra("group_name");
 		setContentView(R.layout.activity_add_contact);
 	}
 
@@ -24,10 +29,18 @@ public class AddContactActivity extends Activity {
 	}
 	
 	public void onCreateGroup(MenuItem item) {
-		Toast.makeText(getApplicationContext(), "Implement Create Group(). Requires Models", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), "Method 2: Implement Create Group(). Requires Models", Toast.LENGTH_SHORT).show();
 	}
 
 	public void onOpenContacts(View v) {
-		Toast.makeText(getApplicationContext(), "Implement Open Contacst List", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), "Method 3: Implement Open Contacts List Activity", Toast.LENGTH_SHORT).show();
+	}
+	
+	public void searchByFirstOrLastName(String name) {
+		// TODO Open the contactListFragment
+		Toast.makeText(getApplicationContext(), "Method 4: Implement - search contacts from DB",Toast.LENGTH_SHORT).show();
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flContainer, new ContactsListFragment());
+		ft.commit();
 	}
 }

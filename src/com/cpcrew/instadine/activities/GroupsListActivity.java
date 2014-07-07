@@ -1,13 +1,13 @@
 package com.cpcrew.instadine.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.AttributeSet;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.fragments.GroupsListFragment;
 
 public class GroupsListActivity extends FragmentActivity {
 
@@ -16,13 +16,10 @@ public class GroupsListActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_groups_list);
 
-	}
-	
-	@Override
-	public View onCreateView(String name, Context context, AttributeSet attrs) {
-		// TODO Auto-generated method stub
-		return super.onCreateView(name, context, attrs);
-		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flContainer, new GroupsListFragment());
+		ft.commit();
+
 	}
 	
 	public void onNewGroup(View v) {
