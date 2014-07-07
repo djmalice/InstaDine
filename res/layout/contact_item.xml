@@ -5,15 +5,15 @@
     android:orientation="horizontal"
     android:gravity="center" >
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <com.parse.ParseImageView
+        android:id="@+id/ivPhoto"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginLeft="15dp"
         android:src="@drawable/ic_contact" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -21,14 +21,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ivSelected"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="50dp"
         android:src="@drawable/ic_cross" />
 
        <CheckBox
-           android:id="@+id/checkBox1"
+           android:id="@+id/ivSelect"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="" />

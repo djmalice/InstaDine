@@ -40,7 +40,6 @@ public class GroupsListFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_group, container, false);
 		lvGroups = (ListView) v.findViewById(R.id.lvGroups);
 		pb = (ProgressBar) v.findViewById(R.id.pbGroup);
-		// populateTimeline(1, -1); // OnScroll called onCreate
 		lvGroups.setAdapter(groupAdapter);
 		// TODO Get the userid from login
 		//getMyGroups(uid);
