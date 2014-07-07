@@ -5,6 +5,8 @@ import com.parse.ParseObject;
 
 @ParseClassName("User")
 public class User extends ParseObject {
+	
+	
 	public User() {
 		super();
 	}
