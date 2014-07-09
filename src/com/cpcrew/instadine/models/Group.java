@@ -64,6 +64,21 @@ public class Group extends ParseObject {
 		saveInBackground();
 	}
 	
+	
+	// Adding Events to a Group
+	public ParseRelation<Event> getEventRelation() {
+	      return getRelation("events");
+	  }
+
+	  public void addEvent(Event event) {
+	    getEventRelation().add(event);
+	    saveInBackground();
+	  }
+
+	  public void removeEvent(Event event) {
+	     getEventRelation().remove(event);
+	     saveInBackground();
+	  }
 
 
 }

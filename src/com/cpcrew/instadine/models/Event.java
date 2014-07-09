@@ -2,6 +2,7 @@ package com.cpcrew.instadine.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
@@ -32,5 +33,19 @@ public class Event extends ParseObject {
 	public String getDate() {
 		return getString("date");
 	}
+	
+	public ParseRelation<Restaurant> getRestaurantRelation() {
+	      return getRelation("restaurants");
+	  }
+
+	  public void addRestaurant(Restaurant restaurant) {
+	    getRestaurantRelation().add(restaurant);
+	    saveInBackground();
+	  }
+
+	  public void removeRestaurant(Restaurant restaurant) {
+	     getRestaurantRelation().remove(restaurant);
+	     saveInBackground();
+	  }
 
 }
