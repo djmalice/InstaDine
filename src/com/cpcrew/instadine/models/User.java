@@ -1,7 +1,10 @@
 package com.cpcrew.instadine.models;
 
+import java.util.ArrayList;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 
 @ParseClassName("User")
 public class User extends ParseObject {
@@ -34,12 +37,22 @@ public class User extends ParseObject {
 		return getString("last");
 	}
 	
-	/**
-	 *  link Group and User using just their ids like so:
-	 * @param gid
-	 */
-	public void addToGroup(int gid ) {
-		addUnique("parent", ParseObject.createWithoutData("User", String.valueOf(gid)));
-	}
+//	public ParseRelation<Group> getGroupRelation() {
+//		return getRelation("gid");
+//	}
+//	
+//	/**
+//	 *  link Group and User using just their ids like so:
+//	 * @param gid
+//	 */
+//	public void addToGroup(Group group ) {
+//		getGroupRelation().add(group);
+//	}
+//	
+//	public void removeFromGroup(Group group) {
+//		getGroupRelation().remove(group);
+//	}
+//	
+
 
 }

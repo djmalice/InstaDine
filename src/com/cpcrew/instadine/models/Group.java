@@ -1,8 +1,11 @@
 package com.cpcrew.instadine.models;
 
+import java.util.ArrayList;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 
 @ParseClassName("Group")
 public class Group extends ParseObject {
@@ -47,9 +50,20 @@ public class Group extends ParseObject {
         put("gimage", file);
     }
     
-
-	public void addUser(int uid ) {
-		addUnique("parent", ParseObject.createWithoutData("User", String.valueOf(uid)));
+    public ParseRelation<User> getUserRelation() {
+    	return getRelation("uid");
+    }
+    
+	public void addUser(User user ) {
+		getUserRelation().add(user);
+		saveInBackground();
 	}
+	
+	public void removeUser(User user) {
+		getUserRelation().remove(user);
+		saveInBackground();
+	}
+	
+
 
 }
