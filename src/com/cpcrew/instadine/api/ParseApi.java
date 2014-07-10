@@ -45,7 +45,7 @@ public class ParseApi {
 		query.findInBackground(new FindCallback<Group>() {
 		    public void done(List<Group> groups, com.parse.ParseException e) {
 		    	if ( e == null )
-		    		System.out.println(" Number of grups the user belongs to " + groups.size());
+		    		System.out.println(" Number of groups the user belongs to " + groups.size());
 		    	else
 		    		System.out.println(e.getMessage());
 		    }
@@ -61,7 +61,7 @@ public class ParseApi {
 		query.findInBackground(new FindCallback<User>() {
 		    public void done(List<User> users, com.parse.ParseException e) {
 		    	if ( e == null )
-		    		System.out.println(" Number of grups the user belongs to " + users.size());
+		    		System.out.println(" Number of users in this group " + users.size());
 		    	else
 		    		System.out.println(e.getMessage());
 		    }
