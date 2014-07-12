@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.api.ParseGroupsApi;
@@ -18,6 +17,7 @@ import com.cpcrew.instadine.fragments.ContactsListFragment;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
+import com.cpcrew.instadine.utils.Constants;
 
 public class ContactsListActivity extends FragmentActivity implements ParseGroupsApiListener {
 	
@@ -31,8 +31,11 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 		setContentView(R.layout.activity_contacts_list);	
 		parseGroupsApiListener = new ParseGroupsApi(this);
 		mFragment = new ContactsListFragment();
+		Bundle args = new Bundle();
+        args.putStringArrayList("selectedusers", null);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, mFragment);
+		mFragment.setArguments(args);
 		ft.commit();
 		showContacts();
 	}

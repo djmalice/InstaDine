@@ -1,6 +1,7 @@
 package com.cpcrew.instadine.fragments;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ContactArrayAdapter;
-import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.User;
 
 public class ContactsListFragment extends Fragment {
@@ -31,19 +31,22 @@ public class ContactsListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		contacts = new ArrayList<User>();
-		contactAdapter = new ContactArrayAdapter(getActivity(), contacts);
-		// TODO Fetch contacts
-
+		// TODO Figure how to send ParseObjects
+		ArrayList<String> selContacts = getArguments().getStringArrayList( "selectedusers");
+		HashSet selectedSet = null;
+		if (selContacts != null )
+			selectedSet = new HashSet(selContacts);
+		contactAdapter = new ContactArrayAdapter(getActivity(), contacts ,selectedSet);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		makeToast("Method 3: To implement : Fetch contacts from databse");
 		View v = inflater.inflate(R.layout.fragment_contacts, container, false);
 		lvContacts = (ListView) v.findViewById(R.id.lvContacts);
 		pb = (ProgressBar) v.findViewById(R.id.pbContacts);
 		lvContacts.setAdapter(contactAdapter);
+		lvContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		return v;
 
 	}

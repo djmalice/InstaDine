@@ -44,6 +44,7 @@ public class AddContactActivity extends FragmentActivity {
 	}
 
 	public void onOpenContacts(View v) {
+		// TODO Send the users selected so far
 		Intent intent = new Intent(this, ContactsListActivity.class);
 		startActivityForResult(intent, Constants.REQUEST_CODE);
 	}
