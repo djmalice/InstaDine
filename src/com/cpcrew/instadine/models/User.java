@@ -15,6 +15,10 @@ public class User extends ParseObject {
 		put("uid",id);
 	}
 	
+	public String getObjectId() {
+		return getString("objectId");
+	}
+	
 	public int getId() {
 		return getInt("uid");
 	}

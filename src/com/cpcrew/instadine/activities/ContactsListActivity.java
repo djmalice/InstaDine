@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.api.ParseGroupsApi;
@@ -17,7 +20,6 @@ import com.cpcrew.instadine.fragments.ContactsListFragment;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
-import com.cpcrew.instadine.utils.Constants;
 
 public class ContactsListActivity extends FragmentActivity implements ParseGroupsApiListener {
 	
@@ -32,10 +34,12 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 		parseGroupsApiListener = new ParseGroupsApi(this);
 		mFragment = new ContactsListFragment();
 		Bundle args = new Bundle();
-        args.putStringArrayList("selectedusers", null);
+		// Should get from prev activity
+		ArrayList<String> selectedUsers = new ArrayList<String>();
+        args.putStringArrayList("selectedusers", selectedUsers);
+        mFragment.setArguments(args);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, mFragment);
-		mFragment.setArguments(args);
 		ft.commit();
 		showContacts();
 	}
@@ -48,10 +52,11 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 	
 	public void onDoneWithSelection(MenuItem item) {
 		// send the selection info
-		ArrayList<Integer> selUsers = mFragment.getCheckedContactsIds();
-		Intent intent = new Intent(this,AddContactActivity.class);
-		intent.putIntegerArrayListExtra("selusers", selUsers);
-		startActivity(intent);
+		ArrayList<Integer> selUsers = mFragment.getCheckedUsers();
+		Intent data = new Intent();
+		data.putIntegerArrayListExtra("selusers", selUsers);
+		setResult(RESULT_OK, data); 
+		finish(); 
 	}
 	
 	public void showContacts() {
@@ -59,6 +64,7 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 		if ( currentUser != null )
 			parseGroupsApiListener.getFriendsOfUser(LoggedInUser.getcurrentUser());
 	}
+	
 
 	@Override
 	public void onallUsersResults(List<User> users) {

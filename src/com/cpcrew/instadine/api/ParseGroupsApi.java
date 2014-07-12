@@ -26,6 +26,8 @@ public class ParseGroupsApi {
 	
 	/** Declaring the interface, to invoke a callback function in the implementing activity class */
 	ParseGroupsApiListener mParseApiListner;
+	
+	
 	public ParseGroupsApi(Activity activity) {
 		mParseApiListner = (ParseGroupsApiListener) activity;
 	}
@@ -214,5 +216,6 @@ public class ParseGroupsApi {
 		  }
 		});
 	}
-
+	
+	
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ContactArrayAdapter;
 import com.cpcrew.instadine.models.User;
+import com.parse.ParseObject;
 
 public class ContactsListFragment extends Fragment {
 
@@ -26,6 +27,7 @@ public class ContactsListFragment extends Fragment {
 	private ContactArrayAdapter contactAdapter;
 	protected ListView lvContacts;
 	private ProgressBar pb;
+	HashSet<String> selectedSet;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +35,9 @@ public class ContactsListFragment extends Fragment {
 		contacts = new ArrayList<User>();
 		// TODO Figure how to send ParseObjects
 		ArrayList<String> selContacts = getArguments().getStringArrayList( "selectedusers");
-		HashSet selectedSet = null;
+		selectedSet = null;
 		if (selContacts != null )
-			selectedSet = new HashSet(selContacts);
+			selectedSet = new HashSet<String>(selContacts);
 		contactAdapter = new ContactArrayAdapter(getActivity(), contacts ,selectedSet);
 	}
 
@@ -54,8 +56,11 @@ public class ContactsListFragment extends Fragment {
 		contactAdapter.clear();
 		Log.d(TAG, "Number of friends " + friends.size());
 		contactAdapter.addAll(friends);
+		contactAdapter.selectNone();
 	}
 	
+	// TODO lvContacts.getCheckedItemPositions() Not working
+	// Check with Nathan
 	public ArrayList<User> getCheckedContacts() {
 		int cntChoice = lvContacts.getCount();
 		ArrayList<User> selUsers = new ArrayList<User>();
@@ -69,20 +74,23 @@ public class ContactsListFragment extends Fragment {
 		return selUsers;
 	}
 	
-	public ArrayList<Integer> getCheckedContactsIds() {
+	// TODO lvContacts.getCheckedItemPositions() Not working
+	// Check with Nathan
+	public ArrayList<String> getCheckedContactsIds() {
 		int cntChoice = lvContacts.getCount();
-		ArrayList<Integer> selUsers = new ArrayList<Integer>();
+		ArrayList<String> selUsers = new ArrayList<String>();
 		SparseBooleanArray sparseBooleanArray = lvContacts.getCheckedItemPositions();
 		for (int i = 0; i < cntChoice; i++) {
 			if (sparseBooleanArray.get(i) == true) {
 				User user = (User) lvContacts.getItemAtPosition(i);
-				selUsers.add(user.getId() );	
+				selUsers.add(user.getObjectId() );	
 			} else if (sparseBooleanArray.get(i) == false) {
+				System.out.println("false");
 			}
 		}
 		return selUsers;
 	}
-
+ 
 	public void showProgressBar() {
 		pb.setVisibility(ProgressBar.VISIBLE);
 	}
@@ -100,5 +108,18 @@ public class ContactsListFragment extends Fragment {
 			}
 		});
 	}
+	
+	// wrokaround Return friends that have been selected
+	public ArrayList<String> getCheckedUsers() {
+		ArrayList<String> selectedUsers = new ArrayList<String>();
+		for (int i = 0; i < lvContacts.getCount();++i ) {
+			if (contactAdapter.checkedUsers.get(i) == true) {
+				User user = (User) lvContacts.getItemAtPosition(i);
+				selectedUsers.add(user.getObjectId() );	
+			}
+		}
+		return selectedUsers;
+	}
+		
 
 }
