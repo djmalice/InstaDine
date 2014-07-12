@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center" >
+    android:gravity="center"
+    android:orientation="horizontal" >
 
     <com.parse.ParseImageView
         android:id="@+id/ivPhoto"
@@ -27,10 +27,10 @@
         android:layout_marginLeft="50dp"
         android:src="@drawable/ic_cross" />
 
-       <CheckBox
-           android:id="@+id/ivSelect"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="" />
+    <CheckBox
+        android:id="@+id/cbSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
 
 </LinearLayout>

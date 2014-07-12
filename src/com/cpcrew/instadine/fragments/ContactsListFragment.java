@@ -1,10 +1,13 @@
 package com.cpcrew.instadine.fragments;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,21 +31,56 @@ public class ContactsListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		contacts = new ArrayList<User>();
-		contactAdapter = new ContactArrayAdapter(getActivity(), contacts);
-		// TODO Fetch contacts
-
+		// TODO Figure how to send ParseObjects
+		ArrayList<String> selContacts = getArguments().getStringArrayList( "selectedusers");
+		HashSet selectedSet = null;
+		if (selContacts != null )
+			selectedSet = new HashSet(selContacts);
+		contactAdapter = new ContactArrayAdapter(getActivity(), contacts ,selectedSet);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		makeToast("Method 3: To implement : Fetch contacts from databse");
 		View v = inflater.inflate(R.layout.fragment_contacts, container, false);
 		lvContacts = (ListView) v.findViewById(R.id.lvContacts);
 		pb = (ProgressBar) v.findViewById(R.id.pbContacts);
 		lvContacts.setAdapter(contactAdapter);
+		lvContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		return v;
 
+	}
+	public void setContactAdapter(List<User> friends ) {
+		contactAdapter.clear();
+		Log.d(TAG, "Number of friends " + friends.size());
+		contactAdapter.addAll(friends);
+	}
+	
+	public ArrayList<User> getCheckedContacts() {
+		int cntChoice = lvContacts.getCount();
+		ArrayList<User> selUsers = new ArrayList<User>();
+		SparseBooleanArray sparseBooleanArray = lvContacts.getCheckedItemPositions();
+		for (int i = 0; i < cntChoice; i++) {
+			if (sparseBooleanArray.get(i) == true) {
+				selUsers.add((User) lvContacts.getItemAtPosition(i));				
+			} else if (sparseBooleanArray.get(i) == false) {
+			}
+		}
+		return selUsers;
+	}
+	
+	public ArrayList<Integer> getCheckedContactsIds() {
+		int cntChoice = lvContacts.getCount();
+		ArrayList<Integer> selUsers = new ArrayList<Integer>();
+		SparseBooleanArray sparseBooleanArray = lvContacts.getCheckedItemPositions();
+		for (int i = 0; i < cntChoice; i++) {
+			if (sparseBooleanArray.get(i) == true) {
+				User user = (User) lvContacts.getItemAtPosition(i);
+				selUsers.add(user.getId() );	
+			} else if (sparseBooleanArray.get(i) == false) {
+			}
+		}
+		return selUsers;
 	}
 
 	public void showProgressBar() {

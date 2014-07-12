@@ -15,9 +15,6 @@ import android.widget.ProgressBar;
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.GroupArrayAdapter;
 import com.cpcrew.instadine.models.Group;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 public class GroupsListFragment extends Fragment {
 
@@ -55,22 +52,12 @@ public class GroupsListFragment extends Fragment {
 		// run a background job and once complete
 		pb.setVisibility(ProgressBar.GONE);
 	}
-
-	// Get all groups to which the user belongs to.
-	public void getMyGroups(int uid) {
-		//TODO implement getGroupsForUser
-		Log.d(TAG, " Method 1: Implement show groups");
-		// Assume ParseObject myPost was previously created.
-		ParseQuery<Group> query = ParseQuery.getQuery("gid");
-		query.whereEqualTo("uid", uid);
-
-		query.findInBackground(new FindCallback<Group>() {
-			public void done(List<Group> groupList, ParseException e) {
-				// uidList now has the groups for my uid
-				groupAdapter.addAll(groupList);
-			}
-		});
-	}
 	
+	public void setGroupsAdapter(List<Group> groups ) {
+		groupAdapter.clear();
+		Log.d(TAG, "Number of groups " + groups.size());
+		groupAdapter.addAll(groups);
+	}
+
 
 }

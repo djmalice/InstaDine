@@ -7,6 +7,7 @@
     <string name="group_name_subject_hint">Type dining group subject here...</string>
     <string name="group_next">Next</string>
     <string name="group_create">Create</string>
+    <string name="group_done">Done</string>
     <string name="group_add_contact">ADD GROUP PARTICIPANTS</string>
     <string name="group_add_contact_hint">Type contact name...</string>
     <string name="group_open_contacts">Open contacts</string>

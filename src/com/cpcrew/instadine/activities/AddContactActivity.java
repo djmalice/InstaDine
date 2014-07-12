@@ -1,5 +1,7 @@
 package com.cpcrew.instadine.activities;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,11 +16,13 @@ import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.fragments.ContactsListFragment;
+import com.cpcrew.instadine.utils.Constants;
 
 public class AddContactActivity extends FragmentActivity {
 	
 	private String groupName;
 	private TextView tvAddContact;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +46,30 @@ public class AddContactActivity extends FragmentActivity {
 	}
 
 	public void onOpenContacts(View v) {
-		Toast.makeText(getApplicationContext(), "Method 3: Implement Open Contacts List Activity", Toast.LENGTH_SHORT).show();
+		// TODO Send the users selected so far
+		Intent intent = new Intent(this, ContactsListActivity.class);
+		startActivityForResult(intent, Constants.REQUEST_CODE);
 	}
 	
 	public void searchByFirstOrLastName(String name) {
-		// TODO Open the contactListFragment
-		Toast.makeText(getApplicationContext(), "Method 4: Implement - search contacts from DB",Toast.LENGTH_SHORT).show();
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContactsContainer, new ContactsListFragment());
 		ft.commit();
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  // REQUEST_CODE is defined above
+	  if (resultCode == RESULT_OK && requestCode == Constants.REQUEST_CODE) {
+	     // Extract name value from result extras
+	     ArrayList<Integer>userids = data.getIntegerArrayListExtra("selusers");
+	     
+	     // fetch the users for the userids
+	     // display on the fragment
+	     Toast.makeText(getApplicationContext(), "Method 3: display results", Toast.LENGTH_SHORT).show();
+	  }
+	} 
+	
 	
 	public void addTextWatcherToAddContact() {
 		tvAddContact.addTextChangedListener(new TextWatcher() {
