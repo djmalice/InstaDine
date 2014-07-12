@@ -28,6 +28,9 @@ public class InstaDineApplication extends Application {
 		ParseObject.registerSubclass(User.class);
 		Parse.initialize(this, "4j8uZgh6wEGO5GrOGWpgPEut9tCIFAvjdLWxeyJ2", "kllySxso8im9bcTw8XmwcjEEAlubXzdVo4GKeYF1");
 		
+		//RajiTest - Has dummy data for testing
+		//Parse.initialize(this, "ddKpbQ6IZhdY3fDebFZnzuSlKx8blZ91ug4Z3L7w", "XLnBfQLNuDxhzqNyJymRU3M75hskYNGptsI2jpjX");
+		
 		/*// Test creation of object
       	ParseObject testObject = new ParseObject("TestObject");
       	testObject.put("Tintim", "Kitkat");

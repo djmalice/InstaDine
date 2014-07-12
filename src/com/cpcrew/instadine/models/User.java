@@ -1,7 +1,5 @@
 package com.cpcrew.instadine.models;
 
-import java.util.ArrayList;
-
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
@@ -37,22 +35,39 @@ public class User extends ParseObject {
 		return getString("last");
 	}
 	
-//	public ParseRelation<Group> getGroupRelation() {
-//		return getRelation("gid");
-//	}
-//	
-//	/**
-//	 *  link Group and User using just their ids like so:
-//	 * @param gid
-//	 */
-//	public void addToGroup(Group group ) {
-//		getGroupRelation().add(group);
-//	}
-//	
-//	public void removeFromGroup(Group group) {
-//		getGroupRelation().remove(group);
-//	}
-//	
-
-
+	public ParseRelation<User> getFriendRelation() {
+		return getRelation("friends");
+	}
+	
+	/**
+	 *  link Friend(User) and User
+	 *  
+	 */
+	public void addToFriends(User friend ) {
+		getFriendRelation().add(friend);
+		saveInBackground();
+	}
+	
+	public void removeFromFriends(User friend) {
+		getFriendRelation().remove(friend);
+		saveInBackground();
+	}
+	
+	public ParseRelation<Group> getGroupRelation() {
+		return getRelation("gid");
+	}
+	
+	/**
+	 *  link Group and User
+	 *  
+	 */
+	public void addToGroup(Group group ) {
+		getGroupRelation().add(group);
+		saveInBackground();
+	}
+	
+	public void removeFromGroup(Group group) {
+		getGroupRelation().remove(group);
+		saveInBackground();
+	}
 }

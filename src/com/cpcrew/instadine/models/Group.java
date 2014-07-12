@@ -1,7 +1,5 @@
 package com.cpcrew.instadine.models;
 
-import java.util.ArrayList;
-
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -19,12 +17,12 @@ public class Group extends ParseObject {
 		
 	}
 	
-	public void setGroupId(int id) {
+	private void setGroupId(int id) {
 		put("gid",id);
 	}
 	
 	public int getGroupId() {
-		return getInt("gid");
+		return getInt("objectId");
 	}
 	
 	

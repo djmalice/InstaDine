@@ -1,10 +1,12 @@
 package com.cpcrew.instadine.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ContactArrayAdapter;
+import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.User;
 
 public class ContactsListFragment extends Fragment {
@@ -43,6 +46,38 @@ public class ContactsListFragment extends Fragment {
 		lvContacts.setAdapter(contactAdapter);
 		return v;
 
+	}
+	public void setContactAdapter(List<User> friends ) {
+		contactAdapter.clear();
+		Log.d(TAG, "Number of friends " + friends.size());
+		contactAdapter.addAll(friends);
+	}
+	
+	public ArrayList<User> getCheckedContacts() {
+		int cntChoice = lvContacts.getCount();
+		ArrayList<User> selUsers = new ArrayList<User>();
+		SparseBooleanArray sparseBooleanArray = lvContacts.getCheckedItemPositions();
+		for (int i = 0; i < cntChoice; i++) {
+			if (sparseBooleanArray.get(i) == true) {
+				selUsers.add((User) lvContacts.getItemAtPosition(i));				
+			} else if (sparseBooleanArray.get(i) == false) {
+			}
+		}
+		return selUsers;
+	}
+	
+	public ArrayList<Integer> getCheckedContactsIds() {
+		int cntChoice = lvContacts.getCount();
+		ArrayList<Integer> selUsers = new ArrayList<Integer>();
+		SparseBooleanArray sparseBooleanArray = lvContacts.getCheckedItemPositions();
+		for (int i = 0; i < cntChoice; i++) {
+			if (sparseBooleanArray.get(i) == true) {
+				User user = (User) lvContacts.getItemAtPosition(i);
+				selUsers.add(user.getId() );	
+			} else if (sparseBooleanArray.get(i) == false) {
+			}
+		}
+		return selUsers;
 	}
 
 	public void showProgressBar() {
