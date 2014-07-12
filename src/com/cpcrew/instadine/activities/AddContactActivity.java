@@ -1,5 +1,6 @@
 package com.cpcrew.instadine.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -35,7 +36,9 @@ public class AddContactActivity extends FragmentActivity {
 	}
 	
 	public void onCreateGroup(MenuItem item) {
-		Toast.makeText(getApplicationContext(), "Method 2: Implement Create Group(). Requires Models", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getApplicationContext(), "Method 2: Implement Create Group(). Requires Models", Toast.LENGTH_SHORT).show();
+		Intent i =new Intent(this,MapActivity.class);
+		startActivity(i);
 	}
 
 	public void onOpenContacts(View v) {
