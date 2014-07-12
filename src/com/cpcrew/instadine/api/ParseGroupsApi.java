@@ -13,6 +13,15 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 
+/**
+* APIs to read, write and query from Parse
+* for Groups and Users
+*
+* @author  Rajalakshmi Balakrishnan
+* @version 1.0
+* @since   2014-07-07 
+*/
+
 public class ParseGroupsApi {
 	
 	/** Declaring the interface, to invoke a callback function in the implementing activity class */
@@ -36,6 +45,7 @@ public class ParseGroupsApi {
 		group.saveInBackground();
 
 	}
+	
 
 	/**
 	 * Get groups the user belongs to
@@ -143,6 +153,11 @@ public class ParseGroupsApi {
 	}
 	
 
+	/**
+	 * Get friends of the user
+	 * callback to return a list of users who are friends of input user.
+	 * @param user 
+	 */
 	public void getFriendsOfUser(User user) {
 		ParseRelation<User> relation = user.getRelation("friends");
 		ParseQuery<User> query = relation.getQuery();
@@ -183,7 +198,10 @@ public class ParseGroupsApi {
 	}
 	
 	
-	// mainly for testing
+	/**
+	 * Get the user object given the objectId of the user.
+	 * @param objectId
+	 */
 	public void retrieveUser(String objectId) {
 		ParseQuery<User> query = ParseQuery.getQuery(User.class);
 		query.getInBackground(objectId, new GetCallback<User>() {
