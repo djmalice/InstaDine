@@ -41,7 +41,7 @@ public class AddContactActivity extends FragmentActivity {
 	
 	public void onCreateGroup(MenuItem item) {
 		//Toast.makeText(getApplicationContext(), "Method 2: Implement Create Group(). Requires Models", Toast.LENGTH_SHORT).show();
-		Intent i =new Intent(this,MapActivity.class);
+		Intent i =new Intent(this,VotingActivity.class);
 		startActivity(i);
 	}
 
