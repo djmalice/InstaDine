@@ -78,7 +78,6 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 
 	// Create a group
 	public void onCreateGroup(MenuItem item) {
-		System.out.println("selected users on create group : " + selectedUsers.size());
 		if( selectedUsers != null && selectedUsers.size() > 0) {
 			selectedUsers.add(LoggedInUser.getcurrentUser());
 			ParseGroupsApi.createGroup(groupName, selectedUsers, LoggedInUser.getcurrentUser());
@@ -152,7 +151,6 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 		// Translate into user objects
 		HashSet<String> selectedSet = null;
 		if (selectedUserids != null) {
-			System.out.println("Number of selected users" + selectedUserids.size());
 			selectedSet = new HashSet<String>(selectedUserids);
 		}
 		for (User user : users) {
@@ -207,9 +205,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 	public void onGetFriendsResult(List<User> friends) {
 		if (isActivityResult) {
 			// Translate into user objects
-			System.out.println("callback " + selectedUserids.size());
 			if (selectedUserids != null) {
-				System.out.println("callback1 " + selectedUserids.get(0));
 				HashSet<String> set = new HashSet<String>(selectedUserids);
 				selectedSet.clear();
 				selectedSet.addAll(set);

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,7 +32,6 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contacts_list);	
 		parseGroupsApiListener = new ParseGroupsApi(this);
-		
 		
 		mFragment = new ContactsListFragment();
 		Bundle args = new Bundle();
@@ -96,7 +96,7 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 	public void onGetFriendsResult(List<User> friends) {
 		mFragment.setContactAdapter(friends, null);
 		if (friends != null ) {
-			System.out.println("caching friends" + friends.size());
+			Log.d(TAG, "caching friends" + friends.size());
 			CacheApi.cacheFriends(friends);
 		}
 		

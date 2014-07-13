@@ -48,7 +48,6 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 					.findViewById(R.id.tvGroupMembers);
 			convertView.setTag(viewHolder);
 		}
-		System.out.println("Group Name : " + thisGroup.getGroupName());
 		viewHolder = (ViewHolder) convertView.getTag();
 		viewHolder.tvGroupName.setText(thisGroup.getGroupName());
 		// TODO Get the members name as a string

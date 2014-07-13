@@ -56,8 +56,6 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 	 */
 	public void onNext(MenuItem item) {
 		// GroupName
-		//expDB();
-		System.out.println("Going to next activity AddContact");
 		String groupName = etGroupName.getText().toString();
 		Intent intent = new Intent(this, AddContactActivity.class);
 		intent.putExtra("group_name", groupName);

@@ -36,28 +36,6 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 
 	}
 	
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		System.out.println("STATE: resuming GroupsListActivity");
-	}
-	
-
-	@Override
-	protected void onPause() {
-		System.out.println("STATE: pause GroupsListActivity");
-		super.onPause();
-	}
-	
-
-	@Override
-	protected void onRestart() {
-		System.out.println("STATE: restart GroupsListActivity");
-		super.onRestart();
-	}
-	
-	
 	public void testGetGroups() {
 		// Get current User
 		// TODO lets hardcode since login interface missing
