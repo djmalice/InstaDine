@@ -10,12 +10,12 @@ public class Restaurant extends ParseObject {
 		public Restaurant() {
 			super();
 		}
-		public void setId(int id ) {
-			put("rid",id);
-		}
+//		public void setId(int id ) {
+//			put("rid",id);
+//		}
 		
-		public int getId() {
-			return getInt("rid");
+		public String getId() {
+			return getObjectId();
 		}
 		
 		public void setRestaurantName(String restaurantName) {

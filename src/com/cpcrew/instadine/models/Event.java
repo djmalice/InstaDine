@@ -10,12 +10,12 @@ public class Event extends ParseObject {
 	public Event() {
 		super();
 	}
-	public void setId(int id ) {
-		put("eid",id);
-	}
+//	public void setId(int id ) {
+//		put("eid",id);
+//	}
 	
-	public int getId() {
-		return getInt("eid");
+	public String getId() {
+		return getObjectId();
 	}
 	
 	public void setEventName(String eventName) {
@@ -32,6 +32,14 @@ public class Event extends ParseObject {
 	
 	public String getDate() {
 		return getString("date");
+	}
+	
+	public void setGroup(Group group) {
+		put("group", group);
+	}
+	
+	public Group getGroup() {
+		return (Group) getParseObject("group");
 	}
 	
 	public ParseRelation<Restaurant> getRestaurantRelation() {
