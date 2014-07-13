@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.activities.GroupsListActivity;
 import com.cpcrew.instadine.adapters.GroupArrayAdapter;
 import com.cpcrew.instadine.models.Group;
 
@@ -29,6 +32,7 @@ public class GroupsListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		groups = new ArrayList<Group>();
 		groupAdapter = new GroupArrayAdapter(getActivity(), groups);
+		
 	}
 
 	@Override
@@ -38,8 +42,15 @@ public class GroupsListFragment extends Fragment {
 		lvGroups = (ListView) v.findViewById(R.id.lvGroups);
 		pb = (ProgressBar) v.findViewById(R.id.pbGroup);
 		lvGroups.setAdapter(groupAdapter);
-		// TODO Get the userid from login
-		//getMyGroups(uid);
+		lvGroups.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+				// TODO Better way , quick and dirty implementation for now
+				((GroupsListActivity) getActivity()).showEvent();
+			}
+		});
+
 
 		return v;
 	}

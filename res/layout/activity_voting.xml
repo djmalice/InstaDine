@@ -5,12 +5,71 @@
     tools:context="${relativePackage}.${activityClass}" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:onClick="callSearchActivity"
-        android:text="SearchActivity" />
+        android:text="Search" />
+    
+       <Button
+        android:id="@+id/btnDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick=""
+        android:text="Done" />
+
+    <TextView
+        android:id="@+id/tvLocationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="24dp"
+        android:text="Near " />
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvLocationLabel"
+        android:layout_toRightOf="@+id/tvLocationLabel"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="47dp"
+        android:text="Date " />
+
+    <Button
+        android:id="@+id/btnDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvDateLabel"
+        android:layout_alignBottom="@+id/tvDateLabel"
+        android:layout_toRightOf="@+id/tvLocationLabel"
+        android:layout_marginLeft="18dp"
+        android:text="Pick Date" />
+
+    <ListView
+        android:id="@+id/lvRestaurants"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSearch"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnDate" >
+
+    </ListView>
 
 </RelativeLayout>

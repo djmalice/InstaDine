@@ -20,8 +20,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/rlSearch"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/rlSearch"
         android:layout_marginTop="20dp" >
+
     </FrameLayout>
 
     <RelativeLayout
@@ -34,7 +37,7 @@
         android:layout_below="@+id/tvAddContactLabel"
         android:background="@drawable/customborder" >
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/tvAddContact"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -42,6 +45,7 @@
             android:ems="10"
             android:gravity="left"
             android:background="#00000000"
+            android:completionThreshold="1" 
             android:hint="@string/group_add_contact_hint" />
 
         <ImageButton

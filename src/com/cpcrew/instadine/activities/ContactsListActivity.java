@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.api.CacheApi;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.fragments.ContactsListFragment;
@@ -30,12 +32,16 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contacts_list);	
 		parseGroupsApiListener = new ParseGroupsApi(this);
+		
 		mFragment = new ContactsListFragment();
 		Bundle args = new Bundle();
-        args.putStringArrayList("selectedusers", null);
+		// Should get from prev activity
+		ArrayList<String> selectedUsers = new ArrayList<String>();
+        args.putStringArrayList("selectedusers", selectedUsers);
+        args.putString("parent_activity", Constants.GROUP_ALL_CONTACTS);
+        mFragment.setArguments(args);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, mFragment);
-		mFragment.setArguments(args);
 		ft.commit();
 		showContacts();
 	}
@@ -48,10 +54,11 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 	
 	public void onDoneWithSelection(MenuItem item) {
 		// send the selection info
-		ArrayList<Integer> selUsers = mFragment.getCheckedContactsIds();
-		Intent intent = new Intent(this,AddContactActivity.class);
-		intent.putIntegerArrayListExtra("selusers", selUsers);
-		startActivity(intent);
+		ArrayList<String> selUsers = mFragment.getCheckedUsers();
+		Intent data = new Intent();
+		data.putStringArrayListExtra("selusers", selUsers);
+		setResult(RESULT_OK, data); 
+		finish(); 
 	}
 	
 	public void showContacts() {
@@ -59,6 +66,7 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 		if ( currentUser != null )
 			parseGroupsApiListener.getFriendsOfUser(LoggedInUser.getcurrentUser());
 	}
+	
 
 	@Override
 	public void onallUsersResults(List<User> users) {
@@ -86,7 +94,11 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 
 	@Override
 	public void onGetFriendsResult(List<User> friends) {
-		mFragment.setContactAdapter(friends);
+		mFragment.setContactAdapter(friends, null);
+		if (friends != null ) {
+			Log.d(TAG, "caching friends" + friends.size());
+			CacheApi.cacheFriends(friends);
+		}
 		
 	}
 

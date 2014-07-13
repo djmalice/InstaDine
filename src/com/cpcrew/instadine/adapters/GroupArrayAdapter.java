@@ -36,31 +36,34 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Group thisGroup = getItem(position);
 		ViewHolder viewHolder;
-		if (convertView == null ) {
+		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			LayoutInflater inflator = LayoutInflater.from(getContext());
 			convertView = inflator.inflate(R.layout.group_item, parent, false);
-			viewHolder.ivGroupPhoto = (ParseImageView) convertView.findViewById(R.id.ivGroupPhoto);
-			viewHolder.tvGroupName = (TextView) convertView.findViewById(R.id.tvGroupName);
-			viewHolder.tvGroupMembers = (TextView) convertView.findViewById(R.id.tvGroupMembers);
+			viewHolder.ivGroupPhoto = (ParseImageView) convertView
+					.findViewById(R.id.ivGroupPhoto);
+			viewHolder.tvGroupName = (TextView) convertView
+					.findViewById(R.id.tvGroupName);
+			viewHolder.tvGroupMembers = (TextView) convertView
+					.findViewById(R.id.tvGroupMembers);
 			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-			viewHolder.tvGroupName.setText(thisGroup.getGroupName());
-			// TODO Get the members name as a string
-			viewHolder.tvGroupMembers.setText("user.getMembers().toString()");
-			// Load the image
-			ParseFile photoFile = thisGroup.getPhotoFile();
-			if (photoFile != null) {
-				viewHolder.ivGroupPhoto.setParseFile(photoFile);
-				viewHolder.ivGroupPhoto.loadInBackground(new GetDataCallback() {
-					@Override
-					public void done(byte[] data, ParseException e) {
-						// nothing to do
-					}
-				});
-			}
 		}
+		viewHolder = (ViewHolder) convertView.getTag();
+		viewHolder.tvGroupName.setText(thisGroup.getGroupName());
+		// TODO Get the members name as a string
+		viewHolder.tvGroupMembers.setText("user.getMembers().toString()");
+		// Load the image
+		ParseFile photoFile = thisGroup.getPhotoFile();
+		if (photoFile != null) {
+			viewHolder.ivGroupPhoto.setParseFile(photoFile);
+			viewHolder.ivGroupPhoto.loadInBackground(new GetDataCallback() {
+				@Override
+				public void done(byte[] data, ParseException e) {
+					// nothing to do
+				}
+			});
+		}
+
 		return convertView;
 	}
 	
