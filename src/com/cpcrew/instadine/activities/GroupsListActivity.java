@@ -20,14 +20,14 @@ import com.cpcrew.instadine.models.User;
 public class GroupsListActivity extends FragmentActivity implements ParseGroupsApiListener {
 	
 	GroupsListFragment mFragment;
-	private ParseGroupsApi  parseGroupsApiListener;
+	private ParseGroupsApi  parseApi;
 	private static String TAG = GroupsListActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_groups_list);	
-		parseGroupsApiListener = new ParseGroupsApi(this);
+		parseApi = new ParseGroupsApi(this);
 		mFragment = new GroupsListFragment();
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, mFragment);
@@ -36,10 +36,32 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 
 	}
 	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		System.out.println("STATE: resuming GroupsListActivity");
+	}
+	
+
+	@Override
+	protected void onPause() {
+		System.out.println("STATE: pause GroupsListActivity");
+		super.onPause();
+	}
+	
+
+	@Override
+	protected void onRestart() {
+		System.out.println("STATE: restart GroupsListActivity");
+		super.onRestart();
+	}
+	
+	
 	public void testGetGroups() {
 		// Get current User
 		// TODO lets hardcode since login interface missing
-		parseGroupsApiListener.retrieveUser("9SE4eH8D4X");
+		parseApi.retrieveUser("ftATYWIhjA");
 	}
 	
 	public void onNewGroup(View v) {
@@ -49,7 +71,6 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 
 	@Override
 	public void onallUsersResults(List<User> users) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -82,11 +103,12 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	@Override
 	public void retrieveUser(User user) {
 		// Now get the groups the user belongs to
-		Log.d(TAG, "Retrieved user" + user.getFirstName());
+		Log.d(TAG, "Retrieved user " + user.getFirstName());
 		if (user != null) {
 			LoggedInUser.setCurrentUser(user);
-			parseGroupsApiListener.getGroupsForUser(user);
+			parseApi.getGroupsForUser(user);
 		}
 
 	}
+	
 }

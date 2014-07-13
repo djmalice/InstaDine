@@ -26,6 +26,7 @@ public class ParseGroupsApi {
 	
 	/** Declaring the interface, to invoke a callback function in the implementing activity class */
 	ParseGroupsApiListener mParseApiListner;
+	private static String TAG = ParseGroupsApi.class.getSimpleName();
 	
 	
 	public ParseGroupsApi(Activity activity) {
@@ -44,6 +45,7 @@ public class ParseGroupsApi {
 		for (User user : users) {
 			group.addUser(user);
 		}
+		Log.d(TAG, "Handle groupadmin");
 		group.saveInBackground();
 
 	}
@@ -60,8 +62,8 @@ public class ParseGroupsApi {
 
 		// now we will query the users relation to see if the user object we
 		// have is contained therein
-		query.whereEqualTo("uid", user);
-		
+		query.whereEqualTo("users", user);
+		Log.d(TAG, "Starting async getGroupsForUser");
 		// execute the query
 		query.findInBackground(new FindCallback<Group>() {
 		    public void done(List<Group> groups, com.parse.ParseException e) {
@@ -71,12 +73,34 @@ public class ParseGroupsApi {
 		    	}
 		    	
 		    	else
-		    		System.out.println(e.getMessage());
+		    		System.out.println("TEST" + e.getMessage());
 		    }
 
 		});
 
 	}
+	
+	
+//	public void getGroupsForUser(User user) {
+//		
+//		ParseRelation<Group> relation = user.getRelation("gid");
+//		ParseQuery<Group> query = relation.getQuery();
+//		Log.d(TAG, "Starting async getGroupsForUser");
+//		// execute the query
+//		query.findInBackground(new FindCallback<Group>() {
+//		    public void done(List<Group> groups, com.parse.ParseException e) {
+//		    	if ( e == null ) {
+//		    		System.out.println(" getGroupsForUser: Number of grups the user belongs to " + groups.size());
+//		    		mParseApiListner.onGetGroupsForUserResults(groups);
+//		    	}
+//		    	
+//		    	else
+//		    		System.out.println("TEST" + e.getMessage());
+//		    }
+//
+//		});
+//
+//	}
 	
 	/**
 	 * Get the list of users belonging to a specific group
@@ -84,8 +108,9 @@ public class ParseGroupsApi {
 	 * @param group
 	 */
 	public void getUsersOfGroup(Group group) {
-		ParseRelation<User> relation = group.getRelation("uid");
+		ParseRelation<User> relation = group.getRelation("users");
 		ParseQuery<User> query = relation.getQuery();
+		Log.d(TAG, "Starting async getUsersOfGroup");
 		query.findInBackground(new FindCallback<User>() {
 		    public void done(List<User> users, com.parse.ParseException e) {
 		    	if ( e == null ) {
@@ -118,7 +143,7 @@ public class ParseGroupsApi {
      * @param groupName
      */
     public void getGroupByName( String groupName ) {
-    	System.out.println("Get group");
+    	Log.d(TAG, "Starting async getGroupByName");
     	ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
     	query.whereEqualTo("gname", groupName);
 		// execute the query
@@ -138,6 +163,7 @@ public class ParseGroupsApi {
      * Get all users in the DB
      */
 	public void getAllUsers() {
+		Log.d(TAG, "Starting async getAllUsers");
 		ParseQuery<User> query = ParseQuery.getQuery(User.class);
         query.findInBackground(new FindCallback<User>() {
                 public void done(List<User> userList, ParseException e) {
@@ -161,6 +187,7 @@ public class ParseGroupsApi {
 	 * @param user 
 	 */
 	public void getFriendsOfUser(User user) {
+		Log.d(TAG, "Starting async getFriendsOfUser");
 		ParseRelation<User> relation = user.getRelation("friends");
 		ParseQuery<User> query = relation.getQuery();
 		query.findInBackground(new FindCallback<User>() {
@@ -183,6 +210,7 @@ public class ParseGroupsApi {
 	 * @param currentUser
 	 */
 	public void findFriend(String partialName, User currentUser) {
+		Log.d(TAG, "Starting async findFriend");
 		ParseRelation<User> relation = currentUser.getRelation("friends");
 		ParseQuery<User> query = relation.getQuery();
 		query.whereStartsWith("first", partialName);
@@ -205,6 +233,7 @@ public class ParseGroupsApi {
 	 * @param objectId
 	 */
 	public void retrieveUser(String objectId) {
+		Log.d(TAG, "Starting async retrieveUser");
 		ParseQuery<User> query = ParseQuery.getQuery(User.class);
 		query.getInBackground(objectId, new GetCallback<User>() {
 		  public void done(User user, ParseException e) {

@@ -11,16 +11,14 @@ public class User extends ParseObject {
 	public User() {
 		super();
 	}
-	public void setId(int id ) {
-		put("uid",id);
-	}
-	
-	public String getObjectId() {
-		return getString("objectId");
-	}
-	
-	public int getId() {
-		return getInt("uid");
+
+//	public String getObjectId() {
+//		return getString("objectId");
+//	}
+//	
+	public String getId() {
+		//return getString("objectId");
+		return getObjectId();
 	}
 	
 	public void setFirstName(String first) {
@@ -57,21 +55,24 @@ public class User extends ParseObject {
 		saveInBackground();
 	}
 	
-	public ParseRelation<Group> getGroupRelation() {
-		return getRelation("gid");
-	}
+//	public ParseRelation<Group> getGroupRelation() {
+//		return getRelation("gid");
+//	}
 	
-	/**
-	 *  link Group and User
-	 *  
-	 */
-	public void addToGroup(Group group ) {
-		getGroupRelation().add(group);
-		saveInBackground();
-	}
 	
-	public void removeFromGroup(Group group) {
-		getGroupRelation().remove(group);
-		saveInBackground();
-	}
+	
+// Never do this ( it uses inverse relationship concept to query)
+//	/**
+//	 *  link Group and User
+//	 *  
+//	 */
+//	public void addToGroup(Group group ) {
+//		getGroupRelation().add(group);
+//		saveInBackground();
+//	}
+//	
+//	public void removeFromGroup(Group group) {
+//		getGroupRelation().remove(group);
+//		saveInBackground();
+//	}
 }

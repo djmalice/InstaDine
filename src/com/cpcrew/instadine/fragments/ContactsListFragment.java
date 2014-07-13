@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ContactArrayAdapter;
 import com.cpcrew.instadine.models.User;
-import com.parse.ParseObject;
 
 public class ContactsListFragment extends Fragment {
 
@@ -28,13 +27,16 @@ public class ContactsListFragment extends Fragment {
 	protected ListView lvContacts;
 	private ProgressBar pb;
 	HashSet<String> selectedSet;
+	String parentActivity;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		contacts = new ArrayList<User>();
+		
 		// TODO Figure how to send ParseObjects
 		ArrayList<String> selContacts = getArguments().getStringArrayList( "selectedusers");
+		parentActivity  = getArguments().getString("parent_activity");
 		selectedSet = null;
 		if (selContacts != null )
 			selectedSet = new HashSet<String>(selContacts);
@@ -52,12 +54,17 @@ public class ContactsListFragment extends Fragment {
 		return v;
 
 	}
-	public void setContactAdapter(List<User> friends ) {
+	public void setContactAdapter(List<User> friends, HashSet<String> selectedFriends ) {
 		contactAdapter.clear();
+		if (selectedFriends != null) {
+			selectedSet.clear();
+			selectedSet.addAll(selectedFriends);
+		}
 		Log.d(TAG, "Number of friends " + friends.size());
 		contactAdapter.addAll(friends);
 		contactAdapter.selectNone();
 	}
+	
 	
 	// TODO lvContacts.getCheckedItemPositions() Not working
 	// Check with Nathan

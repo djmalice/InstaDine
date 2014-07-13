@@ -17,12 +17,9 @@ public class Group extends ParseObject {
 		
 	}
 	
-	private void setGroupId(int id) {
-		put("gid",id);
-	}
-	
-	public int getGroupId() {
-		return getInt("objectId");
+	public String getGroupId() {
+		//return getString("objectId");
+		return getObjectId();
 	}
 	
 	
@@ -49,7 +46,7 @@ public class Group extends ParseObject {
     }
     
     public ParseRelation<User> getUserRelation() {
-    	return getRelation("uid");
+    	return getRelation("users");
     }
     
 	public void addUser(User user ) {

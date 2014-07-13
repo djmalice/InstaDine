@@ -35,9 +35,10 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_group);
 		etGroupName = (EditText) findViewById(R.id.etGroupName);
-		addTextWatcherToGroupName();
 		parseApi = new ParseGroupsApi(this);
-		parseApi.getAllUsers();
+		addTextWatcherToGroupName();
+		
+		
 	}
 
 	@Override
@@ -55,7 +56,8 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 	 */
 	public void onNext(MenuItem item) {
 		// GroupName
-		expDB();
+		//expDB();
+		System.out.println("Going to next activity AddContact");
 		String groupName = etGroupName.getText().toString();
 		Intent intent = new Intent(this, AddContactActivity.class);
 		intent.putExtra("group_name", groupName);
@@ -109,25 +111,31 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 
 	@Override
 	public void onallUsersResults(List<User> userList) {
-		Log.d( TAG, "Number of users : " + userList.size() );
+		Log.d( TAG, "onallUsersResults: Number of users : " + userList.size() );
 		users = new ArrayList<User>(userList);
+		for (User user : users) {
+			Log.d(TAG,
+					user.getFirstName() + "added to group "
+							+ testGroup.getGroupName());
+			testGroup.addUser(user);
+		}
 		
 	}
 
 	@Override
 	public void onGetUserOfGroupResults(List<User> users) {
 		Log.d(TAG ," Number of users in the group " + users.size()) ;
-		for (User user : users) {
-			Log.d(TAG, user.getFirstName());
-			user.addToGroup(testGroup);
-		}
-		for ( int i = 0; i < users.size(); ++i ) {
-			User currentUser = users.get(i);
-			for ( User user: users) {
-				if ( user != currentUser )
-					currentUser.addToFriends(user);
-			}
-		}
+//		for (User user : users) {
+//			Log.d(TAG, user.getFirstName());
+//			testGroup.addUser(user);
+//		}
+//		for ( int i = 0; i < users.size(); ++i ) {
+//			User currentUser = users.get(i);
+//			for ( User user: users) {
+//				if ( user != currentUser )
+//					currentUser.addToFriends(user);
+//			}
+//		}
 		
 		
 	}
@@ -144,7 +152,8 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 		if (groups != null && groups.size() > 0) {
 			testGroup = groups.get(0);
 			Log.d(TAG, "Group Name" + testGroup.getGroupName());
-			parseApi.getUsersOfGroup(testGroup);
+			parseApi.getAllUsers();
+			//parseApi.getUsersOfGroup(testGroup);
 		}
 
 	}
