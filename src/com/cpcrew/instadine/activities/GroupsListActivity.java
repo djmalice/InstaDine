@@ -35,6 +35,7 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		testGetGroups();
 
 	}
+
 	
 	public void testGetGroups() {
 		// Get current User
@@ -46,6 +47,14 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		Intent intent = new Intent(this,NewGroupActivity.class);
 		startActivity(intent);
 	}
+	
+	public void showEvent() {
+		// Open the existing event if present
+		// else create a new event.
+		Intent intent = new Intent(this, VotingActivity.class);
+		startActivity(intent);
+	}
+	
 
 	@Override
 	public void onallUsersResults(List<User> users) {

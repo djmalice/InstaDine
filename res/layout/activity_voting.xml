@@ -60,10 +60,10 @@
         android:layout_alignBottom="@+id/tvDateLabel"
         android:layout_toRightOf="@+id/tvLocationLabel"
         android:layout_marginLeft="18dp"
-        android:text="Button" />
+        android:text="Pick Date" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/lvRestaurants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSearch"

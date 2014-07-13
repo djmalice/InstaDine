@@ -9,6 +9,7 @@ import android.util.Log;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.Restaurant;
+import com.cpcrew.instadine.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -92,6 +93,10 @@ public class ParseEventsApi {
 					Log.d("debug", e.getMessage());
 			}
 		});
+	}
+	
+	public void createRestaurant(String name , User user, Event event) {
+		
 	}
 
 }
