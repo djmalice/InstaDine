@@ -33,7 +33,10 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends FragmentActivity implements
 		GooglePlayServicesClient.ConnectionCallbacks,
@@ -81,6 +84,10 @@ public class MapActivity extends FragmentActivity implements
 	    // inflate the view that we created before
 	    View v = inflater.inflate(R.layout.actionbar_search, null);
 	    searchBox =  (ClearableAutoCompleteTextView) v.findViewById(R.id.search_box);
+	    adapter = new RestaurantDropDownAdapter(this, R.layout.actionbar_search_item);
+	    searchBox.setAdapter(adapter);
+	    
+	    
 	    searchIcon = (ImageView) v.findViewById(R.id.action_search);
 	    searchBox.setVisibility(View.INVISIBLE);
 		searchIcon.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +114,21 @@ public class MapActivity extends FragmentActivity implements
 			}
 			
 		});
-	    searchBox.setAdapter(adapter);
+	    
 	 
 	    actionBar.setCustomView(v);
+	    
+	    
+	    final LatLng dishDash = new LatLng(37.376239, -122.030237);
+	    Marker res = map.addMarker(new MarkerOptions()
+	                              .position(dishDash)
+	                              .title("Dish Dash")
+	                              .snippet("Mediterranean Fine Dining")
+	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
+	    
+	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(dishDash, 10));
+	    res.showInfoWindow();
+	    
 		
 	}
 	
