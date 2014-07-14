@@ -32,14 +32,30 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
-            android:name=".activities.GroupsListActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.LoginActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity 
+            android:name=".activities.UserDetailsActivity" 
+            android:label="@string/app_name"/>
+        
+        <activity android:name="com.facebook.LoginActivity"
+                  android:label="@string/app_name" />
+        
+        <meta-data android:name="com.facebook.sdk.ApplicationId" 
+            android:value="@string/app_id"/>
+                
+        <activity
+            android:name=".activities.GroupsListActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".activities.NewGroupActivity"
@@ -59,14 +75,6 @@
             android:name=".activities.ContactsListActivity"
             android:label="@string/title_activity_add_contact" >
         </activity>
-        <activity
-            android:name="com.facebook.LoginActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/app_id" />
 
         <activity
             android:name=".activities.MapActivity"

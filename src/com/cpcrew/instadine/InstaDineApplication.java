@@ -1,23 +1,19 @@
 package com.cpcrew.instadine;
 
-import java.util.List;
-
 import android.app.Application;
 
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.models.User;
-import com.facebook.model.GraphUser;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 
 public class InstaDineApplication extends Application {
+
+	public static final String TAG = "InstaDine";
 	
-    private List<GraphUser> selectedUsers;
-    static final String TAG = "MyApp";
-		
 	@Override
 	public void onCreate() {
 				
@@ -26,7 +22,10 @@ public class InstaDineApplication extends Application {
 		ParseObject.registerSubclass(Group.class);
 		ParseObject.registerSubclass(Restaurant.class);
 		ParseObject.registerSubclass(User.class);
-		Parse.initialize(this, "4j8uZgh6wEGO5GrOGWpgPEut9tCIFAvjdLWxeyJ2", "kllySxso8im9bcTw8XmwcjEEAlubXzdVo4GKeYF1");
+		
+		//please initialize appropriate parse database!!!
+		
+		//Parse.initialize(this, "4j8uZgh6wEGO5GrOGWpgPEut9tCIFAvjdLWxeyJ2", "kllySxso8im9bcTw8XmwcjEEAlubXzdVo4GKeYF1");
 		
 		//RajiTest - Has dummy data for testing
 		//Parse.initialize(this, "ddKpbQ6IZhdY3fDebFZnzuSlKx8blZ91ug4Z3L7w", "XLnBfQLNuDxhzqNyJymRU3M75hskYNGptsI2jpjX");
@@ -36,21 +35,13 @@ public class InstaDineApplication extends Application {
       	testObject.put("Tintim", "Kitkat");
       	testObject.saveInBackground();*/
 
-    	/* cpcrewcorp account - MayanTest App
+    	// cpcrewcorp account - MayanTest App
     	Parse.initialize(this, "2KdnQ3PisBoJWPavuDKHBxXnQEHWMlyESyXYBfyV",
-    			"re2zJPO0piIISY7qL07dNClFC2Iz91u2Gcw4Abfg"); */
+    			"re2zJPO0piIISY7qL07dNClFC2Iz91u2Gcw4Abfg");
 
     	// Set your Facebook App Id in strings.xml
-    	ParseFacebookUtils.initialize(getString(R.string.app_id));
+    	ParseFacebookUtils.initialize(getString(R.string.app_id)); 
 		
 	}
 	
-    public List<GraphUser> getSelectedUsers() {
-        return selectedUsers;
-    }
-
-    public void setSelectedUsers(List<GraphUser> selectedUsers) {
-        this.selectedUsers = selectedUsers;
-    }
-    
 }

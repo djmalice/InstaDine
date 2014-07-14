@@ -6,7 +6,6 @@
     <string name="title_activity_groups_list">InstaDine</string>
     <string name="title_activity_new_group">New Group</string>
     <string name="title_activity_add_contact">New Group</string>
-    <string name="app_id">1447839002142744</string>
     <string name="exception">Exception: %1$s</string>
     <string name="ok_button">OK</string>
     <string name="need_perms_alert_text">In order to pick your friends you need to accept all the permissions on the following page.</string>
