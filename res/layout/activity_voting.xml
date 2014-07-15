@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:onClick=""
+        android:onClick="onDone"
         android:text="Done" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:text="Date " />
 
     <TextView
-        android:id="@+id/btnDate"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvDateLabel"

@@ -1,13 +1,19 @@
 package com.cpcrew.instadine.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
@@ -19,6 +25,7 @@ import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
+import com.parse.ParseObject;
 
 public class VotingActivity extends Activity implements ParseEventApiListener {
 	
@@ -30,6 +37,7 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 	protected ListView lvRestaurants;
 	private static int counter = 0;
 	private ArrayList<String> currentSelection;
+	//private ArrayList<JSONObject> prevSelections;
 	private String groupId = null;
 
 	@Override
@@ -48,7 +56,7 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 		
 		restAdapter = new RestaurantArrayAdapter(this, restaurants);
 		lvRestaurants.setAdapter(restAdapter);
-		addDummyRestaurant();
+		//addDummyRestaurant();
 	}
 	
 	public void callSearchActivity(View v){
@@ -58,24 +66,57 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 		//addDummyRestaurant();
 	}
 	
+	public void loadEvent() {
+		EditText etLocation = (EditText)findViewById(R.id.etLocation);
+		TextView tvDate = (TextView)findViewById(R.id.tvDate);
+		
+		// Read from the currentEvent
+		etLocation.setText(currentEvent.getEventName());
+		tvDate.setText(currentEvent.getDate());
+
+		// load the restaurants
+		List<String> prevSelections =  currentEvent.getSelection();
+		HashMap<String, Rest> restIds = new HashMap<String, Rest>();
+		for ( int i = 0; i < prevSelections.size();++i) {
+
+				System.out.println(prevSelections.get(i));
+				String restName = Event.getSelectionRest(prevSelections.get(i));
+				String userId = Event.getSelectionUser(prevSelections.get(i));
+				System.out.println(restName);
+				Rest restaurantSel;
+				if ( restIds.containsKey(restName))
+					restaurantSel = restIds.get(restName);
+				else {
+					restaurantSel = new Rest();
+					restaurantSel.setRestName(restName);
+					restIds.put(restName, restaurantSel);
+				}
+				restaurantSel.addUser(userId);
+				restAdapter.add(restaurantSel); // View 
+		
+		}
+		etLocation.setEnabled(false);
+		tvDate.setEnabled(false);
+	}
+	
 	public void addDummyRestaurant() {
 		 String[] restaurants = {"World Wraps", "Dish Dash", "Olive Garden" , "Thai Basil"};
 		if (currentEvent == null) {
 			Rest restaurant = new Rest();
-			restaurant.restName = restaurants[counter++];
-			restaurant.count = 1;
-			currentSelection.add(restaurant.restName);
+			restaurant.setRestName(restaurants[counter++]);
+			restaurant.setCount(1);
+			currentSelection.add(restaurant.getRestName());
 			restAdapter.add(restaurant);
 		}
 	}
 	
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
-//		if (currentEvent == null) {
-//			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getObjectId(),currentSelection);
-//		} else {
-//			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getObjectId(), currentSelection );
-//		}
+		if (currentEvent == null) {
+			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getObjectId(),currentSelection);
+		} else {
+			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getObjectId(), currentSelection );
+		}
 	}
 	
 	public void onNo(View v) {
@@ -103,6 +144,7 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 	public void onGetEventsForGroupResult(List<Event> events) {
 		if (events != null && events.size() > 0) {
 			currentEvent = events.get(0);
+			loadEvent();
 		}
 		
 	}

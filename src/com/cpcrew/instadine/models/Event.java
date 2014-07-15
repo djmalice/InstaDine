@@ -1,9 +1,7 @@
 package com.cpcrew.instadine.models;
 
+import java.util.Arrays;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -47,20 +45,38 @@ public class Event extends ParseObject {
 	}
 	
 	public void addSelection(String userid, String resid) {
-		JSONObject value = new JSONObject();
-		try {
-			value.put("userid", userid);
-			value.put("resid", resid);
-			add("selections" ,value);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		// Broken in Parse
+		// does not save in proper JSON format
+//		JSONObject value = new JSONObject();
+//		try {
+//			value.put("userid", userid);
+//			value.put("resid", resid);
+//			add("selections" ,value);
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		add("selections" , userid + "," + resid);
 		
 	}
 	
-	public  List<JSONObject> getSelection() {
+//	public  List<JSONObject> getSelection() {
+//		return getList("selections");
+//	}
+	
+	public List<String> getSelection() {
 		return getList("selections");
+	}
+	
+	public static String getSelectionRest(String selection) {
+		List<String> ll = Arrays.asList(selection.split(","));
+		return ll.get(1);
+	}
+	
+	public static String getSelectionUser(String selection) {
+		List<String> ll = Arrays.asList(selection.split(","));
+		return ll.get(0);
 	}
 	
 	public void addRejectedUser(User user) {
