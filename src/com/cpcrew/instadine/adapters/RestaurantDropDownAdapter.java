@@ -148,7 +148,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
             // Extract the Place descriptions from the results
             resultList = new ArrayList<Business>(predsJsonArray.length());
             for (int i = 0; i < predsJsonArray.length(); i++) {
-            	Business b = Business.fromJson(predsJsonArray.getJSONObject(i));
+            	Business b = Business.fromAutoCompleteJson(predsJsonArray.getJSONObject(i));
                 resultList.add(b);
             }
             Log.d("debug", resultList.toString());

@@ -1,5 +1,9 @@
 package com.cpcrew.instadine.activities;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,7 +23,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
+import com.cpcrew.instadine.models.Business;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -39,6 +43,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 public class MapActivity extends FragmentActivity implements
 		GooglePlayServicesClient.ConnectionCallbacks,
@@ -47,12 +54,12 @@ public class MapActivity extends FragmentActivity implements
 	ImageView searchIcon;
 	//ClearableAutoCompleteTextView searchBox;
 	AutoCompleteTextView searchBox;
+	Business selectedBusiness;
 	private SupportMapFragment mapFragment;
 	private GoogleMap map;
 	private LocationClient mLocationClient;
 	RestaurantDropDownAdapter adapter;
-	private static final String[] COUNTRIES = new String[] { "Belgium",
-        "France", "France_", "Italy", "Germany", "Spain" };
+	
 	/*
 	 * Define a request code to send to Google Play services This code is
 	 * returned in Activity.onActivityResult
@@ -96,15 +103,8 @@ public class MapActivity extends FragmentActivity implements
 	    
 	   // searchBox =  (ClearableAutoCompleteTextView) v.findViewById(R.id.search_box);
 	    searchBox =  (AutoCompleteTextView) v.findViewById(R.id.search_box);
-	    /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, COUNTRIES);*/
 	    adapter = new RestaurantDropDownAdapter(this, R.layout.actionbar_search_item);
 	    searchBox.setAdapter(adapter);
-	    
-	    
-	    
-	    
-	    
 	    
 	    
 	    
@@ -155,7 +155,11 @@ public class MapActivity extends FragmentActivity implements
 	 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// handle clicks on search resaults here	
+				Business business = (Business) parent.getItemAtPosition(position);
+				searchBox.setText(business.getName());
+				fetchBusinessLocation(business);
+				
+				
 			}
 			
 		});
@@ -164,15 +168,7 @@ public class MapActivity extends FragmentActivity implements
 	   
 	    
 	    
-	    final LatLng dishDash = new LatLng(37.376239, -122.030237);
-	    Marker res = map.addMarker(new MarkerOptions()
-	                              .position(dishDash)
-	                              .title("Dish Dash")
-	                              .snippet("Mediterranean Fine Dining")
-	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
 	    
-	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(dishDash, 10));
-	    res.showInfoWindow();
 	    
 		
 	}
@@ -198,6 +194,59 @@ public class MapActivity extends FragmentActivity implements
 		
 	}
 	
+	public void fetchBusinessLocation(Business b){
+		
+		final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+		final String TYPE_DETAILS = "/details";
+		final String OUT_JSON = "/json";
+		final String API_KEY = "AIzaSyDUWcjTHpCoU93QIFWHJ_glTbd4wfiP8bw";
+		StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DETAILS + OUT_JSON);
+		AsyncHttpClient client = new AsyncHttpClient();
+		RequestParams params = new RequestParams();
+		params.put("key", API_KEY);
+		params.put("placeid", b.getId());
+		client.get(sb.toString(), params, new
+		    JsonHttpResponseHandler() {
+			
+			
+		        public void onSuccess(JSONObject response) {
+		        	
+    				try {
+						 JSONObject jsonObject = response.getJSONObject("result");
+						 selectedBusiness = Business.fromDetailJson(jsonObject);
+				         Log.d("debug", "Business Object: " + selectedBusiness.toString());
+				        
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	
+    				displayMapMarker(selectedBusiness);
+		        };
+		        
+
+		        @Override
+		        public void onFailure(Throwable e, String s) {
+		            Log.d("ERROR", e.toString());
+		        }	
+		    }
+		);
+    }
+	
+	public void displayMapMarker(Business business){
+		final LatLng restaurant = new LatLng(business.getLat(), business.getLongi());
+	    Marker res = map.addMarker(new MarkerOptions()
+	                              .position(restaurant)
+	                              .title(business.getName())
+	                              .snippet("Fine Dining")
+	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
+	    
+	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
+	    res.showInfoWindow();
+	}
+	
+	
+    
 
 	/*
 	 * Called when the Activity becomes visible.
