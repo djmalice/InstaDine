@@ -1,5 +1,6 @@
 package com.cpcrew.instadine.api;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.models.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -32,8 +34,8 @@ public class ParseEventsApi {
 	 */
 	public interface ParseEventApiListener {
 		public void onGetEventsForGroupResult(List<Event> events);
-
 		public void onGetRestaurantsForEventResult(List<Restaurant> restaurants);
+		public void onGetGroupByIdResult(Group group);
 	}
 
 	// Won't work
@@ -54,33 +56,33 @@ public class ParseEventsApi {
 	// });
 	// }
 
-	public void getRestaurantsForEvent(Event event) {
-
-		event.getRestaurantRelation().getQuery()
-				.findInBackground(new FindCallback<Restaurant>() {
-					public void done(List<Restaurant> restaurants,
-							ParseException e) {
-						if (e == null) {
-							Log.d("debug",
-									"Number of restaurants for this event: "
-											+ restaurants.size());
-							mParseApiListner
-									.onGetRestaurantsForEventResult(restaurants);
-						}
-
-						else
-							Log.d("debug", e.getMessage());
-					}
-				});
-	}
-
-	public void createEvent(Group group, Date date) {
-		Event event = new Event();
-		event.setDate(date.toString());
-		event.setGroup(group);
-		event.saveInBackground();
-	}
-
+//	public void getRestaurantsForEvent(Event event) {
+//
+//		event.getRestaurantRelation().getQuery()
+//				.findInBackground(new FindCallback<Restaurant>() {
+//					public void done(List<Restaurant> restaurants,
+//							ParseException e) {
+//						if (e == null) {
+//							Log.d("debug",
+//									"Number of restaurants for this event: "
+//											+ restaurants.size());
+//							mParseApiListner
+//									.onGetRestaurantsForEventResult(restaurants);
+//						}
+//
+//						else
+//							Log.d("debug", e.getMessage());
+//					}
+//				});
+//	}
+//
+//	public void createEvent(Group group, Date date) {
+//		Event event = new Event();
+//		event.setDate(date.toString());
+//		event.setGroup(group);
+//		event.saveInBackground();
+//	}
+//
 	public void getEventsForGroup(Group group) {
 		ParseQuery<Event> eventQuery = ParseQuery.getQuery(Event.class);
 		eventQuery.whereEqualTo("group", group);
@@ -95,8 +97,55 @@ public class ParseEventsApi {
 		});
 	}
 	
-	public void createRestaurant(String name , User user, Event event) {
-		
+	public void createEvent(Group group, String date , String userid , ArrayList<String> restid) {
+		Event event = new Event();
+		event.setDate(date);
+		event.setGroup(group);
+		for ( String rest : restid)
+			event.addSelection(userid, rest);
+		event.saveInBackground();
 	}
+	
+	public void updateEvent(Event event, String userid, ArrayList<String> restid) {
+		for ( String rest : restid)
+			event.addSelection(userid, rest);
+		event.saveInBackground();
+	}
+	
+	public void updateEvent(Event event, User rejectedUser) {
+		event.addRejectedUser(rejectedUser);
+		event.saveInBackground();
+	}
+	
+	public void getEventsForGroup(String groupId) {
+		ParseQuery<Group> innerQuery = ParseQuery.getQuery(Group.class);
+		innerQuery.whereExists(groupId);
+		ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+		query.whereMatchesQuery("group", innerQuery);
+		// execute the query
+		query.findInBackground(new FindCallback<Event>() {
+			public void done(List<Event> events, ParseException e) {
+				if (e == null)
+					mParseApiListner.onGetEventsForGroupResult(events);
+				else
+					Log.d("debug", e.getMessage());
+			}
+		});
+	}
+	
+	public void getGroupById(String groupId) {
+		ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+		query.getInBackground(groupId, new GetCallback<Group>() {
+		  public void done(Group group, ParseException e) {
+		    if (e == null) {
+		    	mParseApiListner.onGetGroupByIdResult(group);
+		    } else {
+		    	Log.d("debug", e.getMessage());
+		    }
+		  }
+		});	
+	}
+	
+
 
 }

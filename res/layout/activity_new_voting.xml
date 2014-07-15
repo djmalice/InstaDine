@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvLocationLabel"
         android:layout_toRightOf="@+id/tvLocationLabel"
-        android:text="Sunnyvale CA"
         android:ems="10" >
 
         <requestFocus />
@@ -53,7 +52,7 @@
         android:layout_marginTop="47dp"
         android:text="Date " />
 
-    <TextView
+    <Button
         android:id="@+id/btnDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +60,7 @@
         android:layout_alignBottom="@+id/tvDateLabel"
         android:layout_toRightOf="@+id/tvLocationLabel"
         android:layout_marginLeft="18dp"
-        android:text="07/20/2014" />
+        android:text="Pick Date" />
 
     <ListView
         android:id="@+id/lvRestaurants"

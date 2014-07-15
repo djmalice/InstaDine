@@ -17,6 +17,15 @@ public class Group extends ParseObject {
 		
 	}
 	
+	public void setDesc(String desc) {
+		put("desc", desc);
+	}
+	
+	public String getDesc() {
+		return getString("desc");
+	}
+	
+	
 	public String getGroupId() {
 		//return getString("objectId");
 		return getObjectId();

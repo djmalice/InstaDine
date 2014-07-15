@@ -1,8 +1,12 @@
 package com.cpcrew.instadine.models;
 
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-import com.parse.ParseRelation;
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
@@ -42,18 +46,43 @@ public class Event extends ParseObject {
 		return (Group) getParseObject("group");
 	}
 	
-	public ParseRelation<Restaurant> getRestaurantRelation() {
-	      return getRelation("restaurants");
-	  }
-
-	  public void addRestaurant(Restaurant restaurant) {
-	    getRestaurantRelation().add(restaurant);
-	    saveInBackground();
-	  }
-
-	  public void removeRestaurant(Restaurant restaurant) {
-	     getRestaurantRelation().remove(restaurant);
-	     saveInBackground();
-	  }
+	public void addSelection(String userid, String resid) {
+		JSONObject value = new JSONObject();
+		try {
+			value.put("userid", userid);
+			value.put("resid", resid);
+			add("selections" ,value);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public  List<JSONObject> getSelection() {
+		return getList("selections");
+	}
+	
+	public void addRejectedUser(User user) {
+		add("rejectedusers" ,user);
+	}
+	
+	public List<User> getRejectedUsers() {
+		return getList("rejectedusers");
+	}
+	
+//	public ParseRelation<Restaurant> getRestaurantRelation() {
+//	      return getRelation("restaurants");
+//	  }
+//
+//	  public void addRestaurant(Restaurant restaurant) {
+//	    getRestaurantRelation().add(restaurant);
+//	    saveInBackground();
+//	  }
+//
+//	  public void removeRestaurant(Restaurant restaurant) {
+//	     getRestaurantRelation().remove(restaurant);
+//	     saveInBackground();
+//	  }
 
 }
