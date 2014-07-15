@@ -14,6 +14,7 @@ public class Business {
 	private String phone;
 	private String imageUrl;
 	private String city;
+	private double rating;
 	private double lat;
 	private double longi;
 	
@@ -33,6 +34,10 @@ public class Business {
 		return longi;
 	}
 
+	public double getRating() {
+		return rating;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -46,7 +51,7 @@ public class Business {
 	}
 	
 	// Decodes business json into business model object
-	public static Business fromJson(JSONObject jsonObject) {
+	public static Business fromAutoCompleteJson(JSONObject jsonObject) {
 		Business b = new Business();
         // Deserialize json into object fields
 		try {
@@ -73,6 +78,31 @@ public class Business {
 		return b;
 	}
 	
+	public static Business fromDetailJson(JSONObject jsonObject) {
+		Business b = new Business();
+        // Deserialize json into object fields
+		try {
+			b.name = jsonObject.getString("name");;
+			b.city=jsonObject.getString("vicinity");
+			b.id = jsonObject.getString("place_id");
+			b.rating = jsonObject.getDouble("rating");
+        	JSONObject Geometry = jsonObject.getJSONObject("geometry").getJSONObject("location");
+        	b.lat= Geometry.getDouble("lat");
+        	b.longi = Geometry.getDouble("lng");
+        	b.phone =jsonObject.getString("formatted_phone_number");
+        	b.imageUrl = jsonObject.getString("icon");
+        	
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+		// Return new object
+		return b;
+	}
+	
+	
+	
+	
 	// Decodes array of business json results into business model objects
     public static ArrayList<Business> fromJson(JSONArray jsonArray) {
         ArrayList<Business> businesses = new ArrayList<Business>(jsonArray.length());
@@ -86,7 +116,7 @@ public class Business {
                 continue;
             }
 
-            Business business = Business.fromJson(businessJson);
+            Business business = Business.fromAutoCompleteJson(businessJson);
             if (business != null) {
             	businesses.add(business);
             }
@@ -97,6 +127,6 @@ public class Business {
     
     @Override
     public String toString() {
-    	return id + " " + name + " " + city + " ";
+    	return "Id: " + id + " Name: " + name + " City: " + city + " Lat:" + lat + " Longi: " + longi + " Phone: " + phone;
     }
 }
