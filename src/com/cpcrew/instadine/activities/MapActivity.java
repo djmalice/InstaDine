@@ -11,20 +11,22 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
-import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView;
-import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView.OnClearListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -41,13 +43,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends FragmentActivity implements
 		GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener {
-	SearchView searchView;
+	
 	ImageView searchIcon;
-	ClearableAutoCompleteTextView searchBox;
+	//ClearableAutoCompleteTextView searchBox;
+	AutoCompleteTextView searchBox;
 	private SupportMapFragment mapFragment;
 	private GoogleMap map;
 	private LocationClient mLocationClient;
 	RestaurantDropDownAdapter adapter;
+	private static final String[] COUNTRIES = new String[] { "Belgium",
+        "France", "France_", "Italy", "Germany", "Spain" };
 	/*
 	 * Define a request code to send to Google Play services This code is
 	 * returned in Activity.onActivityResult
@@ -83,13 +88,53 @@ public class MapActivity extends FragmentActivity implements
 	    LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    // inflate the view that we created before
 	    View v = inflater.inflate(R.layout.actionbar_search, null);
-	    searchBox =  (ClearableAutoCompleteTextView) v.findViewById(R.id.search_box);
+	    actionBar.setCustomView(v);
+	    
+	    
+	    
+	    
+	    
+	   // searchBox =  (ClearableAutoCompleteTextView) v.findViewById(R.id.search_box);
+	    searchBox =  (AutoCompleteTextView) v.findViewById(R.id.search_box);
+	    /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, COUNTRIES);*/
 	    adapter = new RestaurantDropDownAdapter(this, R.layout.actionbar_search_item);
 	    searchBox.setAdapter(adapter);
 	    
 	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    searchBox.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				Log.d("debug", "in onTextChanged calling Filter");
+				adapter.getFilter().filter(s);
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	    /*
 	    searchIcon = (ImageView) v.findViewById(R.id.action_search);
 	    searchBox.setVisibility(View.INVISIBLE);
+	    
 		searchIcon.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -98,14 +143,14 @@ public class MapActivity extends FragmentActivity implements
 			}
 		});
 		
-		searchBox.setOnClearListener(new OnClearListener() {
+		/*searchBox.setOnClearListener(new OnClearListener() {
 			
 			@Override
 			public void onClear() {
 				toggleSearch(true);
 			}
 		});
-		
+		*/
 		searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	 
 			@Override
@@ -116,7 +161,7 @@ public class MapActivity extends FragmentActivity implements
 		});
 	    
 	 
-	    actionBar.setCustomView(v);
+	   
 	    
 	    
 	    final LatLng dishDash = new LatLng(37.376239, -122.030237);

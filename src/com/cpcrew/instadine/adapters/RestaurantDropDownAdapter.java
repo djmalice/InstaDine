@@ -23,8 +23,10 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.models.Business;
+import com.cpcrew.instadine.models.Restaurant;
 
-public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
+public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
 		Filterable {
 	private static final String LOG_TAG = "DEBUG";
 
@@ -33,11 +35,12 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
 	private static final String OUT_JSON = "/json";
 
 	private static final String API_KEY = "AIzaSyDUWcjTHpCoU93QIFWHJ_glTbd4wfiP8bw";
-	private ArrayList<String> resultList;
+	private ArrayList<Business> resultList;
 	
 	public RestaurantDropDownAdapter(Context context, int resource) {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
+	
 	}
 
 	@Override
@@ -53,11 +56,11 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
 		TextView venueAddress = (TextView) convertView
 				.findViewById(R.id.search_item_venue_address);
  
-		String venue = getItem(position);
+		Business venue = getItem(position);
 		convertView.setTag(venue);
 		 
-			venueName.setText("name");
-			venueAddress.setText("address");
+			venueName.setText(venue.getName());
+			venueAddress.setText(venue.getCity());
 			
  
 		return convertView;
@@ -69,7 +72,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
     }
 
     @Override
-    public String getItem(int index) {
+    public Business getItem(int index) {
         return resultList.get(index);
     }
 
@@ -79,6 +82,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
+                Log.d("debug", "Perform Filtering called");
                 if (constraint != null) {
                     // Retrieve the autocomplete results.
                     resultList = autocomplete(constraint.toString());
@@ -103,8 +107,8 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
         return filter;
     }
     
-    private ArrayList<String> autocomplete(String input) {
-        ArrayList<String> resultList = null;
+    private ArrayList<Business> autocomplete(String input) {
+        ArrayList<Business> resultList = null;
 
         HttpURLConnection conn = null;
         StringBuilder jsonResults = new StringBuilder();
@@ -137,15 +141,17 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<String> implements
         }
 
         try {
-            // Create a JSON object hierarchy from the results
+        	// Create a JSON object hierarchy from the results
             JSONObject jsonObj = new JSONObject(jsonResults.toString());
             JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
 
             // Extract the Place descriptions from the results
-            resultList = new ArrayList<String>(predsJsonArray.length());
+            resultList = new ArrayList<Business>(predsJsonArray.length());
             for (int i = 0; i < predsJsonArray.length(); i++) {
-                resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
+            	Business b = Business.fromJson(predsJsonArray.getJSONObject(i));
+                resultList.add(b);
             }
+            Log.d("debug", resultList.toString());
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Cannot process JSON results", e);
         }
