@@ -48,14 +48,14 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		startActivity(intent);
 	}
 	
-	public void showEvent() {
+	public void showEvent(String groupId) {
 		// Open the existing event if present
 		// else create a new event.
 		Intent intent = new Intent(this, VotingActivity.class);
+		intent.putExtra("group_id", groupId);
 		startActivity(intent);
 	}
 	
-
 	@Override
 	public void onallUsersResults(List<User> users) {
 		

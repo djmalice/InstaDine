@@ -46,8 +46,9 @@ public class GroupsListFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view,
 					int position, long id) {
+				Group listItem = (Group) lvGroups.getItemAtPosition(position);
 				// TODO Better way , quick and dirty implementation for now
-				((GroupsListActivity) getActivity()).showEvent();
+				((GroupsListActivity) getActivity()).showEvent(listItem.getObjectId());
 			}
 		});
 
@@ -68,6 +69,7 @@ public class GroupsListFragment extends Fragment {
 		groupAdapter.clear();
 		Log.d(TAG, "Number of groups " + groups.size());
 		groupAdapter.addAll(groups);
+		groupAdapter.notifyDataSetChanged();
 	}
 
 
