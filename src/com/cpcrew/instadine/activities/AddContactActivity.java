@@ -32,15 +32,14 @@ import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Constants;
 
-public class AddContactActivity extends FragmentActivity implements ParseGroupsApiListener, CacheApiListener {
+public class AddContactActivity extends FragmentActivity implements ParseGroupsApiListener {
 
 	private static String TAG = AddContactActivity.class.getSimpleName();
 	private String groupName;
 	private AutoCompleteTextView tvAddContact;
 	ArrayList<User> selectedUsers;
-	ArrayList<String> selectedUserids;
+	ArrayList<String> selectedUserids; // for transferring between  activities/fragments
 	HashSet<String> selectedSet;
-	CacheApi cacheApi;
 	ParseGroupsApi parseApi;
 	ContactsListFragment mFragment;
 	ArrayAdapter<String> autoCompleteAdapter;
@@ -55,16 +54,14 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 		groupName = getIntent().getStringExtra("group_name");
 		setContentView(R.layout.activity_add_contact);
 		tvAddContact = (AutoCompleteTextView) findViewById(R.id.tvAddContact);
-		
 		addTextWatcherToAddContact();
 		
 		// initialize
+		parseApi = new ParseGroupsApi(this);
 		selectedUsers = new ArrayList<User>();
 		selectedUserids = new ArrayList<String>();
 		selectedSet = new HashSet<String>();
 
-		parseApi = new ParseGroupsApi(this);
-		cacheApi = new CacheApi(this);
 		showFragment();
 		showSelectedContacts();
 	}
@@ -90,6 +87,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 	public void onOpenContacts(View v) {
 		// CacheApi.cacheSelectedUsers(selectedUsers);
 		Intent intent = new Intent(this, ContactsListActivity.class);
+		intent.putStringArrayListExtra("selectedusers", selectedUserids);
 		startActivityForResult(intent, Constants.REQUEST_CODE);
 	}
 
@@ -109,7 +107,6 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 	public void showSelectedContacts() {
 		User currentUser = LoggedInUser.getcurrentUser();
 		if ( currentUser != null ) {
-			//cacheApi.getFriendsFromCache(); // Not working returns empty
 			parseApi.getFriendsOfUser(currentUser);
 		}
 	}
@@ -135,33 +132,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 			}
 		});
 	}
-	
-	
-
-	@Override
-	public void onGetSelectedUsersFromCacheResult(List<User> users) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onGetFriendsFromCacheResult(List<User> users) {
-
-		// Translate into user objects
-		HashSet<String> selectedSet = null;
-		if (selectedUserids != null) {
-			selectedSet = new HashSet<String>(selectedUserids);
-		}
-		for (User user : users) {
-			if (selectedSet.contains(user.getObjectId()))
-				selectedUsers.add(user);
-		}
 		
-		// show the results in fragment
-		mFragment.setContactAdapter(selectedUsers,selectedSet);
-	}
-	
-	
 	public void showFragment() {
 		mFragment = new ContactsListFragment();
 		Bundle args = new Bundle();
@@ -208,6 +179,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 				HashSet<String> set = new HashSet<String>(selectedUserids);
 				selectedSet.clear();
 				selectedSet.addAll(set);
+				selectedUsers.clear();
 			}
 			for (User user : friends) {
 				if (selectedSet.contains(user.getObjectId()))
@@ -237,10 +209,10 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 					String name = (String) adapterView.getItemAtPosition(pos);
 					User user = friendsMap.get(name);
 					selectedUsers.add(user);
+					selectedUserids.add(user.getId());
 					selectedSet.add(user.getId());
 					mFragment.setContactAdapter(selectedUsers, selectedSet);
-					// Toast.makeText(getApplicationContext(),(CharSequence)arg0.getItemAtPosition(arg2),
-					// Toast.LENGTH_LONG).show();
+
 				}
 			});
 		}

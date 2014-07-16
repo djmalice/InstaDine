@@ -30,13 +30,15 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		System.out.println("here");
 		setContentView(R.layout.activity_contacts_list);	
 		parseGroupsApiListener = new ParseGroupsApi(this);
 		
 		mFragment = new ContactsListFragment();
 		Bundle args = new Bundle();
 		// Should get from prev activity
-		ArrayList<String> selectedUsers = new ArrayList<String>();
+		ArrayList<String> selectedUsers = new ArrayList<String>(getIntent().getStringArrayListExtra("selectedusers"));
+		System.out.println("selected users size " + selectedUsers.size());
         args.putStringArrayList("selectedusers", selectedUsers);
         args.putString("parent_activity", Constants.GROUP_ALL_CONTACTS);
         mFragment.setArguments(args);
@@ -95,10 +97,6 @@ public class ContactsListActivity extends FragmentActivity implements ParseGroup
 	@Override
 	public void onGetFriendsResult(List<User> friends) {
 		mFragment.setContactAdapter(friends, null);
-		if (friends != null ) {
-			Log.d(TAG, "caching friends" + friends.size());
-			CacheApi.cacheFriends(friends);
-		}
 		
 	}
 

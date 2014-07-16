@@ -38,8 +38,9 @@ public class ContactsListFragment extends Fragment {
 		ArrayList<String> selContacts = getArguments().getStringArrayList( "selectedusers");
 		parentActivity  = getArguments().getString("parent_activity");
 		selectedSet = null;
-		if (selContacts != null )
+		if (selContacts != null ) {
 			selectedSet = new HashSet<String>(selContacts);
+		}
 		contactAdapter = new ContactArrayAdapter(getActivity(), contacts ,selectedSet);
 	}
 
@@ -80,6 +81,7 @@ public class ContactsListFragment extends Fragment {
 		}
 		return selUsers;
 	}
+	
 	
 	// TODO lvContacts.getCheckedItemPositions() Not working
 	// Check with Nathan
