@@ -83,6 +83,18 @@ public class Group extends ParseObject {
 	     getEventRelation().remove(event);
 	     saveInBackground();
 	  }
+	  
+	  public void setEventPresent() {
+		  put("isevent",true);
+	  }
+	  
+	  public void setEventNotPresent() {
+		  put("isevent",false);
+	  }
+	  
+	  public boolean isEventPresent() {
+		  return getBoolean("isevent");
+	  }
 
 
 }
