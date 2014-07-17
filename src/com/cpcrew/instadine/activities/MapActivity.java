@@ -89,6 +89,9 @@ public class MapActivity extends FragmentActivity implements
 		}
 		
 		Intent intent = getIntent();
+		restMap = new HashMap<String,Business>();
+		restCount = new HashMap<String,Integer>();
+		markerMap = new HashMap<Marker, String>();
 	    restMap = (HashMap<String, Business>)intent.getSerializableExtra("rest_map");
 	    restCount = (HashMap<String, Integer>)intent.getSerializableExtra("rest_count");
 	    // Log.d("HashMapTest", restMap.get("key").toString());
@@ -445,9 +448,6 @@ public class MapActivity extends FragmentActivity implements
 		Intent data = new Intent();
 		data.putExtra("rest_map", restMap);
 		data.putExtra("rest_count",restCount);
-		// Return the current selection instead Chintan
-		Business business = (Business) restMap.entrySet().iterator().next();
-		data.putExtra("current_selection", business);
 		data.putExtra("user_choice", markerSelectedBusiness);
 		setResult(RESULT_OK,data);
 		finish();

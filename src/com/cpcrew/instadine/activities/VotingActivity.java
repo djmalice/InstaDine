@@ -1,6 +1,5 @@
 package com.cpcrew.instadine.activities;
 
-import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,8 +57,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
-
-	private HashMap<String,Integer> restCount; 
+ 
 	Business userChoice;
 	private HashMap<String,Rest> Restaurants; 
 
@@ -216,12 +214,21 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
     ////////////////////////
 	public void callSearchActivity(View v){
-
+		
+		HashMap<String, Business> restMap = new HashMap<String, Business>();
+		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
+		for (Rest rest : restaurants) {
+			restMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
+			restCount.put(rest.getRestaurant().getId(), rest.getCount());
+		}
 		Intent i = new Intent(VotingActivity.this, MapActivity.class);
-		i.putExtra("restaurants",restaurants);
+		i.putExtra("rest_map" , restMap);
+		i.putExtra("rest_count",restCount);
 		startActivityForResult(i,Constants.MAP_REQUEST_CODE);
 		
 	}
+	
+	
 	
 	//////////////////////
 	@Override
@@ -345,23 +352,25 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 
 		// load the restaurant id and count
 		List<String> prevSelections =  currentEvent.getSelection();
-		HashMap<String, Rest> restIds = new HashMap<String, Rest>();
-		for ( int i = 0; i < prevSelections.size();++i) {
+		if (prevSelections != null) {
+			for (int i = 0; i < prevSelections.size(); ++i) {
 
 				String restId = Event.getSelectionRest(prevSelections.get(i));
 				String userId = Event.getSelectionUser(prevSelections.get(i));
 				addRestaurant(restId, userId);
-				
+
 				// Add my previous selections
-				if ( userId.equals(LoggedInUser.getcurrentUser().getId()))
-					mySelection.add(restId);				
+				if (userId.equals(LoggedInUser.getcurrentUser().getId()))
+					mySelection.add(restId);
+			}
+			// restaurants is populated with Business info.
+			populateBusinessInfo();
+			restAdapter.notifyDataSetChanged();
 		}
-		// restaurants is populated with Business info.
-		populateBusinessInfo();
 		etLocation.setEnabled(false);
 		tvDate.setEnabled(false);
 		// Show in the listView
-		restAdapter.notifyDataSetChanged();
+		
 	}
 	
 	
