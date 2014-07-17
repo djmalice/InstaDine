@@ -209,8 +209,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void callSearchActivity(View v){
 		addDummyRestaurant();
 		
-//		Intent i = new Intent(this, MapActivity.class);
-//		startActivityForResult(i,Constants.REQUEST_CODE);
+		Intent i = new Intent(this, MapActivity.class);
+		startActivityForResult(i,Constants.REQUEST_CODE);
 		//addRestaurantSelection(rest);
 		//addDummyRestaurant();
 	}
