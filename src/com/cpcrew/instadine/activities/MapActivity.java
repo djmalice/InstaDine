@@ -253,7 +253,7 @@ public class MapActivity extends FragmentActivity implements
 	                              .snippet("Fine Dining")
 	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
 	    markerMap.put(res, business.getId());
-	    // map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
+	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
 	    map.setOnMarkerClickListener(new OnMarkerClickListener() {
 			
 			@Override
