@@ -445,7 +445,7 @@ public class MapActivity extends FragmentActivity implements
 		Intent data = new Intent();
 		data.putExtra("rest_map", restMap);
 		data.putExtra("rest_count",restCount);
-		
+		data.putExtra("user_choice", markerSelectedBusiness);
 		setResult(RESULT_OK,data);
 		finish();
 		

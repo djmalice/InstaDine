@@ -59,7 +59,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
 	private HashMap<String,Business> Restaurants;
 	private HashMap<String,Integer> restCount; 
-	
+	Business userChoice;
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {        	
@@ -230,6 +230,9 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	     // Extract restMap and restCount from maps
 		  Restaurants = (HashMap<String, Business>)data.getSerializableExtra("rest_map");
 		  restCount = (HashMap<String, Integer>)data.getSerializableExtra("rest_count");
+		  
+		  // User selected choice from MapActivity
+		  userChoice = (Business)data.getSerializableExtra("user_choice");
 	     // Toast the name to display temporarily on screen
 	     //Toast.makeText(this, business.getName(), Toast.LENGTH_SHORT).show();
 	     
