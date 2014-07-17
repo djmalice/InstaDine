@@ -62,6 +62,7 @@ public class MapActivity extends FragmentActivity implements
 	RestaurantDropDownAdapter adapter;
 	TextView tvTitle;
 	HashMap<String, Business> restMap;
+	HashMap<String, Business> searchBusiness;
 	HashMap<String, Integer> restCount;
 	HashMap<Marker,String> markerMap;
 	/*
@@ -87,7 +88,19 @@ public class MapActivity extends FragmentActivity implements
 		} else {
 			Log.d("debug","Error - Map Fragment was null!!");
 		}
-		
+		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker arg0) {
+				// TODO Auto-generated method stub
+				tvTitle.setText(arg0.getTitle());
+				if(restMap.get(markerMap.get(arg0)) == null) {
+					markerSelectedBusiness = searchBusiness.get(markerMap.get(arg0));
+				}
+				markerSelectedBusiness = restMap.get(markerMap.get(arg0));
+				return false;
+			}
+		});
 		Intent intent = getIntent();
 		restMap = new HashMap<String,Business>();
 		restCount = new HashMap<String,Integer>();
@@ -254,17 +267,13 @@ public class MapActivity extends FragmentActivity implements
 	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
 	    markerMap.put(res, business.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
-	    map.setOnMarkerClickListener(new OnMarkerClickListener() {
-			
-			@Override
-			public boolean onMarkerClick(Marker arg0) {
-				// TODO Auto-generated method stub
-				tvTitle.setText(arg0.getTitle());
-				markerSelectedBusiness = restMap.get(markerMap.get(arg0));
-				return false;
-			}
-		});
+	    
+		
 	    // res.showInfoWindow();
+	    // Add to temporary search business map for all markers in the system
+	    
+	    searchBusiness.put(business.getId(), business);
+	    
 	}
 	
 	
@@ -437,21 +446,28 @@ public class MapActivity extends FragmentActivity implements
 		
 	
 	public void sendSelectionToVoting(View v){
-		if(restMap.containsKey(markerSelectedBusiness.getId())){
-			restCount.put(markerSelectedBusiness.getId(),restCount.get(markerSelectedBusiness.getId())+1);
+		if (markerSelectedBusiness == null) {
+			Toast.makeText(getBaseContext(),
+					"Please select a marker before pressing done",
+					Toast.LENGTH_LONG).show();
 		} else {
-			restMap.put(markerSelectedBusiness.getId(), markerSelectedBusiness);
-			restCount.put(markerSelectedBusiness.getId(), 1);
+			if (restMap.containsKey(markerSelectedBusiness.getId())) {
+				restCount.put(markerSelectedBusiness.getId(),
+						restCount.get(markerSelectedBusiness.getId()) + 1);
+			} else {
+				restMap.put(markerSelectedBusiness.getId(),
+						markerSelectedBusiness);
+				restCount.put(markerSelectedBusiness.getId(), 1);
+			}
+
+			// Send to voting acitivity
+			Intent data = new Intent();
+			data.putExtra("rest_map", restMap);
+			data.putExtra("rest_count", restCount);
+			data.putExtra("user_choice", markerSelectedBusiness);
+			setResult(RESULT_OK, data);
+			finish();
 		}
-		
-		// Send to voting acitivity
-		Intent data = new Intent();
-		data.putExtra("rest_map", restMap);
-		data.putExtra("rest_count",restCount);
-		data.putExtra("user_choice", markerSelectedBusiness);
-		setResult(RESULT_OK,data);
-		finish();
-		
 		
 		
 	}
