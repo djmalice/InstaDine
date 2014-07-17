@@ -4,16 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.Activity;
+import org.joda.time.DateTime;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
@@ -26,8 +37,33 @@ import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.utils.Constants;
+import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
+import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
+import com.parse.PushService;
+import com.parse.RefreshCallback;
+import com.parse.SaveCallback;
 
-public class VotingActivity extends Activity implements ParseEventApiListener {
+public class VotingActivity extends FragmentActivity implements ParseEventApiListener, 
+	CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener {
+	
+	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
+	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
+	
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {        	
+	    	Toast.makeText(getApplicationContext(), "onReceive invoked!", Toast.LENGTH_LONG).show();
+	    }
+	};
+	
+	private TextView tvDateSelected;
+	private Button btnDateSelect;
+	private Button btnTimeSelect;
 	
 	private ParseEventsApi parseEventApi;
 	private Event currentEvent;
@@ -44,6 +80,8 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
 		if ( groupId == null)
 			groupId = getIntent().getStringExtra("group_id");
 		setContentView(R.layout.activity_voting);
@@ -60,7 +98,113 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 		lvRestaurants.setAdapter(restAdapter);
 		onRestaurantSelected();
 		populateBusinessInfo();
+		
+		createDatePicker();
+        createTimePicker();
+    	
+        // Specify an Activity to handle all pushes by default
+		PushService.setDefaultPushCallback(this, VotingActivity.class);
 	}
+
+	
+	// pushNotifications onPause routine
+	@Override
+    public void onPause() {
+        super.onPause();
+       LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+    
+	
+	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
+	// leaving code here for now...
+	public void createTimePicker() {
+		
+		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
+		
+		btnTimeSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                DateTime now = DateTime.now();
+                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+                        .newInstance(VotingActivity.this, now.getHourOfDay(), now.getMinuteOfHour(),
+                                DateFormat.is24HourFormat(VotingActivity.this));
+                timePickerDialog.setThemeDark(true);
+                timePickerDialog.show(fm, FRAG_TAG_TIME_PICKER);
+            }
+        });
+	}
+	
+
+    @Override
+    public void onTimeSet(RadialTimePickerDialog dialog, int hourOfDay, int minute) {
+    	if (hourOfDay==0){
+    		hourOfDay=12;
+    	}    	
+    	if (hourOfDay > 12) { 
+    		hourOfDay = hourOfDay - 12;
+    		if (minute < 10) {
+    			btnTimeSelect.setText("" + hourOfDay + ":0" + minute + "PM");
+    		}
+    		else {
+    			btnTimeSelect.setText("" + hourOfDay + ":" + minute + "PM");
+    		}
+    	}
+    	else {
+    		if (minute < 10) {
+    			btnTimeSelect.setText("" + hourOfDay + ":0" + minute + "AM");
+    		}
+    		else {
+    			btnTimeSelect.setText("" + hourOfDay + ":" + minute + "AM");
+    		}    		
+    	}
+    }
+
+	public void createDatePicker() {
+        tvDateSelected = (TextView) findViewById(R.id.tvDateSelected);
+        btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+        
+        tvDateSelected.setText("--");
+        btnDateSelect.setText("Set Date");
+        
+        btnDateSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                DateTime now = DateTime.now();
+                CalendarDatePickerDialog calendarDatePickerDialog = CalendarDatePickerDialog
+                        .newInstance(VotingActivity.this, now.getYear(), now.getMonthOfYear() - 1,
+                                now.getDayOfMonth());
+                calendarDatePickerDialog.show(fm, FRAG_TAG_DATE_PICKER);
+            }
+        });
+	}
+	
+    @Override
+    public void onDateSet(CalendarDatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+    	btnDateSelect.setText(monthOfYear + "/" + dayOfMonth + "/" + year);
+    }
+    
+    @Override
+    public void onResume() {
+        // Example of reattaching to the fragment
+        super.onResume();
+        
+        // pushNotifications onResume routine, calls the custom defined VotingActivityReceiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(VotingActivityReceiver.intentAction));
+        
+        CalendarDatePickerDialog calendarDatePickerDialog = (CalendarDatePickerDialog) getSupportFragmentManager()
+                .findFragmentByTag(FRAG_TAG_DATE_PICKER);
+        if (calendarDatePickerDialog != null) {
+            calendarDatePickerDialog.setOnDateSetListener(this);
+        }
+        
+        RadialTimePickerDialog rtpd = (RadialTimePickerDialog) getSupportFragmentManager().findFragmentByTag(
+                FRAG_TAG_TIME_PICKER);
+        if (rtpd != null) {
+            rtpd.setOnTimeSetListener(this);
+        }        
+    }    
 	
 	public void callSearchActivity(View v){
 		addDummyRestaurant();
@@ -195,6 +339,82 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), mySelection );
 		}
+		
+		// Get the latest values from the ParseInstallation object.
+		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
+			
+			@Override
+			public void done(ParseObject object, ParseException e) {
+				if (e == null) {
+					pushToVotingActivity();
+				}
+			}
+		});
+		
+	}
+	
+	public void pushToVotingActivity() {
+
+		JSONObject obj;
+		try {
+			obj = new JSONObject();
+			obj.put("alert", "All users of " + currentGroup.getGroupName() + " are recieving this notification!");
+			obj.put("title", "New event invite!");
+			obj.put("action", VotingActivityReceiver.intentAction);
+			obj.put("customdata","My message");
+			
+			/* 
+			 * Every Parse application installed on a device registered for push notifications has an associated Installation object. 
+			 * The Installation object is where you store all the data needed to target push notifications.
+			 * 
+			 *  Installation objects are available through the ParseInstallation class, a subclass of ParseObject. 
+			 *  It uses the same API for storing and retrieving data.
+			 */
+						
+			/*
+			 * You can even create relationships between your Installation objects and other classes saved on Parse. 
+			 * To associate an Installation with a particular user, for example, 
+			 * you can simply store the current user on the ParseInstallation.
+			 */
+			
+			ParseInstallation.getCurrentInstallation().put("groupname", currentGroup.getGroupName());
+			ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
+			
+			ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+				@Override
+				public void done(ParseException e) {
+					if (e == null) {
+						Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
+						toast.show();
+					} else {
+						e.printStackTrace();
+
+						Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Save Failed :(" , Toast.LENGTH_SHORT);
+						toast.show();
+					}
+				}
+			});
+			
+			/*
+			 * Once you have your data stored on your Installation objects, 
+			 * you can use a ParseQuery to target a subset of these devices. 
+			 * 
+			 * Installation queries work just like any other Parse query, 
+			 * but we use the special static method ParseInstallation.getQuery() to create it.
+			 */
+			
+			ParsePush push = new ParsePush();
+			ParseQuery query = ParseInstallation.getQuery();
+			
+			// Send push notification to query - in this case, only the current group's users will be notified
+			query.whereEqualTo("groupname", currentGroup.getGroupName());
+			push.setQuery(query);
+			push.setData(obj);
+			push.sendInBackground(); 
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	public void onNo(View v) {
@@ -215,7 +435,6 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 			currentGroup = group;
 			parseEventApi.getEventsForGroup(group);
 		}
-		
 	}
 
 	@Override
@@ -224,7 +443,6 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 			currentEvent = events.get(0);
 			loadEvent();
 		}
-		
 	}
 
 	@Override
