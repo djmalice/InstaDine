@@ -112,7 +112,7 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 		if (currentEvent == null) {
 			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getObjectId(),currentSelection);
 		} else {
-			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getObjectId(), currentSelection );
+			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), currentSelection );
 		}
 	}
 	

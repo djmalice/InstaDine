@@ -2,6 +2,7 @@ package com.cpcrew.instadine.adapters;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.models.User;
@@ -28,7 +29,8 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 
 	public ContactArrayAdapter(Context context, ArrayList<User> contacts , HashSet<String> selContacts) {
 		super(context, 0, contacts);
-		mSelContacts = selContacts;
+		mSelContacts = new HashSet<String>(selContacts);
+		//mSelContacts = selContacts;
 		checkedUsers = new ArrayList<Boolean>();
 	}
 
@@ -63,6 +65,7 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 		
 		if (isAlreadySelected(user)) {
 			viewHolder.cbSelect.setVisibility(View.INVISIBLE);
+			viewHolder.ivSelected.setVisibility(View.VISIBLE);
 			checkedUsers.set(position, true);
 		} else {
 			viewHolder.ivSelected.setVisibility(View.INVISIBLE);
@@ -87,8 +90,9 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 	}
 	
 	private boolean isAlreadySelected(User user) {
+		
 		if ( mSelContacts != null ) {
-			if ( mSelContacts.contains(user.getObjectId()))
+			if ( mSelContacts.contains(user.getId()))
 				return true;
 		}
 		return false;
@@ -116,6 +120,10 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 		for (int i = 0; i < cnt ; ++ i) {
 			checkedUsers.add(false);
 		}
+	}
+	
+	public void addSelectedUsers(HashSet<String> users) {
+		mSelContacts = users;
 	}
 	
 }

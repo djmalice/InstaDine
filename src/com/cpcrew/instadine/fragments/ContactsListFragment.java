@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ContactArrayAdapter;
 import com.cpcrew.instadine.models.User;
+import com.cpcrew.instadine.utils.Constants;
 
 public class ContactsListFragment extends Fragment {
 
@@ -61,10 +61,10 @@ public class ContactsListFragment extends Fragment {
 			selectedSet.clear();
 			selectedSet.addAll(selectedFriends);
 		}
-		Log.d(TAG, "Number of friends " + friends.size());
-		Log.d(TAG, "Number of selected friends " + selectedSet.size());
 		contactAdapter.addAll(friends);
 		contactAdapter.selectNone();
+		if ( parentActivity == Constants.GROUP_ADD_CONTACT)
+			contactAdapter.addSelectedUsers(selectedFriends);
 	}
 	
 	
@@ -125,7 +125,7 @@ public class ContactsListFragment extends Fragment {
 		for (int i = 0; i < lvContacts.getCount();++i ) {
 			if (contactAdapter.checkedUsers.get(i) == true) {
 				User user = (User) lvContacts.getItemAtPosition(i);
-				selectedUsers.add(user.getObjectId() );	
+				selectedUsers.add(user.getId() );	
 			}
 		}
 		return selectedUsers;

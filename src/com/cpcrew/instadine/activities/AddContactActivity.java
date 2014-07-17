@@ -74,7 +74,6 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 
 	// Create a group
 	public void onCreateGroup(MenuItem item) {
-		System.out.println( " Num users " + selectedUsers.size());
 		if( selectedUsers != null && selectedUsers.size() > 0) {
 			selectedUsers.add(LoggedInUser.getcurrentUser());
 			ParseGroupsApi.createGroup(groupName, selectedUsers, LoggedInUser.getcurrentUser());
@@ -184,7 +183,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 				selectedUsers.clear();
 			}
 			for (User user : friends) {
-				if (selectedSet.contains(user.getObjectId()))
+				if (selectedSet.contains(user.getId()))
 					selectedUsers.add(user);
 			}
 
@@ -192,12 +191,13 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 			mFragment.setContactAdapter(selectedUsers, selectedSet);
 			isActivityResult = false;
 		} else {
-			// TODO Handle duplicate first names
+			// Search Autocomplete
 			// Maybe first name will be screen Name instead
 			friendsMap = new HashMap<String, User>();
 			autocompleteList = new ArrayList<String>();
 			for (User user : friends) {
 				String name = user.getFirstName() + " " + user.getLastName();
+				
 				friendsMap.put(name, user);
 				autocompleteList.add(name);
 			}
@@ -206,6 +206,8 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 					android.R.layout.simple_dropdown_item_1line,
 					autocompleteList);
 			tvAddContact.setAdapter(autoCompleteAdapter);
+			
+			// ON selection of item
 			tvAddContact.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> adapterView, View view, int pos, long arg3) {
 					String name = (String) adapterView.getItemAtPosition(pos);
@@ -213,7 +215,6 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 					selectedUsers.add(user);
 					selectedUserids.add(user.getId());
 					selectedSet.add(user.getId());
-					System.out.println(user.getFirstName());
 					mFragment.setContactAdapter(selectedUsers, selectedSet);
 
 				}

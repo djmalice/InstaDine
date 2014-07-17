@@ -46,7 +46,7 @@ public class ParseGroupsApi {
 		group.setGroupName(groupName);
 		for (User user : users) {
 			group.addUser(user);
-			desc.append(user.getUserName() + ", ");
+			desc.append(user.getFirstName() + ", ");
 		}
 		String str = desc.toString();
 		str = str.replaceAll(" ,$", "");
@@ -201,7 +201,11 @@ public class ParseGroupsApi {
 		    public void done(List<ParseUser> users, com.parse.ParseException e) {
 		    	if ( e == null ) {
 		    		System.out.println(" Number of friends " + users.size());
-		    		mParseApiListner.onGetFriendsResult( User.wrapParseUsers(users));
+		    		List<User> us = User.wrapParseUsers(users);
+		    		for (User u : us) {
+		    			System.out.println("ff " + u.getId());
+		    		}
+		    		mParseApiListner.onGetFriendsResult( us);
 		    	}
 		    	else
 		    		System.out.println(e.getMessage());
