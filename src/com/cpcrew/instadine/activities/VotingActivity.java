@@ -295,12 +295,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		// load the restaurants
 		List<String> prevSelections =  currentEvent.getSelection();
 		HashMap<String, Rest> restIds = new HashMap<String, Rest>();
-		for ( int i = 0; i < prevSelections.size();++i) {
+		if (prevSelections != null) {
+			for (int i = 0; i < prevSelections.size(); ++i) {
 
 				String restId = Event.getSelectionRest(prevSelections.get(i));
 				String userId = Event.getSelectionUser(prevSelections.get(i));
 				Rest restaurantSel;
-				if ( restIds.containsKey(restId))
+				if (restIds.containsKey(restId))
 					restaurantSel = restIds.get(restId);
 				else {
 					restaurantSel = new Rest();
@@ -308,13 +309,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 					restIds.put(restId, restaurantSel);
 				}
 				restaurantSel.addUser(userId);
-				
+
 				// Add my previous selections
-				System.out.println(userId + "::: " + LoggedInUser.getcurrentUser().getId());
-				if ( userId.equals(LoggedInUser.getcurrentUser().getId()))
+				System.out.println(userId + "::: "
+						+ LoggedInUser.getcurrentUser().getId());
+				if (userId.equals(LoggedInUser.getcurrentUser().getId()))
 					mySelection.add(restId);
-				restAdapter.add(restaurantSel); // View 
-		
+				restAdapter.add(restaurantSel); // View
+
+			}
 		}
 		etLocation.setEnabled(false);
 		tvDate.setEnabled(false);
