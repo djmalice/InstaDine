@@ -3,11 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="${packageName}.${activityClass}" >
-	
-	<fragment
-	   android:id="@+id/map"
-	   class="com.google.android.gms.maps.SupportMapFragment"
-	   android:layout_width="match_parent"
-	   android:layout_height="match_parent"/>
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/map"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restaurant Name" />
+        
+        <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/tvTitle"
+        android:src="@drawable/ic_done" />
+    </RelativeLayout>
+
     
+
 </RelativeLayout>

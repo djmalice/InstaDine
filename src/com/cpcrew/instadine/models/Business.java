@@ -82,19 +82,47 @@ public class Business {
 		Business b = new Business();
         // Deserialize json into object fields
 		try {
-			b.name = jsonObject.getString("name");;
+			b.name = jsonObject.getString("name");
+		} catch (JSONException e) {
+            e.printStackTrace();
+            b.name = null;
+        }
+		try {
 			b.city=jsonObject.getString("vicinity");
+		} catch (JSONException e) {
+            e.printStackTrace();
+            b.city = null;
+        }
+		try {
 			b.id = jsonObject.getString("place_id");
-			b.rating = jsonObject.getDouble("rating");
-        	JSONObject Geometry = jsonObject.getJSONObject("geometry").getJSONObject("location");
-        	b.lat= Geometry.getDouble("lat");
-        	b.longi = Geometry.getDouble("lng");
+		} catch (JSONException e) {
+            e.printStackTrace();
+            b.id = null;
+        }
+		JSONObject Geometry;
+		try {
+			Geometry = jsonObject.getJSONObject("geometry").getJSONObject("location");
+			b.lat= Geometry.getDouble("lat");
+			b.longi = Geometry.getDouble("lng");
+		} catch (JSONException e) {
+            e.printStackTrace();
+            Geometry = null;
+            return b;
+        }
+
+			
+			// b.rating = jsonObject.getDouble("rating");
+        	
+        	
+		try {
         	b.phone =jsonObject.getString("formatted_phone_number");
         	b.imageUrl = jsonObject.getString("icon");
         	
         } catch (JSONException e) {
             e.printStackTrace();
-            return null;
+            b.phone = null;
+            b.imageUrl = null;
+            return b;
         }
 		// Return new object
 		return b;

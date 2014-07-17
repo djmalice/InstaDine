@@ -75,13 +75,13 @@ public class MapActivity extends FragmentActivity implements
 		if (mapFragment != null) {
 			map = mapFragment.getMap();
 			if (map != null) {
-				Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+				Log.d("debug","Map Fragment was loaded properly!");
 				map.setMyLocationEnabled(true);
 			} else {
-				Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+				Log.d("debug","Error - Map was null!!");
 			}
 		} else {
-			Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+			Log.d("debug","Error - Map Fragment was null!!");
 		}
 		
 		
@@ -131,7 +131,7 @@ public class MapActivity extends FragmentActivity implements
 				
 			}
 		});
-	    /*
+	    
 	    searchIcon = (ImageView) v.findViewById(R.id.action_search);
 	    searchBox.setVisibility(View.INVISIBLE);
 	    
@@ -327,9 +327,9 @@ public class MapActivity extends FragmentActivity implements
 		// Display the connection status
 		Location location = mLocationClient.getLastLocation();
 		if (location != null) {
-			Toast.makeText(this, "GPS location was found!", Toast.LENGTH_SHORT).show();
+			Log.d("debug", "GPS location was found!");
 			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
 			map.animateCamera(cameraUpdate);
 		} else {
 			Toast.makeText(this, "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
@@ -398,7 +398,7 @@ public class MapActivity extends FragmentActivity implements
 			return mDialog;
 		}
 	}
-	
+	/*
 	// Search from Menu
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -422,7 +422,7 @@ public class MapActivity extends FragmentActivity implements
 				return false;
 			}
 		});
-		*/
+		
 
     	// Associate searchable configuration with the SearchView
         SearchManager searchManager =
@@ -434,7 +434,7 @@ public class MapActivity extends FragmentActivity implements
     	
     	return true;
     }
-	
+	*/
 	
 	
 	
