@@ -31,7 +31,7 @@ public class User  {
 
 	public String getObjectId() {
 		System.out.println("objectid " + parseUser.getString("objectId"));
-		return parseUser.getString("objectId");
+		return parseUser.getObjectId();
 	}
 	
 	public String getId() {
@@ -86,7 +86,6 @@ public class User  {
 		List<User> users = new ArrayList<User>();
 		for ( ParseUser pUser : pUsers) {
 			User user = wrapParseUser(pUser);
-			System.out.println("Wrapping " + user.getId());
 			users.add(user);
 		}
 		return users;

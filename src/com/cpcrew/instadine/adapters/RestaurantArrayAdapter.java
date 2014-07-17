@@ -36,7 +36,7 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
     }
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Rest thisGroup = getItem(position);
+		Rest thisRest = getItem(position);
 		ViewHolder viewHolder;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
@@ -47,8 +47,8 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
 			convertView.setTag(viewHolder);
 		}
 		viewHolder = (ViewHolder) convertView.getTag();
-		viewHolder.tvRestname.setText(thisGroup.getRestName());
-		viewHolder.tvSelectionCount.setText(String.valueOf(thisGroup.getCount()) );
+		viewHolder.tvRestname.setText(thisRest.getRestName());
+		viewHolder.tvSelectionCount.setText(String.valueOf(thisRest.getCount()) );
 		return convertView;
 	}
 	

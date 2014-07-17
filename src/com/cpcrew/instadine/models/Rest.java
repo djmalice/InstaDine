@@ -12,8 +12,9 @@ import java.util.HashSet;
  */
 public class Rest {
 	
+	private Business restaurant;
 	private String restName;
-	private int count;
+	private int count = 0;
 	private HashSet<String> userids; // objectIds of users that selected this restaurant, no duplicates
 	
 	public String getRestName() {
@@ -36,8 +37,18 @@ public class Rest {
 		userids.add(userid);
 	}
 	
+	public void removeUser(String userid) {
+		userids.remove(userid);
+	}
+	
 	public HashSet<String> getUsers() {
 		return userids;
+	}
+	public Business getRestaurant() {
+		return restaurant;
+	}
+	public void setRestaurant(Business restaurant) {
+		this.restaurant = restaurant;
 	}
 	
 
