@@ -99,6 +99,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		//initialize
 		restaurants = new ArrayList<Rest>();
 		mySelection = new ArrayList<String>();
+		Restaurants = new HashMap<String, Rest>();
 		parseEventApi = new ParseEventsApi(this);
 		
 		findEvent(groupId);
