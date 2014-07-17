@@ -1,7 +1,6 @@
 package com.cpcrew.instadine.api;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -145,6 +144,24 @@ public class ParseEventsApi {
 		  }
 		});	
 	}
+	
+//	public void createRestaurant(final Restaurant restaurant) {
+//
+//	    restaurant.saveInBackground(new SaveCallback() {
+//	    	
+//	        public void done(ParseException e) {
+//	            if (e == null) {
+//	                // Saved successfully.
+//	                Log.d(TAG, "User update saved!");
+//	                String id = po.getObjectId();
+//	                Log.d(TAG, "The object id is: " + id);
+//	            } else {
+//	                // The save failed.
+//	                Log.d(TAG, "User update error: " + e);
+//	            }
+//	        }
+//	    });
+//	}
 	
 
 

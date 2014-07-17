@@ -4,6 +4,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 @ParseClassName("Group")
 public class Group extends ParseObject {
@@ -54,17 +55,17 @@ public class Group extends ParseObject {
         put("gimage", file);
     }
     
-    public ParseRelation<User> getUserRelation() {
+    public ParseRelation<ParseUser> getUserRelation() {
     	return getRelation("users");
     }
     
 	public void addUser(User user ) {
-		getUserRelation().add(user);
+		getUserRelation().add(user.getParseUser());
 		saveInBackground();
 	}
 	
 	public void removeUser(User user) {
-		getUserRelation().remove(user);
+		getUserRelation().remove(user.getParseUser());
 		saveInBackground();
 	}
 	

@@ -12,6 +12,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 /**
 * APIs to read, write and query from Parse
@@ -45,7 +46,7 @@ public class ParseGroupsApi {
 		group.setGroupName(groupName);
 		for (User user : users) {
 			group.addUser(user);
-			desc.append(user.getFirstName() + ", ");
+			desc.append(user.getUserName() + ", ");
 		}
 		String str = desc.toString();
 		str = str.replaceAll(" ,$", "");
@@ -67,7 +68,7 @@ public class ParseGroupsApi {
 
 		// now we will query the users relation to see if the user object we
 		// have is contained therein
-		query.whereEqualTo("users", user);
+		query.whereEqualTo("users", user.getParseUser());
 		Log.d(TAG, "Starting async getGroupsForUser");
 		// execute the query
 		query.findInBackground(new FindCallback<Group>() {
@@ -113,14 +114,15 @@ public class ParseGroupsApi {
 	 * @param group
 	 */
 	public void getUsersOfGroup(Group group) {
-		ParseRelation<User> relation = group.getRelation("users");
-		ParseQuery<User> query = relation.getQuery();
+		ParseRelation<ParseUser> relation = group.getRelation("users");
+		ParseQuery<ParseUser> query = relation.getQuery();
 		Log.d(TAG, "Starting async getUsersOfGroup");
-		query.findInBackground(new FindCallback<User>() {
-		    public void done(List<User> users, com.parse.ParseException e) {
+		query.findInBackground(new FindCallback<ParseUser>() {
+		    public void done(List<ParseUser> users, com.parse.ParseException e) {
 		    	if ( e == null ) {
 		    		System.out.println(" Number of grups the user belongs to " + users.size());
-		    		mParseApiListner.onGetUserOfGroupResults( users);
+		    		
+		    		mParseApiListner.onGetUserOfGroupResults( User.wrapParseUsers(users));
 		    	}
 		    	else
 		    		System.out.println(e.getMessage());
@@ -169,13 +171,13 @@ public class ParseGroupsApi {
      */
 	public void getAllUsers() {
 		Log.d(TAG, "Starting async getAllUsers");
-		ParseQuery<User> query = ParseQuery.getQuery(User.class);
-        query.findInBackground(new FindCallback<User>() {
-                public void done(List<User> userList, ParseException e) {
+		ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.findInBackground(new FindCallback<ParseUser>() {
+                public void done(List<ParseUser> userList, ParseException e) {
                         if (e == null) {
                                 Log.d("debug", "size of response: " + userList.size());
                                 // Call back here
-                                mParseApiListner.onallUsersResults(userList);
+                                mParseApiListner.onallUsersResults(User.wrapParseUsers(userList));
 
                         } else {
                                 Log.d("item", "Error: " + e.getMessage());
@@ -193,13 +195,13 @@ public class ParseGroupsApi {
 	 */
 	public void getFriendsOfUser(User user) {
 		Log.d(TAG, "Starting async getFriendsOfUser");
-		ParseRelation<User> relation = user.getRelation("friends");
-		ParseQuery<User> query = relation.getQuery();
-		query.findInBackground(new FindCallback<User>() {
-		    public void done(List<User> users, com.parse.ParseException e) {
+		ParseRelation<ParseUser> relation = user.getParseUser().getRelation("pfriends");
+		ParseQuery<ParseUser> query = relation.getQuery();
+		query.findInBackground(new FindCallback<ParseUser>() {
+		    public void done(List<ParseUser> users, com.parse.ParseException e) {
 		    	if ( e == null ) {
 		    		System.out.println(" Number of friends " + users.size());
-		    		mParseApiListner.onGetFriendsResult( users);
+		    		mParseApiListner.onGetFriendsResult( User.wrapParseUsers(users));
 		    	}
 		    	else
 		    		System.out.println(e.getMessage());
@@ -216,14 +218,14 @@ public class ParseGroupsApi {
 	 */
 	public void findFriend(String partialName, User currentUser) {
 		Log.d(TAG, "Starting async findFriend");
-		ParseRelation<User> relation = currentUser.getRelation("friends");
-		ParseQuery<User> query = relation.getQuery();
+		ParseRelation<ParseUser> relation = currentUser.getParseUser().getRelation("pfriends");
+		ParseQuery<ParseUser> query = relation.getQuery();
 		query.whereStartsWith("first", partialName);
-		query.findInBackground(new FindCallback<User>() {
-		    public void done(List<User> users, com.parse.ParseException e) {
+		query.findInBackground(new FindCallback<ParseUser>() {
+		    public void done(List<ParseUser> users, com.parse.ParseException e) {
 		    	if ( e == null ) {
 		    		System.out.println(" Number of friends " + users.size());
-		    		mParseApiListner.onGetFriendsResult( users);
+		    		mParseApiListner.onGetFriendsResult( User.wrapParseUsers(users));
 		    	}
 		    	else
 		    		System.out.println(e.getMessage());
@@ -239,17 +241,35 @@ public class ParseGroupsApi {
 	 */
 	public void retrieveUser(String objectId) {
 		Log.d(TAG, "Starting async retrieveUser");
-		ParseQuery<User> query = ParseQuery.getQuery(User.class);
-		query.getInBackground(objectId, new GetCallback<User>() {
-		  public void done(User user, ParseException e) {
+		ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+		query.getInBackground(objectId, new GetCallback<ParseUser>() {
+		  public void done(ParseUser user, ParseException e) {
 		    if (e == null) {
-		      mParseApiListner.retrieveUser(user);
+		      mParseApiListner.retrieveUser(User.wrapParseUser(user));
 		    } else {
 		    	System.out.println("Retrieve user :" + e.getMessage());
 		    }
 		  }
+
 		});
 	}
+	
+//	public void retrieveUserWithFacebookId(String facebookId) {
+//		Log.d(TAG, "Starting async retrieveUserWithFacebookId");
+//		ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+//		query.getInBackground(facebookId, new GetCallback<ParseUser>() {
+//		  public void done(ParseUser user, ParseException e) {
+//		    if (e == null) {
+//		      mParseApiListner.retrieveUser(User.wrapParseUser(user));
+//		    } else {
+//		    	System.out.println("Retrieve user :" + e.getMessage());
+//		    }
+//		  }
+//
+//		});
+//	}
+	
+
 	
 	
 }

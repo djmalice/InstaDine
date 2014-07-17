@@ -37,7 +37,6 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 	protected ListView lvRestaurants;
 	private static int counter = 0;
 	private ArrayList<String> currentSelection;
-	//private ArrayList<JSONObject> prevSelections;
 	private String groupId = null;
 
 	@Override
@@ -79,10 +78,8 @@ public class VotingActivity extends Activity implements ParseEventApiListener {
 		HashMap<String, Rest> restIds = new HashMap<String, Rest>();
 		for ( int i = 0; i < prevSelections.size();++i) {
 
-				System.out.println(prevSelections.get(i));
 				String restName = Event.getSelectionRest(prevSelections.get(i));
 				String userId = Event.getSelectionUser(prevSelections.get(i));
-				System.out.println(restName);
 				Rest restaurantSel;
 				if ( restIds.containsKey(restName))
 					restaurantSel = restIds.get(restName);

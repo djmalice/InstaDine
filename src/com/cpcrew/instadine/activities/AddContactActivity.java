@@ -74,6 +74,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 
 	// Create a group
 	public void onCreateGroup(MenuItem item) {
+		System.out.println( " Num users " + selectedUsers.size());
 		if( selectedUsers != null && selectedUsers.size() > 0) {
 			selectedUsers.add(LoggedInUser.getcurrentUser());
 			ParseGroupsApi.createGroup(groupName, selectedUsers, LoggedInUser.getcurrentUser());
@@ -86,6 +87,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 	// Open contacts list
 	public void onOpenContacts(View v) {
 		// CacheApi.cacheSelectedUsers(selectedUsers);
+		
 		Intent intent = new Intent(this, ContactsListActivity.class);
 		intent.putStringArrayListExtra("selectedusers", selectedUserids);
 		startActivityForResult(intent, Constants.REQUEST_CODE);
@@ -211,6 +213,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 					selectedUsers.add(user);
 					selectedUserids.add(user.getId());
 					selectedSet.add(user.getId());
+					System.out.println(user.getFirstName());
 					mFragment.setContactAdapter(selectedUsers, selectedSet);
 
 				}

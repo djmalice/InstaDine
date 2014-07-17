@@ -164,13 +164,6 @@ public class MapActivity extends FragmentActivity implements
 			
 		});
 	    
-	 
-	   
-	    
-	    
-	    
-	    
-		
 	}
 	
 	protected void toggleSearch(boolean reset) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
@@ -80,11 +81,19 @@ public class Event extends ParseObject {
 	}
 	
 	public void addRejectedUser(User user) {
-		add("rejectedusers" ,user);
+		add("rejectedusers" ,user.getParseUser());
 	}
 	
-	public List<User> getRejectedUsers() {
+	public List<ParseUser> getRejectedUsers() {
 		return getList("rejectedusers");
+	}
+	
+	public void addOrganizer(User user) {
+		add("organizer", user.getParseUser());
+	}
+	
+	public ParseUser getParseUser() {
+		return getParseUser("organizer");
 	}
 	
 //	public ParseRelation<Restaurant> getRestaurantRelation() {

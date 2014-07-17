@@ -1,21 +1,14 @@
 package com.cpcrew.instadine.models;
 
+import com.parse.ParseUser;
+
 
 public class LoggedInUser {
     private static User currentUser;
-    public static void setCurrentUser(User user) {
+    public static void setCurrentUser(ParseUser parseUser) {
     	
-    	// testing
-        currentUser = user;
+        currentUser = new User(parseUser);
       
-        // store in shared preferences ??
-//        if (user == null) {
-//            InstaDineApplication.getSharedPreferences().edit().remove("current_user")
-//                    .commit();
-//        } else {
-//            InstaDineApplication.getSharedPreferences().edit()
-//                    .putString("current_user", user.jsonObject.toString()).commit();
-//        }
     }
     
     public static User getcurrentUser() {

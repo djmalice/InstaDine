@@ -113,7 +113,7 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 		users = new ArrayList<User>(userList);
 		for (User user : users) {
 			Log.d(TAG,
-					user.getFirstName() + "added to group "
+					user.getUserName() + "added to group "
 							+ testGroup.getGroupName());
 			testGroup.addUser(user);
 		}

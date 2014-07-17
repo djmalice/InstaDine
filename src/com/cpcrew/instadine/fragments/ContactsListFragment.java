@@ -62,6 +62,7 @@ public class ContactsListFragment extends Fragment {
 			selectedSet.addAll(selectedFriends);
 		}
 		Log.d(TAG, "Number of friends " + friends.size());
+		Log.d(TAG, "Number of selected friends " + selectedSet.size());
 		contactAdapter.addAll(friends);
 		contactAdapter.selectNone();
 	}

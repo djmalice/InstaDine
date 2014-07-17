@@ -72,7 +72,7 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 			addClickHandlerToCheckBox(viewHolder.cbSelect);
 		}
 		// Load the image TODO - Verify the right API
-		ParseFile photoFile = user.getParseFile("profileImage");
+		ParseFile photoFile = user.getProfileImage();
 		if (photoFile != null) {
 			viewHolder.pivPhoto.setParseFile(photoFile);
 			viewHolder.pivPhoto.loadInBackground(new GetDataCallback() {

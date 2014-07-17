@@ -3,7 +3,6 @@ package com.cpcrew.instadine.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,14 +17,17 @@ import android.widget.Toast;
 
 import com.cpcrew.instadine.InstaDineApplication;
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.models.LoggedInUser;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class UserDetailsActivity extends Activity {
@@ -103,16 +105,36 @@ public class UserDetailsActivity extends Activity {
 				      
 			             if (users != null) {
 				             List<String> friendsList = new ArrayList<String>();
-				             for (GraphUser user : users) {				            	
-				                friendsList.add(user.getName());
+				             for (GraphUser user : users) {		
+				            	 System.out.println(user.getId());
+				            	 // What will I do with a name that is not present in the profile !!! Ridiculous
+				                //friendsList.add(user.getName());
+				            	 friendsList.add(user.getId());
 				                Toast.makeText(getApplicationContext(), friendsList.toString(), Toast.LENGTH_SHORT).show();
 				             }
 				             ParseUser currentUser = ParseUser
 										.getCurrentUser();
 				             
 				             	// friends array key specified in existing _user class
-								currentUser.put("friends", friendsList);
+								currentUser.put("friendsfb", friendsList);
 								currentUser.saveInBackground();
+								LoggedInUser.setCurrentUser(currentUser);
+								
+//								 ParseQuery friendQuery = ParseQuery.getQuery();
+//							     friendQuery.whereContainedIn("fbId", friendsList);
+//
+//							      // findObjects will return a list of ParseUsers that are friends with
+//							      // the current user
+//							      try {
+//									List<ParseObject> friendUsers = friendQuery.find();
+//									if ( friendUsers == null )
+//										System.out.println("Friedn users null");
+//									else
+//										System.out.println("friend " + friendUsers.size());
+//								} catch (ParseException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
 								
 								// friends array in a new class format
 								ParseObject allFriends = new ParseObject("AllFriends");
@@ -136,9 +158,13 @@ public class UserDetailsActivity extends Activity {
 								// Populate the JSON object
 								userProfile.put("facebookId", user.getId());
 								userProfile.put("name", user.getName());
-								if (user.getLocation().getProperty("name") != null) {
-									userProfile.put("location", (String) user
+								if ( user.getLocation() != null ) {
+									if (user.getLocation().getProperty("name") != null) {
+										userProfile.put("location", (String) user
 											.getLocation().getProperty("name"));
+									
+									}
+									else userProfile.put("location", "");
 								}
 								if (user.getProperty("gender") != null) {
 									userProfile.put("gender",
@@ -155,12 +181,14 @@ public class UserDetailsActivity extends Activity {
 															.getProperty("relationship_status"));
 								}
 								
-
 								// Save the user profile info in a user property
 								ParseUser currentUser = ParseUser
 										.getCurrentUser();
 								currentUser.put("profile", userProfile);
+								currentUser.put("facebookid", user.getId());
 								//currentUser.put("username", user.getName().toString());
+								currentUser.put("first" , user.getFirstName());
+								currentUser.put("last", user.getLastName());
 								currentUser.saveInBackground();
 
 								// Show the user info
