@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,6 +40,9 @@ import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.utils.Constants;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -53,6 +57,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
+	private HashMap<String,Business> Restaurants;
+	private HashMap<String,Integer> restCount; 
 	
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
@@ -209,8 +215,10 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void callSearchActivity(View v){
 		addDummyRestaurant();
 		
-		Intent i = new Intent(this, MapActivity.class);
-		startActivityForResult(i,Constants.REQUEST_CODE);
+		Intent i = new Intent(VotingActivity.this, MapActivity.class);
+		i.putExtra("rest_map",Restaurants);
+		i.putExtra("rest_count", restCount);
+		startActivityForResult(i,Constants.MAP_REQUEST_CODE);
 		//addRestaurantSelection(rest);
 		//addDummyRestaurant();
 	}
@@ -218,20 +226,70 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  // REQUEST_CODE is defined above
-	  if (resultCode == RESULT_OK && requestCode == Constants.REQUEST_CODE) {
-	     // Extract name value from result extras
-	     Business business = (Business) data.getExtras().getSerializable("restaurant");
+	  if (resultCode == RESULT_OK && requestCode == Constants.MAP_REQUEST_CODE) {
+	     // Extract restMap and restCount from maps
+		  Restaurants = (HashMap<String, Business>)data.getSerializableExtra("rest_map");
+		  restCount = (HashMap<String, Integer>)data.getSerializableExtra("rest_count");
 	     // Toast the name to display temporarily on screen
-	     Toast.makeText(this, business.getName(), Toast.LENGTH_SHORT).show();
+	     //Toast.makeText(this, business.getName(), Toast.LENGTH_SHORT).show();
 	     
-	     // Add this to the Restaurant ListView
+	     // Refresh the Restaurant ListView
 	  }
 	} 
 	
 	public void populateBusinessInfo() {
 		// Given a list of restaurant IDs return business Objects
 		// Populate the restaurants with the business info
-		//addRestaurantSelection
+		// addRestaurantSelection
+		List<String> resSelections =  currentEvent.getSelection();
+		for (String resId : resSelections) {
+			final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+			final String TYPE_DETAILS = "/details";
+			final String OUT_JSON = "/json";
+			final String API_KEY = "AIzaSyDUWcjTHpCoU93QIFWHJ_glTbd4wfiP8bw";
+			StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DETAILS
+					+ OUT_JSON);
+			AsyncHttpClient client = new AsyncHttpClient();
+			RequestParams params = new RequestParams();
+			params.put("key", API_KEY);
+			params.put("placeid", resId);
+			client.get(sb.toString(), params, new JsonHttpResponseHandler() {
+
+				public void onSuccess(JSONObject response) {
+
+					try {
+						Business b =new Business();
+						JSONObject jsonObject = response
+								.getJSONObject("result");
+						b = Business.fromDetailJson(jsonObject);
+						Log.d("debug",
+								"Business Object in Voting: "
+										+ b.toString());
+						// Add to hashmap for later user
+						if(Restaurants.containsKey(b.getId())){
+							restCount.put(b.getId(),restCount.get(b.getId())+1);
+						} else {
+							Restaurants.put(b.getId(), b);
+							restCount.put(b.getId(),1);
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				};
+
+				@Override
+				public void onFailure(Throwable e, String s) {
+					Log.d("ERROR", e.toString());
+				}
+			});
+		}		
+		
+		
+		
+		
+		
+		
 	}
 	
 	public void onRestaurantSelected() {
