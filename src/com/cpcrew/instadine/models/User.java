@@ -1,44 +1,62 @@
 package com.cpcrew.instadine.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.parse.ParseClassName;
-import com.parse.ParseObject;
+import com.parse.ParseFile;
 import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 @ParseClassName("User")
-public class User extends ParseObject {
+public class User  {
 	
+	private ParseUser parseUser;
 	
-	public User() {
+	private User() {
 		super();
 	}
+	
+	public User(ParseUser pUser) {
+		parseUser = pUser;
+	}
+	
+	public void setParseUser(ParseUser pUser) {
+		parseUser = pUser;
+	}
+	
+	public ParseUser getParseUser() {
+		return parseUser;
+	}
 
-//	public String getObjectId() {
-//		return getString("objectId");
-//	}
-//	
+	public String getObjectId() {
+		System.out.println("objectid " + parseUser.getString("objectId"));
+		return parseUser.getObjectId();
+	}
+	
 	public String getId() {
 		//return getString("objectId");
-		return getObjectId();
+		return parseUser.getObjectId();
 	}
 	
 	public void setFirstName(String first) {
-		put("first" , first);
+		parseUser.put("first" , first);
 	}
 	
 	public String getFirstName() {
-		return getString("first");
+		return parseUser.getString("first");
 	}
 	
 	public void setLastName(String last) {
-		put("last", last);
+		parseUser.put("last", last);
 	}
 	
 	public String getLastName() {
-		return getString("last");
+		return parseUser.getString("last");
 	}
 	
-	public ParseRelation<User> getFriendRelation() {
-		return getRelation("friends");
+	public ParseRelation<ParseUser> getFriendRelation() {
+		return parseUser.getRelation("pfriends");
 	}
 	
 	/**
@@ -46,19 +64,48 @@ public class User extends ParseObject {
 	 *  
 	 */
 	public void addToFriends(User friend ) {
-		getFriendRelation().add(friend);
-		saveInBackground();
+		getFriendRelation().add(friend.parseUser);
+		parseUser.saveInBackground();
 	}
 	
 	public void removeFromFriends(User friend) {
-		getFriendRelation().remove(friend);
-		saveInBackground();
+		getFriendRelation().remove(friend.parseUser);
+		parseUser.saveInBackground();
 	}
 	
 //	public ParseRelation<Group> getGroupRelation() {
 //		return getRelation("gid");
 //	}
 	
+	public static User wrapParseUser(ParseUser pUser ) {
+		User user = new User(pUser);
+		return user;
+	}
+	
+	public static List<User> wrapParseUsers(List<ParseUser> pUsers ) {
+		List<User> users = new ArrayList<User>();
+		for ( ParseUser pUser : pUsers) {
+			User user = wrapParseUser(pUser);
+			users.add(user);
+		}
+		return users;
+	}
+	
+	public ParseFile getProfileImage() {
+		return parseUser.getParseFile("profileImage");
+	}
+	
+	public String getFacebookId() {
+		return parseUser.getString("facebookid");
+	}
+	
+	public List<String> getFacebookFriendsIds() {
+		return parseUser.getList("friendsfb");
+	}
+	
+	public String getUserName() {
+		return parseUser.getString("username");
+	}
 	
 	
 // Never do this ( it uses inverse relationship concept to query)

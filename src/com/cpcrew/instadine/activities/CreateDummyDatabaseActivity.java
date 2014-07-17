@@ -49,8 +49,8 @@ public class CreateDummyDatabaseActivity extends Activity implements ParseGroups
 		for ( int i =0; i < users.size(); ++i) {
 			User first = users.get(i);
 			for (User user: users) {
-				System.out.println(first.getObjectId());
-				System.out.println(first.getId());
+				System.out.println(" 1 " + first.getId());
+				System.out.println("2 " + first.getId());
 				if ( !(first.getId().equals(user.getId())) ) {
 					first.addToFriends(user);
 				}

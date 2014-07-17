@@ -1,5 +1,6 @@
 package com.cpcrew.instadine.activities;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Intent;
@@ -22,6 +23,7 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	GroupsListFragment mFragment;
 	private ParseGroupsApi  parseApi;
 	private static String TAG = GroupsListActivity.class.getSimpleName();
+	HashMap<String, User> allUsers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,10 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, mFragment);
 		ft.commit();
-		testGetGroups();
+		allUsers = new HashMap<String, User>();
+		parseApi.getAllUsers();
+		parseApi.getGroupsForUser(LoggedInUser.getcurrentUser());
+		//testGetGroups();
 
 	}
 
@@ -58,7 +63,20 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	
 	@Override
 	public void onallUsersResults(List<User> users) {
-		
+		System.out.println("Number of users in Db " + users.size());
+		for ( User user : users) {
+			allUsers.put(user.getFacebookId(),user);
+		}
+		if ( LoggedInUser.getcurrentUser() != null) {
+			List<String> friendsfb = LoggedInUser.getcurrentUser().getFacebookFriendsIds();
+			for ( String id : friendsfb) {
+				System.out.println("fB friend " + id);
+				if (allUsers.containsKey(id)) {
+					User user = allUsers.get(id);
+					LoggedInUser.getcurrentUser().addToFriends(user);
+				}				
+			}
+		}
 	}
 
 	@Override
@@ -90,9 +108,9 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	@Override
 	public void retrieveUser(User user) {
 		// Now get the groups the user belongs to
-		Log.d(TAG, "Retrieved user " + user.getFirstName());
+		Log.d(TAG, "Retrieved user " + user.getUserName());
 		if (user != null) {
-			LoggedInUser.setCurrentUser(user);
+			//LoggedInUser.setCurrentUser(user);//  doesnt work ParseUser change XXX
 			parseApi.getGroupsForUser(user);
 		}
 

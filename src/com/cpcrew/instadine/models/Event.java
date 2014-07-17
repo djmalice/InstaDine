@@ -1,12 +1,11 @@
 package com.cpcrew.instadine.models;
 
+import java.util.Arrays;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
@@ -42,33 +41,83 @@ public class Event extends ParseObject {
 		put("group", group);
 	}
 	
+	public void setLocation(String loc) {
+		put("location", loc);
+	}
+	
+	public String getLocation() {
+		return getString("location");
+	}
+	
+	public void setTime(String time) {
+		put("time", time);
+	}
+	
+	public void setOrganizer(User user) {
+		put("organizer" , user.getParseUser());
+	}
+	
+	public User getOrganizer() {
+		return User.wrapParseUser(getParseUser("organizer"));
+	}
+	
+	public String getTime() {
+		return getString("time");
+	}
+	
 	public Group getGroup() {
 		return (Group) getParseObject("group");
 	}
 	
 	public void addSelection(String userid, String resid) {
-		JSONObject value = new JSONObject();
-		try {
-			value.put("userid", userid);
-			value.put("resid", resid);
-			add("selections" ,value);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		// Broken in Parse
+		// does not save in proper JSON format
+//		JSONObject value = new JSONObject();
+//		try {
+//			value.put("userid", userid);
+//			value.put("resid", resid);
+//			add("selections" ,value);
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		add("selections" , userid + "," + resid);
 		
 	}
 	
-	public  List<JSONObject> getSelection() {
+//	public  List<JSONObject> getSelection() {
+//		return getList("selections");
+//	}
+	
+	public List<String> getSelection() {
 		return getList("selections");
 	}
 	
-	public void addRejectedUser(User user) {
-		add("rejectedusers" ,user);
+	public static String getSelectionRest(String selection) {
+		List<String> ll = Arrays.asList(selection.split(","));
+		return ll.get(1);
 	}
 	
-	public List<User> getRejectedUsers() {
+	public static String getSelectionUser(String selection) {
+		List<String> ll = Arrays.asList(selection.split(","));
+		return ll.get(0);
+	}
+	
+	public void addRejectedUser(User user) {
+		add("rejectedusers" ,user.getParseUser());
+	}
+	
+	public List<ParseUser> getRejectedUsers() {
 		return getList("rejectedusers");
+	}
+	
+	public void addOrganizer(User user) {
+		add("organizer", user.getParseUser());
+	}
+	
+	public ParseUser getParseUser() {
+		return getParseUser("organizer");
 	}
 	
 //	public ParseRelation<Restaurant> getRestaurantRelation() {

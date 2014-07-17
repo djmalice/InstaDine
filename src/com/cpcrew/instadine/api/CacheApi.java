@@ -8,13 +8,12 @@ import java.util.List;
 
 import android.app.Activity;
 
-import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
-import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 /**
  * @author Rajalakshmi Balakrishnan
@@ -38,7 +37,7 @@ public class CacheApi {
     
 	
 
-	public static void cacheSelectedUsers(ArrayList<User> users) {
+	public static void cacheSelectedUsers(ArrayList<ParseUser> users) {
 		ParseObject.pinAllInBackground("selectedusers", users);
 	}
 
@@ -47,31 +46,31 @@ public class CacheApi {
 	}
 
 	public void getSelectedUsersFromCache() {
-		ParseQuery<User> query = ParseQuery.getQuery("selectedusers");
+		ParseQuery<ParseUser> query = ParseQuery.getQuery("selectedusers");
 				query.fromLocalDatastore();
-				query.findInBackground(new FindCallback<User>() {
-					public void done(List<User> users, ParseException e) {
-						mCacheApiListener.onGetSelectedUsersFromCacheResult(users);
+				query.findInBackground(new FindCallback<ParseUser>() {
+					public void done(List<ParseUser> users, ParseException e) {
+						mCacheApiListener.onGetSelectedUsersFromCacheResult(User.wrapParseUsers(users));
 					}
 				});
 	}
 	
-	public static void cacheFriends(List<User> friends) {
-		User.pinAllInBackground("selfriends", friends);
+	public static void cacheFriends(List<ParseUser> friends) {
+		ParseUser.pinAllInBackground("selfriends", friends);
 	}
 
 	public static void removeFriends() {
-		User.unpinAllInBackground("selfriends");
+		ParseUser.unpinAllInBackground("selfriends");
 	}
 
 	public void getFriendsFromCache() {
-		ParseQuery<User> query = ParseQuery.getQuery("selfriends");
+		ParseQuery<ParseUser> query = ParseQuery.getQuery("selfriends");
 				query.fromLocalDatastore();
-				query.findInBackground(new FindCallback<User>() {
-					public void done(List<User> users, ParseException e) {
+				query.findInBackground(new FindCallback<ParseUser>() {
+					public void done(List<ParseUser> users, ParseException e) {
 						if (e == null ) {
 							System.out.println("Number of cached friends" + users.size());
-							mCacheApiListener.onGetFriendsFromCacheResult(users);
+							mCacheApiListener.onGetFriendsFromCacheResult(User.wrapParseUsers(users));
 							
 						}
 						else {
