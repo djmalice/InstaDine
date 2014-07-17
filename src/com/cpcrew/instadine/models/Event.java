@@ -41,6 +41,30 @@ public class Event extends ParseObject {
 		put("group", group);
 	}
 	
+	public void setLocation(String loc) {
+		put("location", loc);
+	}
+	
+	public String getLocation() {
+		return getString("location");
+	}
+	
+	public void setTime(String time) {
+		put("time", time);
+	}
+	
+	public void setOrganizer(User user) {
+		put("organizer" , user.getParseUser());
+	}
+	
+	public User getOrganizer() {
+		return User.wrapParseUser(getParseUser("organizer"));
+	}
+	
+	public String getTime() {
+		return getString("time");
+	}
+	
 	public Group getGroup() {
 		return (Group) getParseObject("group");
 	}
