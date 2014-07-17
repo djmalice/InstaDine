@@ -13,15 +13,15 @@ import java.util.HashSet;
 public class Rest {
 	
 	private Business restaurant;
-	private String restName;
+	private String id;
 	private int count = 0;
 	private HashSet<String> userids; // objectIds of users that selected this restaurant, no duplicates
 	
-	public String getRestName() {
-		return restName;
+	public String getRestId() {
+		return id;
 	}
-	public void setRestName(String restName) {
-		this.restName = restName;
+	public void setRestId(String id) {
+		this.id = id;
 	}
 	public int getCount() {
 		if ( userids == null ) return 0;
