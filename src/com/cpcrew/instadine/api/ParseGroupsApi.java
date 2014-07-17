@@ -46,7 +46,7 @@ public class ParseGroupsApi {
 		group.setGroupName(groupName);
 		for (User user : users) {
 			group.addUser(user);
-			desc.append(user.getFirstName() + ", ");
+			desc.append(user.getFirstName() + " ,");
 		}
 		String str = desc.toString();
 		str = str.replaceAll(" ,$", "");
