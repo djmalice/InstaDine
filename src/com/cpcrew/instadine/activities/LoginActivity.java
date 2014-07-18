@@ -38,13 +38,29 @@ public class LoginActivity extends Activity {
 				onLoginButtonClicked();
 			}
 		});
+		
+		/* Add code to print out the key hash
+	    try {
+	        PackageInfo info = getPackageManager().getPackageInfo(
+	                "com.cpcrew.instadine.activities", 
+	                PackageManager.GET_SIGNATURES);
+	        for (Signature signature : info.signatures) {
+	            MessageDigest md = MessageDigest.getInstance("SHA");
+	            md.update(signature.toByteArray());
+	            Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+	            }
+	    } catch (NameNotFoundException e) {
 
+	    } catch (NoSuchAlgorithmException e) {
+
+	    }*/
+		
 		// Check if there is a currently logged in user
 		// and they are linked to a Facebook account.
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
 			// Go to the user info activity
-			showUserDetailsActivity();
+			showAppMainActivity();
 		}
 	}
 
@@ -71,23 +87,27 @@ public class LoginActivity extends Activity {
 			public void done(ParseUser user, ParseException err) {
 				LoginActivity.this.progressDialog.dismiss();
 				if (user == null) {
+					
+					// debug comment to return keyhash to put into developer settings
+					Log.d(InstaDineApplication.TAG, err.getLocalizedMessage());
 					Log.d(InstaDineApplication.TAG,
 							"Uh oh. The user cancelled the Facebook login.");
 				} else if (user.isNew()) {
 					Log.d(InstaDineApplication.TAG,
 							"User signed up and logged in through Facebook!");
-					showUserDetailsActivity();
+					showAppMainActivity();
 				} else {
 					Log.d(InstaDineApplication.TAG,
 							"User logged in through Facebook!");
-					showUserDetailsActivity();
+					showAppMainActivity();
 				}
 			}
 		});
 	}
 
-	private void showUserDetailsActivity() {
+	private void showAppMainActivity() {	
 		Intent intent = new Intent(this, UserDetailsActivity.class);
-		startActivity(intent);
+		startActivity(intent);		
 	}
+
 }
