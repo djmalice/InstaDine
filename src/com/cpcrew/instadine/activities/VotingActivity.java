@@ -68,14 +68,17 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private ParseEventsApi parseEventApi;
 	private Event currentEvent;
 	private Group currentGroup;
+	private String groupId = null;
 	
+	HashMap<String,Business> restaurantsMap;
 	private ArrayList<String> mySelection;
 	private ArrayList<Rest> restaurants;
+	
 	private RestaurantArrayAdapter restAdapter;
 	protected ListView lvRestaurants;
-	private static int counter = 0;
 	
-	private String groupId = null;
+	private static int counter = 0; // Testing delete
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +93,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		//initialize
 		restaurants = new ArrayList<Rest>();
 		mySelection = new ArrayList<String>();
+		restaurantsMap = new HashMap<String,Business>();
 		parseEventApi = new ParseEventsApi(this);
 		
+		// Fetch the Event
 		findEvent(groupId);
 		
 		restAdapter = new RestaurantArrayAdapter(this, restaurants);
 		lvRestaurants.setAdapter(restAdapter);
-		onRestaurantSelected();
+		onRestaurantSelected(); // listeners for ListView
 		populateBusinessInfo();
 		
 		createDatePicker();
@@ -207,12 +212,11 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     }    
 	
 	public void callSearchActivity(View v){
-		addDummyRestaurant();
 		
 		Intent i = new Intent(this, MapActivity.class);
+		i.putExtra("business", restaurantsMap);
 		startActivityForResult(i,Constants.REQUEST_CODE);
-		//addRestaurantSelection(rest);
-		//addDummyRestaurant();
+
 	}
 	
 	@Override
@@ -220,11 +224,9 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	  // REQUEST_CODE is defined above
 	  if (resultCode == RESULT_OK && requestCode == Constants.REQUEST_CODE) {
 	     // Extract name value from result extras
-	     Business business = (Business) data.getExtras().getSerializable("restaurant");
-	     // Toast the name to display temporarily on screen
-	     Toast.makeText(this, business.getName(), Toast.LENGTH_SHORT).show();
+	     restaurantsMap = (HashMap<String, Business>) data.getExtras().getSerializable("business");
 	     
-	     // Add this to the Restaurant ListView
+	     // Add this to the Restaurant ListView and update everything else 
 	  }
 	} 
 	
