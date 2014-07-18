@@ -216,7 +216,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     ////////////////////////
 	public void callSearchActivity(View v){
 		
-		HashMap<String, Business> restMap = new HashMap<String, Business>();
 		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
 		for (Rest rest : restaurants) {
 			//srestMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
@@ -423,6 +422,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
 		
+		// TODO Reload the page to get the Event ID
+		
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
 			
@@ -445,6 +446,9 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		symmetricDiff.removeAll(tmp);
 		// union minus intersection equals symmetric-difference
 		ArrayList<String> list = new ArrayList<String>(symmetricDiff);
+		System.out.println("prev Selection " + prevSelection.size());
+		System.out.println("my selections " + mySelection.size());
+		System.out.println("Num selections " + symmetricDiff.size());
 		return list;
 	}
 	
