@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -129,25 +130,25 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     }
     
 	
-//	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
-//	// leaving code here for now...
-//	public void createTimePicker() {
-//		
-//		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
-//		
-//		btnTimeSelect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentManager fm = getSupportFragmentManager();
-//                DateTime now = DateTime.now();
-//                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
-//                        .newInstance(VotingActivity.this, now.getHourOfDay(), now.getMinuteOfHour(),
-//                                DateFormat.is24HourFormat(VotingActivity.this));
-//                timePickerDialog.setThemeDark(true);
-//                timePickerDialog.show(fm, FRAG_TAG_TIME_PICKER);
-//            }
-//        });
-//	}
+	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
+	// leaving code here for now...
+	public void createTimePicker() {
+		
+		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
+		
+		btnTimeSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                DateTime now = DateTime.now();
+                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+                        .newInstance(VotingActivity.this, now.getHourOfDay(), now.getMinuteOfHour(),
+                                DateFormat.is24HourFormat(VotingActivity.this));
+                timePickerDialog.setThemeDark(true);
+                timePickerDialog.show(fm, FRAG_TAG_TIME_PICKER);
+            }
+        });
+	}
 	
 
     @Override
@@ -562,7 +563,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			btnTimeSelect.setVisibility(View.VISIBLE);
 			btnDateSelect.setVisibility(View.VISIBLE);
 			createDatePicker();
-			createDatePicker();
+			createTimePicker();
 		}
 	}
 
