@@ -1,5 +1,6 @@
 package com.cpcrew.instadine.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -8,7 +9,11 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class Business {
+public class Business implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1118842776475281135L;
 	private String id;
 	private String name;
 	private String phone;

@@ -1,13 +1,13 @@
 package com.cpcrew.instadine.activities;
 
-import org.json.JSONArray;
+import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -19,13 +19,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
@@ -38,6 +37,7 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -54,12 +54,17 @@ public class MapActivity extends FragmentActivity implements
 	ImageView searchIcon;
 	//ClearableAutoCompleteTextView searchBox;
 	AutoCompleteTextView searchBox;
-	Business selectedBusiness;
+	Business listSelectedBusiness;
+	Business markerSelectedBusiness;
 	private SupportMapFragment mapFragment;
 	private GoogleMap map;
 	private LocationClient mLocationClient;
 	RestaurantDropDownAdapter adapter;
-	
+	TextView tvTitle;
+	HashMap<String, Business> restMap;
+	HashMap<String, Business> searchBusiness;
+	HashMap<String, Integer> restCount;
+	HashMap<Marker,String> markerMap;
 	/*
 	 * Define a request code to send to Google Play services This code is
 	 * returned in Activity.onActivityResult
@@ -83,8 +88,36 @@ public class MapActivity extends FragmentActivity implements
 		} else {
 			Log.d("debug","Error - Map Fragment was null!!");
 		}
+		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker arg0) {
+				// TODO Auto-generated method stub
+				tvTitle.setText(arg0.getTitle());
+//				Log.d("debug","searchBusiness: " + searchBusiness.toString());
+//				Log.d("debug","Marker.get(arg0): " + markerMap.get(arg0));
+				if(restMap.get(markerMap.get(arg0)) == null) {
+					markerSelectedBusiness = searchBusiness.get(markerMap.get(arg0));
+				} else {
+//					Log.d("debug","restMap: " + restMap.toString());
+					markerSelectedBusiness = restMap.get(markerMap.get(arg0));
+				}
+				return false;
+			}
+		});
+		Intent intent = getIntent();
+		restMap = new HashMap<String,Business>();
+		restCount = new HashMap<String,Integer>();
+		markerMap = new HashMap<Marker, String>();
+		searchBusiness = new HashMap<String,Business>();
+	    restMap = (HashMap<String, Business>)intent.getSerializableExtra("rest_map");
+	    restCount = (HashMap<String, Integer>)intent.getSerializableExtra("rest_count");
+	    // Log.d("HashMapTest", restMap.get("key").toString());
 		
 		
+		
+		
+		tvTitle = (TextView)findViewById(R.id.tvTitle);
 		
 		
 		// AutoComplete SearchBar
@@ -163,7 +196,11 @@ public class MapActivity extends FragmentActivity implements
 			}
 			
 		});
-	    
+		
+		
+		
+		// load restaurants from restMap and restCount provided by voting activity
+		displayRestOnMap();
 	}
 	
 	protected void toggleSearch(boolean reset) {
@@ -206,15 +243,15 @@ public class MapActivity extends FragmentActivity implements
 		        	
     				try {
 						 JSONObject jsonObject = response.getJSONObject("result");
-						 selectedBusiness = Business.fromDetailJson(jsonObject);
-				         Log.d("debug", "Business Object: " + selectedBusiness.toString());
+						 listSelectedBusiness = Business.fromDetailJson(jsonObject);
+				         Log.d("debug", " List Business Object: " + listSelectedBusiness.toString());
 				        
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 		        	
-    				displayMapMarker(selectedBusiness);
+    				displayMapMarker(listSelectedBusiness);
 		        };
 		        
 
@@ -233,9 +270,15 @@ public class MapActivity extends FragmentActivity implements
 	                              .title(business.getName())
 	                              .snippet("Fine Dining")
 	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
-	    
+	    markerMap.put(res, business.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
-	    res.showInfoWindow();
+	    
+		
+	    // res.showInfoWindow();
+	    // Add to temporary search business map for all markers in the system
+	    
+	    searchBusiness.put(business.getId(), business);
+	    
 	}
 	
 	
@@ -263,6 +306,20 @@ public class MapActivity extends FragmentActivity implements
 		mLocationClient.disconnect();
 		super.onStop();
 	}
+	
+	// Setup markers on map for previously selected restaurants
+	public void displayRestOnMap(){
+		for(Business b:restMap.values()){
+			displayMapMarker(b);
+		}
+			
+	}
+		
+	
+	
+	
+	
+	
 
 	/*
 	 * Handle results returned to the FragmentActivity by Google Play services
@@ -391,46 +448,34 @@ public class MapActivity extends FragmentActivity implements
 			return mDialog;
 		}
 	}
-	/*
-	// Search from Menu
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	// TODO Auto-generated method stub
-    	getMenuInflater().inflate(R.menu.menu_search_rest, menu);
-    	/* MenuItem searchItem = menu.findItem(R.id.action_search);
-    	searchView = (SearchView)searchItem.getActionView();
-    	searchView.setOnQueryTextListener(new OnQueryTextListener() {
-			
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				// TODO Auto-generated method stub
-				//searchQuery = query;
-				//searchForResults();
-				return true;
-			}
-			
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
 		
+	
+	public void sendSelectionToVoting(View v){
+		if (markerSelectedBusiness == null) {
+			Toast.makeText(getBaseContext(),
+					"Please select a marker before pressing done",
+					Toast.LENGTH_LONG).show();
+		} else {
+			if (restMap.containsKey(markerSelectedBusiness.getId())) {
+				restCount.put(markerSelectedBusiness.getId(),
+						restCount.get(markerSelectedBusiness.getId()) + 1);
+			} else {
+				restMap.put(markerSelectedBusiness.getId(),
+						markerSelectedBusiness);
+				restCount.put(markerSelectedBusiness.getId(), 1);
+			}
 
-    	// Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-               (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-    	
-    	return true;
-    }
-	*/
-	
-	
-	
+			// Send to voting acitivity
+			Intent data = new Intent();
+			data.putExtra("rest_map", restMap);
+			data.putExtra("rest_count", restCount);
+			data.putExtra("user_choice", markerSelectedBusiness);
+			setResult(RESULT_OK, data);
+			finish();
+		}
+		
+		
+	}
 	
 	
 	

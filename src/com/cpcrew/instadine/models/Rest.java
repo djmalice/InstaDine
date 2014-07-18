@@ -12,16 +12,16 @@ import java.util.HashSet;
  */
 public class Rest {
 	
-	private Business restaurant;
-	private String restName;
+	//private Business restaurant;
+	private String id;
 	private int count = 0;
 	private HashSet<String> userids; // objectIds of users that selected this restaurant, no duplicates
 	
-	public String getRestName() {
-		return restName;
+	public String getRestId() {
+		return id;
 	}
-	public void setRestName(String restName) {
-		this.restName = restName;
+	public void setRestId(String id) {
+		this.id = id;
 	}
 	public int getCount() {
 		if ( userids == null ) return 0;
@@ -44,11 +44,54 @@ public class Rest {
 	public HashSet<String> getUsers() {
 		return userids;
 	}
-	public Business getRestaurant() {
-		return restaurant;
+	
+//	public Business getRestaurant() {
+//		return null;
+//	}
+//	public void setRestaurant(Business restaurant) {
+//		//this.restaurant = restaurant;
+//	}
+	private String name;
+	private String phone;
+	private String imageUrl;
+	private String city;
+	private double rating;
+
+	
+	public String getId() {
+		return id;
 	}
-	public void setRestaurant(Business restaurant) {
-		this.restaurant = restaurant;
+
+	public String getCity() {
+		return city;
+	}
+
+
+
+	public double getRating() {
+		return rating;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getPhone() {
+		return this.phone;
+	}
+	
+	public String getImageUrl() {
+		return this.imageUrl;
+	}
+	
+	public void inflateBusinessObject( Business b) {
+		name = b.getName();
+		city = b.getCity();
+		rating = b.getRating();
+		imageUrl = b.getImageUrl();
+		id = b.getId();
+		phone = b.getPhone();
+		
 	}
 	
 

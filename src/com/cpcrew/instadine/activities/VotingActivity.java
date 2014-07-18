@@ -2,7 +2,9 @@ package com.cpcrew.instadine.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
@@ -17,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -30,15 +33,13 @@ import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
 import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
-import com.cpcrew.instadine.models.Business;
-import com.cpcrew.instadine.models.Event;
-import com.cpcrew.instadine.models.Group;
-import com.cpcrew.instadine.models.LoggedInUser;
-import com.cpcrew.instadine.models.Rest;
-import com.cpcrew.instadine.models.Restaurant;
+import com.cpcrew.instadine.models.*;
 import com.cpcrew.instadine.utils.Constants;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -53,7 +54,10 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
-	
+ 
+	Business userChoice;
+	private HashMap<String,Rest> Restaurants; 
+
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {        	
@@ -70,12 +74,22 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private Group currentGroup;
 	private String groupId = null;
 	
+<<<<<<< HEAD
 	HashMap<String,Business> restaurantsMap;
 	private ArrayList<String> mySelection;
+=======
+	private HashMap<String, Business> restMap;
+	private HashSet<String> mySelection;
+	private HashSet<String> prevSelection;
+>>>>>>> 378123ed88448b2cf4160dfa24bf651acbf1f5f0
 	private ArrayList<Rest> restaurants;
 	
 	private RestaurantArrayAdapter restAdapter;
 	protected ListView lvRestaurants;
+<<<<<<< HEAD
+=======
+	private boolean hasSelected = false;
+>>>>>>> 378123ed88448b2cf4160dfa24bf651acbf1f5f0
 	
 	private static int counter = 0; // Testing delete
 	
@@ -92,8 +106,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		//initialize
 		restaurants = new ArrayList<Rest>();
+<<<<<<< HEAD
 		mySelection = new ArrayList<String>();
 		restaurantsMap = new HashMap<String,Business>();
+=======
+		mySelection = new HashSet<String>();
+		Restaurants = new HashMap<String, Rest>();
+		prevSelection = new HashSet<String>();
+		restMap = new HashMap<String, Business>();
+>>>>>>> 378123ed88448b2cf4160dfa24bf651acbf1f5f0
 		parseEventApi = new ParseEventsApi(this);
 		
 		// Fetch the Event
@@ -101,9 +122,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		restAdapter = new RestaurantArrayAdapter(this, restaurants);
 		lvRestaurants.setAdapter(restAdapter);
+<<<<<<< HEAD
 		onRestaurantSelected(); // listeners for ListView
 		populateBusinessInfo();
 		
+=======
+		onRestaurantSelected();		
+>>>>>>> 378123ed88448b2cf4160dfa24bf651acbf1f5f0
 		createDatePicker();
         createTimePicker();
     	
@@ -211,31 +236,104 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
         }        
     }    
 	
+    ////////////////////////
 	public void callSearchActivity(View v){
 		
+<<<<<<< HEAD
 		Intent i = new Intent(this, MapActivity.class);
 		i.putExtra("business", restaurantsMap);
 		startActivityForResult(i,Constants.REQUEST_CODE);
 
+=======
+		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
+		for (Rest rest : restaurants) {
+			//srestMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
+			restCount.put(rest.getId(), rest.getCount());
+		}
+		Intent i = new Intent(VotingActivity.this, MapActivity.class);
+		i.putExtra("rest_map" , restMap);
+		i.putExtra("rest_count",restCount);
+		startActivityForResult(i,Constants.MAP_REQUEST_CODE);
+		
+>>>>>>> 378123ed88448b2cf4160dfa24bf651acbf1f5f0
 	}
 	
+	
+	
+	//////////////////////
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  // REQUEST_CODE is defined above
+<<<<<<< HEAD
 	  if (resultCode == RESULT_OK && requestCode == Constants.REQUEST_CODE) {
 	     // Extract name value from result extras
 	     restaurantsMap = (HashMap<String, Business>) data.getExtras().getSerializable("business");
 	     
 	     // Add this to the Restaurant ListView and update everything else 
+=======
+	  if (resultCode == RESULT_OK && requestCode == Constants.MAP_REQUEST_CODE) {
+
+		  // User selected choice from MapActivity
+		  userChoice = (Business)data.getSerializableExtra("user_choice");
+	     
+		  if ( userChoice != null ) {
+	     // Refresh the Restaurant ListView
+	      addRestaurantWithBusinessInfo(userChoice.getId(), 
+	    		  LoggedInUser.getcurrentUser().getId(), userChoice);
+		  } else {
+			  System.out.println(" Returned null from Search Activity");
+		  }
+>>>>>>> 378123ed88448b2cf4160dfa24bf651acbf1f5f0
 	  }
 	} 
 	
+
+	////////////////////
 	public void populateBusinessInfo() {
 		// Given a list of restaurant IDs return business Objects
 		// Populate the restaurants with the business info
-		//addRestaurantSelection
+		// addRestaurantSelection
+		
+		for (final Rest res : restaurants) {
+			final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+			final String TYPE_DETAILS = "/details";
+			final String OUT_JSON = "/json";
+			final String API_KEY = "AIzaSyDUWcjTHpCoU93QIFWHJ_glTbd4wfiP8bw";
+			StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DETAILS
+					+ OUT_JSON);
+			AsyncHttpClient client = new AsyncHttpClient();
+			RequestParams params = new RequestParams();
+			params.put("key", API_KEY);
+			params.put("placeid", res.getRestId());
+			client.get(sb.toString(), params, new JsonHttpResponseHandler() {
+
+				public void onSuccess(JSONObject response) {
+
+					try {
+						Business b =new Business();
+						JSONObject jsonObject = response
+								.getJSONObject("result");
+						b = Business.fromDetailJson(jsonObject);
+						Log.d("debug",
+								"Business Object in Voting: "
+										+ b.toString());
+						res.inflateBusinessObject(b);  // We have the business info now !!
+						restMap.put(b.getId(), b) ; // for the Search Activity
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				};
+
+				@Override
+				public void onFailure(Throwable e, String s) {
+					Log.d("ERROR", e.toString());
+				}
+			});
+		}			
 	}
-	
+		
 	public void onRestaurantSelected() {
 		lvRestaurants.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -245,7 +343,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				// Is the Restaurant already selected
 				boolean removeSelection = false;
 				for (String cs : mySelection) {
-					if (listItem.getRestName().equals(cs)) 
+					if (listItem.getRestId().equals(cs)) 
 						removeSelection = true;
 					
 				}
@@ -258,23 +356,25 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		});
 	}
 
+	// Remove not supported in this version
 	public void removeRestaruantSelection(Rest restaurant) {
-		mySelection.remove(restaurant.getRestName());
-		for ( Rest rt : restaurants){
-			if ( rt.getRestName().equals(restaurant.getRestName()) ){
-				rt.removeUser(LoggedInUser.getcurrentUser().getId());
-			}
-		}
-		// reflect in the adpater
-		restAdapter.notifyDataSetChanged();
+		System.out.println("Removing restaurant not supported");
+//		mySelection.remove(restaurant.getRestId());
+//		for ( Rest rt : restaurants){
+//			if ( rt.getRestName().equals(restaurant.getRestName()) ){
+//				rt.removeUser(LoggedInUser.getcurrentUser().getId());
+//			}
+//		}
+//		// reflect in the adpater
+//		restAdapter.notifyDataSetChanged();
 		
 	}
 	
 	public void addRestaurantSelection(Rest restaurant) {
-		mySelection.add(restaurant.getRestName());
+		mySelection.add(restaurant.getRestId());
 		boolean isActionDone = false;
 		for ( Rest rt : restaurants){
-			if ( rt.getRestName().equals(restaurant.getRestName()) ){
+			if ( rt.getRestId().equals(restaurant.getRestId()) ){
 				rt.addUser(LoggedInUser.getcurrentUser().getId());
 				isActionDone = true;
 			}
@@ -294,56 +394,73 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		etLocation.setText(currentEvent.getEventName());
 		tvDate.setText(currentEvent.getDate());
 
-		// load the restaurants
+		// load the restaurant id and count
 		List<String> prevSelections =  currentEvent.getSelection();
-		HashMap<String, Rest> restIds = new HashMap<String, Rest>();
 		if (prevSelections != null) {
 			for (int i = 0; i < prevSelections.size(); ++i) {
 
 				String restId = Event.getSelectionRest(prevSelections.get(i));
 				String userId = Event.getSelectionUser(prevSelections.get(i));
-				Rest restaurantSel;
-				if (restIds.containsKey(restId))
-					restaurantSel = restIds.get(restId);
-				else {
-					restaurantSel = new Rest();
-					restaurantSel.setRestName(restId);
-					restIds.put(restId, restaurantSel);
-				}
-				restaurantSel.addUser(userId);
+				addRestaurant(restId, userId);
 
+				// TODO Not sure if I need to have the previous Selection information
+				// since we do not allow more than one selection.
 				// Add my previous selections
-				System.out.println(userId + "::: "
-						+ LoggedInUser.getcurrentUser().getId());
-				if (userId.equals(LoggedInUser.getcurrentUser().getId()))
+				if (userId.equals(LoggedInUser.getcurrentUser().getId())) {
 					mySelection.add(restId);
-				restAdapter.add(restaurantSel); // View
-
+					prevSelection.add(restId);
+				}
 			}
+			// restaurants is populated with Business info.
+			populateBusinessInfo();
+			restAdapter.notifyDataSetChanged();
 		}
 		etLocation.setEnabled(false);
 		tvDate.setEnabled(false);
+		// Show in the listView
+		
 	}
 	
-	public void addDummyRestaurant() {
-		 String[] restaurants = {"World Wraps", "Dish Dash", "Olive Garden" , "Thai Basil"};
-		if (currentEvent == null) {
-			Rest restaurant = new Rest();
-			restaurant.setRestName(restaurants[counter++]);
-//			restaurant.setCount(1);
-//			currentSelection.add(restaurant.getRestName());
-//			restAdapter.add(restaurant);
-			addRestaurantSelection(restaurant);
+	public void addRestaurant(String restId, String userId ) {
+		Rest rest;
+		if ( Restaurants.containsKey(restId)) { // preexisting
+			rest = Restaurants.get(restId);
+		}  else { // new restaurant
+			rest = new Rest();
+			rest.setRestId(restId);
+			Restaurants.put(rest.getRestId(), rest);
 		}
+		rest.addUser(userId);
 	}
 	
+	public void addRestaurantWithBusinessInfo(String restId, String userId , Business businessInfo) {
+		if (!mySelection.contains(restId)) { // user already selected restaurant
+			Rest rest;
+			if (Restaurants.containsKey(restId)) { // preexisting restaurant
+				rest = Restaurants.get(restId);
+			} else { // new restaurant
+				rest = new Rest();
+				rest.setRestId(restId);
+				rest.inflateBusinessObject(businessInfo);
+				restMap.put(businessInfo.getId(), businessInfo);
+				Restaurants.put(rest.getRestId(), rest);
+				restaurants.add(rest);
+			}
+			mySelection.add(restId);
+			rest.addUser(userId);
+			restAdapter.notifyDataSetChanged();
+		}	
+	}
+
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
-			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getId(),mySelection);
+			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getId(), newSelections());
 		} else {
-			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), mySelection );
+			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
+		
+		// TODO Reload the page to get the Event ID
 		
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
@@ -354,8 +471,23 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 					pushToVotingActivity();
 				}
 			}
-		});
-		
+		});	
+	}
+	
+	public ArrayList<String> newSelections() {
+		Set<String> symmetricDiff = new HashSet<String>(mySelection);
+		symmetricDiff.addAll(prevSelection);
+		// symmetricDiff now contains the union
+		Set<String> tmp = new HashSet<String>(mySelection);
+		tmp.retainAll(prevSelection);
+		// tmp now contains the intersection
+		symmetricDiff.removeAll(tmp);
+		// union minus intersection equals symmetric-difference
+		ArrayList<String> list = new ArrayList<String>(symmetricDiff);
+		System.out.println("prev Selection " + prevSelection.size());
+		System.out.println("my selections " + mySelection.size());
+		System.out.println("Num selections " + symmetricDiff.size());
+		return list;
 	}
 	
 	public void pushToVotingActivity() {

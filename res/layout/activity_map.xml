@@ -1,38 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="${packageName}.${activityClass}" >
 
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/map"
-        android:layout_centerHorizontal="true" >
+        android:layout_height="40dp"
+         >
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Restaurant Name" />
+            android:text="Select Marker to make Restaurant Choice" />
         
         <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignRight="@+id/tvTitle"
-        android:src="@drawable/ic_done" />
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignRight="@+id/tvTitle"
+            android:src="@drawable/ic_done"
+            android:onClick="sendSelectionToVoting" />
+
     </RelativeLayout>
 
     
 
-</RelativeLayout>
+</LinearLayout>
