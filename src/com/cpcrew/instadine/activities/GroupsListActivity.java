@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.api.ParseGroupsApi;
@@ -17,8 +20,11 @@ import com.cpcrew.instadine.fragments.GroupsListFragment;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
+import com.parse.ParseUser;
 
 public class GroupsListActivity extends FragmentActivity implements ParseGroupsApiListener {
+	
+	private Button logoutButton;
 	
 	GroupsListFragment mFragment;
 	private ParseGroupsApi  parseApi;
@@ -29,6 +35,18 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_groups_list);	
+		
+		logoutButton = (Button) findViewById(R.id.logoutButton);
+		logoutButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onLogoutButtonClicked();
+			}
+		});
+		
+		// keep logout button invisible for now
+		logoutButton.setVisibility(View.GONE);
+		
 		parseApi = new ParseGroupsApi(this);
 		mFragment = new GroupsListFragment();
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -40,6 +58,57 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		//testGetGroups();
 
 	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+    public void onLogoutAction(MenuItem mi) {
+		// Log the user out
+		ParseUser.logOut();
+		
+		// Go to the login view
+		startLoginActivity();
+     }
+
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser != null) {
+			// Check if the user is currently logged
+			// and show any cached content
+			// updateViewsWithProfileInfo();
+			// oncontinueButtonClicked();
+		} else {
+			// If the user is not logged in, go to the
+			// activity showing the login view.
+			startLoginActivity();
+		}
+	}
+
+	
+	private void onLogoutButtonClicked() {
+		// Log the user out
+		ParseUser.logOut();
+		
+		// Go to the login view
+		startLoginActivity();
+	}
+	
+	private void startLoginActivity() {
+		Intent intent = new Intent(this, LoginActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
+	
+	
 
 	
 	public void testGetGroups() {

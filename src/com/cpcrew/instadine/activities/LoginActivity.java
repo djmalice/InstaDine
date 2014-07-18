@@ -1,8 +1,10 @@
 package com.cpcrew.instadine.activities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -15,6 +17,10 @@ import android.widget.Button;
 
 import com.cpcrew.instadine.InstaDineApplication;
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.models.LoggedInUser;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -38,6 +44,9 @@ public class LoginActivity extends Activity {
 				onLoginButtonClicked();
 			}
 		});
+		 
+		ActionBar actionBar = getActionBar();
+		actionBar.hide();
 		
 		/* Add code to print out the key hash
 	    try {
@@ -60,21 +69,25 @@ public class LoginActivity extends Activity {
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
 			// Go to the user info activity
-			showAppMainActivity();
+			loginButton.setVisibility(View.GONE);
+			newMyFriendsRequest();
+		} else if (currentUser != null) {
+			loginButton.setVisibility(View.FOCUS_FORWARD);
 		}
 	}
-
+/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+*/
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+
 	}
 
 	private void onLoginButtonClicked() {
@@ -95,19 +108,76 @@ public class LoginActivity extends Activity {
 				} else if (user.isNew()) {
 					Log.d(InstaDineApplication.TAG,
 							"User signed up and logged in through Facebook!");
-					showAppMainActivity();
+					newMyFriendsRequest();
 				} else {
 					Log.d(InstaDineApplication.TAG,
 							"User logged in through Facebook!");
-					showAppMainActivity();
+					newMyFriendsRequest();
 				}
 			}
 		});
 	}
 
 	private void showAppMainActivity() {	
-		Intent intent = new Intent(this, UserDetailsActivity.class);
+		Intent intent = new Intent(this, GroupsListActivity.class);
 		startActivity(intent);		
+	}
+	
+	private void newMyFriendsRequest() {
+		Request request = Request.newMyFriendsRequest(ParseFacebookUtils.getSession(), 
+				new Request.GraphUserListCallback() {
+				    @Override
+				    public void onCompleted(List<GraphUser> users, Response response) {
+				         Log.d("DEBUG", "Request Completed! " + response.toString() + "Total number of friends: " + users.size());
+				      
+			             if (users != null) {
+				             List<String> friendsList = new ArrayList<String>();
+				             for (GraphUser user : users) {		
+				            	 System.out.println(user.getId());
+				            	 // What will I do with a name that is not present in the profile !!! Ridiculous
+				                //friendsList.add(user.getName());
+				            	 friendsList.add(user.getId());
+				                //wToast.makeText(getApplicationContext(), friendsList.toString(), Toast.LENGTH_SHORT).show();
+				             }
+				             ParseUser currentUser = ParseUser
+										.getCurrentUser();
+				             
+				             	// friends array key specified in existing _user class
+								currentUser.put("friendsfb", friendsList);
+								currentUser.saveInBackground();
+								LoggedInUser.setCurrentUser(currentUser);
+								
+//								 ParseQuery friendQuery = ParseQuery.getQuery();
+//							     friendQuery.whereContainedIn("fbId", friendsList);
+//
+//							      // findObjects will return a list of ParseUsers that are friends with
+//							      // the current user
+//							      try {
+//									List<ParseObject> friendUsers = friendQuery.find();
+//									if ( friendUsers == null )
+//										System.out.println("Friedn users null");
+//									else
+//										System.out.println("friend " + friendUsers.size());
+//								} catch (ParseException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+								
+								/*
+								 * friends array in class format
+								 *
+								ParseObject allFriends = new ParseObject("AllFriends");
+								allFriends.put("friends_list", friendsList);
+								allFriends.saveInBackground();
+								*
+								*/								
+				         }
+			             
+			             // load this after above async event completes
+			             showAppMainActivity();
+			    }
+			});
+		request.executeAsync();
 	}
 
 }
