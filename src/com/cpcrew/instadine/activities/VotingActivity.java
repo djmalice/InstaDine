@@ -2,7 +2,9 @@ package com.cpcrew.instadine.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
@@ -31,12 +33,7 @@ import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
 import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
-import com.cpcrew.instadine.models.Business;
-import com.cpcrew.instadine.models.Event;
-import com.cpcrew.instadine.models.Group;
-import com.cpcrew.instadine.models.LoggedInUser;
-import com.cpcrew.instadine.models.Rest;
-import com.cpcrew.instadine.models.Restaurant;
+import com.cpcrew.instadine.models.*;
 import com.cpcrew.instadine.utils.Constants;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
@@ -76,7 +73,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private Event currentEvent;
 	private Group currentGroup;
 	
-	private ArrayList<String> mySelection;
+	private HashSet<String> mySelection;
+	private HashSet<String> prevSelection;
 	private ArrayList<Rest> restaurants;
 	private RestaurantArrayAdapter restAdapter;
 	protected ListView lvRestaurants;
@@ -96,8 +94,9 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		//initialize
 		restaurants = new ArrayList<Rest>();
-		mySelection = new ArrayList<String>();
+		mySelection = new HashSet<String>();
 		Restaurants = new HashMap<String, Rest>();
+		prevSelection = new HashSet<String>();
 		parseEventApi = new ParseEventsApi(this);
 		
 		findEvent(groupId);
@@ -239,8 +238,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		  // User selected choice from MapActivity
 		  userChoice = (Business)data.getSerializableExtra("user_choice");
 	     
+		  if ( userChoice != null ) {
 	     // Refresh the Restaurant ListView
-	      addRestaurantWithBusinessInfo(userChoice.getId(), LoggedInUser.getcurrentUser().getId(), userChoice);
+	      addRestaurantWithBusinessInfo(userChoice.getId(), 
+	    		  LoggedInUser.getcurrentUser().getId(), userChoice);
+		  } else {
+			  System.out.println(" Returned null from Search Activity");
+		  }
 	  }
 	} 
 	
@@ -359,9 +363,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				String userId = Event.getSelectionUser(prevSelections.get(i));
 				addRestaurant(restId, userId);
 
+				// TODO Not sure if I need to have the previous Selection information
+				// since we do not allow more than one selection.
 				// Add my previous selections
-				if (userId.equals(LoggedInUser.getcurrentUser().getId()))
+				if (userId.equals(LoggedInUser.getcurrentUser().getId())) {
 					mySelection.add(restId);
+					prevSelection.add(restId);
+				}
 			}
 			// restaurants is populated with Business info.
 			populateBusinessInfo();
@@ -372,7 +380,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		// Show in the listView
 		
 	}
-	
 	
 	public void addRestaurant(String restId, String userId ) {
 		Rest rest;
@@ -387,26 +394,28 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	}
 	
 	public void addRestaurantWithBusinessInfo(String restId, String userId , Business businessInfo) {
-		Rest rest;
-		if ( Restaurants.containsKey(restId)) { // preexisting
-			rest = Restaurants.get(restId);
-		}  else { // new restaurant
-			rest = new Rest();
-			rest.setRestId(restId);
-			rest.setRestaurant(businessInfo);
-			Restaurants.put(rest.getRestId(), rest);
-		}
-		rest.addUser(userId);
-		restAdapter.notifyDataSetChanged();
-		
+		if (!mySelection.contains(restId)) { // user already selected restaurant
+			Rest rest;
+			if (Restaurants.containsKey(restId)) { // preexisting restaurant
+				rest = Restaurants.get(restId);
+			} else { // new restaurant
+				rest = new Rest();
+				rest.setRestId(restId);
+				rest.setRestaurant(businessInfo);
+				Restaurants.put(rest.getRestId(), rest);
+			}
+			mySelection.add(restId);
+			rest.addUser(userId);
+			restAdapter.notifyDataSetChanged();
+		}	
 	}
 
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
-			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getId(),mySelection);
+			parseEventApi.createEvent(currentGroup, "07/20/2014", LoggedInUser.getcurrentUser().getId(), newSelections());
 		} else {
-			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), mySelection );
+			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
 		
 		// Get the latest values from the ParseInstallation object.
@@ -418,8 +427,20 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 					pushToVotingActivity();
 				}
 			}
-		});
-		
+		});	
+	}
+	
+	public ArrayList<String> newSelections() {
+		Set<String> symmetricDiff = new HashSet<String>(mySelection);
+		symmetricDiff.addAll(prevSelection);
+		// symmetricDiff now contains the union
+		Set<String> tmp = new HashSet<String>(mySelection);
+		tmp.retainAll(prevSelection);
+		// tmp now contains the intersection
+		symmetricDiff.removeAll(tmp);
+		// union minus intersection equals symmetric-difference
+		ArrayList<String> list = new ArrayList<String>(symmetricDiff);
+		return list;
 	}
 	
 	public void pushToVotingActivity() {
