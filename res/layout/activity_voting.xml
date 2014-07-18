@@ -12,8 +12,8 @@
         android:layout_alignParentLeft="true"
         android:onClick="callSearchActivity"
         android:text="Search" />
-    
-       <Button
+
+    <Button
         android:id="@+id/btnDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="28dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:text="Near " />
 
     <EditText
@@ -38,17 +38,15 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvLocationLabel"
         android:layout_toRightOf="@+id/tvLocationLabel"
-        android:text="Sunnyvale CA"
-        android:ems="10" >
-
-        <requestFocus />
+        android:ems="10"
+        android:text="Sunnyvale CA" >
     </EditText>
 
     <TextView
         android:id="@+id/tvDateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etLocation"
+        android:layout_below="@+id/tvTimeLabel"
         android:layout_marginLeft="28dp"
         android:layout_marginTop="47dp"
         android:text="Date " />
@@ -59,11 +57,11 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvDateLabel"
         android:layout_alignBottom="@+id/tvDateLabel"
-        android:layout_toRightOf="@+id/tvLocationLabel"
         android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/tvLocationLabel"
         android:text="" />
-    
-	<Button
+
+    <Button
         android:id="@+id/btnDateSelect"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -71,34 +69,43 @@
         android:layout_alignBaseline="@+id/tvDateSelected"
         android:layout_alignBottom="@+id/tvDateSelected"
         android:layout_toRightOf="@+id/tvDateSelected"
-        android:text="Set Date" />
-	
-	<TextView
-	    android:id="@+id/tvDate"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/tvDateSelected"
-	    android:layout_below="@+id/tvDateSelected"
-	    android:text="" />
+        android:text="Set Date"
+        android:visibility="gone" />
 
-	<Button
-	    android:id="@+id/btnTimeSelect"
-	    style="?android:attr/buttonStyleSmall"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/btnDateSelect"
-	    android:layout_alignTop="@+id/btnDateSelect"
-	    android:layout_toRightOf="@+id/btnDateSelect"
-	    android:text="Set Time" />
-	
-	
     <ListView
         android:id="@+id/lvRestaurants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSearch"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/btnDateSelect" >
+        android:layout_below="@+id/tvDateLabel"
+        android:layout_marginTop="10dp" >
     </ListView>
+
+    <Button
+        android:id="@+id/btnTimeSelect"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/btnDateSelect"
+        android:layout_below="@+id/etLocation"
+        android:text="Set Time"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:layout_alignLeft="@+id/tvLocationLabel"
+        android:text="Time " />
+
+    <TextView
+        android:id="@+id/tvTimeSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvDateSelected"
+        android:layout_below="@+id/etLocation"
+        android:text="" />
 
 </RelativeLayout>

@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -73,6 +72,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private TextView tvDateSelected;
 	private Button btnDateSelect;
 	private Button btnTimeSelect;
+	private String timeOfEvent;
+	private String dateOfEvent;
 	
 	private ParseEventsApi parseEventApi;
 	private Event currentEvent;
@@ -114,9 +115,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		lvRestaurants.setAdapter(restAdapter);
 
 		onRestaurantSelected();		
-		createDatePicker();
-        createTimePicker();
-    	
+
         // Specify an Activity to handle all pushes by default
 		PushService.setDefaultPushCallback(this, VotingActivity.class);
 	}
@@ -130,25 +129,25 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     }
     
 	
-	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
-	// leaving code here for now...
-	public void createTimePicker() {
-		
-		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
-		
-		btnTimeSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                DateTime now = DateTime.now();
-                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
-                        .newInstance(VotingActivity.this, now.getHourOfDay(), now.getMinuteOfHour(),
-                                DateFormat.is24HourFormat(VotingActivity.this));
-                timePickerDialog.setThemeDark(true);
-                timePickerDialog.show(fm, FRAG_TAG_TIME_PICKER);
-            }
-        });
-	}
+//	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
+//	// leaving code here for now...
+//	public void createTimePicker() {
+//		
+//		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
+//		
+//		btnTimeSelect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentManager fm = getSupportFragmentManager();
+//                DateTime now = DateTime.now();
+//                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+//                        .newInstance(VotingActivity.this, now.getHourOfDay(), now.getMinuteOfHour(),
+//                                DateFormat.is24HourFormat(VotingActivity.this));
+//                timePickerDialog.setThemeDark(true);
+//                timePickerDialog.show(fm, FRAG_TAG_TIME_PICKER);
+//            }
+//        });
+//	}
 	
 
     @Override
@@ -160,19 +159,24 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     		hourOfDay = hourOfDay - 12;
     		if (minute < 10) {
     			btnTimeSelect.setText("" + hourOfDay + ":0" + minute + "PM");
+    			timeOfEvent = hourOfDay + ":0" + minute + "PM";
     		}
     		else {
     			btnTimeSelect.setText("" + hourOfDay + ":" + minute + "PM");
+    			timeOfEvent = hourOfDay + ":" + minute + "PM";
     		}
     	}
     	else {
     		if (minute < 10) {
     			btnTimeSelect.setText("" + hourOfDay + ":0" + minute + "AM");
+    			timeOfEvent = hourOfDay + ":0" + minute + "AM";
     		}
     		else {
     			btnTimeSelect.setText("" + hourOfDay + ":" + minute + "AM");
+    			timeOfEvent = hourOfDay + ":" + minute + "AM";
     		}    		
     	}
+    	 
     }
 
 	public void createDatePicker() {
@@ -198,6 +202,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     @Override
     public void onDateSet(CalendarDatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
     	btnDateSelect.setText(monthOfYear + "/" + dayOfMonth + "/" + year);
+    	dateOfEvent = monthOfYear + "/" + dayOfMonth + "/" + year;
     }
     
     @Override
@@ -354,16 +359,16 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	public void loadEvent() {
 		EditText etLocation = (EditText)findViewById(R.id.etLocation);
-		TextView tvDate = (TextView)findViewById(R.id.tvDate);
+		TextView tvDate = (TextView)findViewById(R.id.tvDateSelected);
+		TextView tvTime = (TextView)findViewById(R.id.tvTimeSelected);
 		
 		// Read from the currentEvent
 		etLocation.setText(currentEvent.getEventName());
 		tvDate.setText(currentEvent.getDate());
-
+		tvTime.setText(currentEvent.getTime());
 		
 		// load the restaurant id and count
 		List<String> prevSelections =  currentEvent.getSelection();
-		System.out.println("Number of selections " + prevSelections.size());
 		if (prevSelections != null) {
 			for (int i = 0; i < prevSelections.size(); ++i) {
 
@@ -426,7 +431,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
-			parseEventApi.createEvent(currentGroup, "07/21/2014", LoggedInUser.getcurrentUser().getId(), newSelections());
+			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, LoggedInUser.getcurrentUser().getId(), newSelections());
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
@@ -550,6 +555,14 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if (events != null && events.size() > 0) {
 			currentEvent = events.get(0);
 			loadEvent();
+		} else {
+			// New Event View
+			Button btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
+			Button btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+			btnTimeSelect.setVisibility(View.VISIBLE);
+			btnDateSelect.setVisibility(View.VISIBLE);
+			createDatePicker();
+			createDatePicker();
 		}
 	}
 
