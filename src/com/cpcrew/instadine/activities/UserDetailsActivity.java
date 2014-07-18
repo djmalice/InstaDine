@@ -46,7 +46,7 @@ public class UserDetailsActivity extends Activity {
 		});
 			
 		//Toast.makeText(getApplicationContext(), "UserDetailsActivity, runs code for friend extraction.  " +
-	    //			"Contains useful Facebook sample code.  Now showing all friends...." , Toast.LENGTH_LONG).show();
+			//	"Contains useful Facebook sample code.  Now showing all friends...." , Toast.LENGTH_LONG).show();
 
 		// Fetch Facebook user info if the session is active
 		Session session = ParseFacebookUtils.getSession();
@@ -82,7 +82,11 @@ public class UserDetailsActivity extends Activity {
 			             if (users != null) {
 				             List<String> friendsList = new ArrayList<String>();
 				             for (GraphUser user : users) {		
-				            	 friendsList.add(user.getId());				          
+				            	 System.out.println(user.getId());
+				            	 // What will I do with a name that is not present in the profile !!! Ridiculous
+				                //friendsList.add(user.getName());
+				            	 friendsList.add(user.getId());
+				                //wToast.makeText(getApplicationContext(), friendsList.toString(), Toast.LENGTH_SHORT).show();
 				             }
 				             ParseUser currentUser = ParseUser
 										.getCurrentUser();

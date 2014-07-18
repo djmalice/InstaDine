@@ -47,7 +47,7 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
 			convertView.setTag(viewHolder);
 		}
 		viewHolder = (ViewHolder) convertView.getTag();
-		viewHolder.tvRestname.setText(thisRest.getRestName());
+		viewHolder.tvRestname.setText(thisRest.getName());
 		viewHolder.tvSelectionCount.setText(String.valueOf(thisRest.getCount()) );
 		return convertView;
 	}
