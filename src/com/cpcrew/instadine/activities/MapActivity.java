@@ -94,10 +94,14 @@ public class MapActivity extends FragmentActivity implements
 			public boolean onMarkerClick(Marker arg0) {
 				// TODO Auto-generated method stub
 				tvTitle.setText(arg0.getTitle());
+//				Log.d("debug","searchBusiness: " + searchBusiness.toString());
+//				Log.d("debug","Marker.get(arg0): " + markerMap.get(arg0));
 				if(restMap.get(markerMap.get(arg0)) == null) {
 					markerSelectedBusiness = searchBusiness.get(markerMap.get(arg0));
+				} else {
+//					Log.d("debug","restMap: " + restMap.toString());
+					markerSelectedBusiness = restMap.get(markerMap.get(arg0));
 				}
-				markerSelectedBusiness = restMap.get(markerMap.get(arg0));
 				return false;
 			}
 		});
@@ -105,6 +109,7 @@ public class MapActivity extends FragmentActivity implements
 		restMap = new HashMap<String,Business>();
 		restCount = new HashMap<String,Integer>();
 		markerMap = new HashMap<Marker, String>();
+		searchBusiness = new HashMap<String,Business>();
 	    restMap = (HashMap<String, Business>)intent.getSerializableExtra("rest_map");
 	    restCount = (HashMap<String, Integer>)intent.getSerializableExtra("rest_count");
 	    // Log.d("HashMapTest", restMap.get("key").toString());
