@@ -572,4 +572,9 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void onGetEventByIdResult(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -35,6 +35,7 @@ public class ParseEventsApi {
 		public void onGetEventsForGroupResult(List<Event> events);
 		public void onGetRestaurantsForEventResult(List<Restaurant> restaurants);
 		public void onGetGroupByIdResult(Group group);
+		public void onGetEventByIdResult(Event event);
 	}
 
 	// Won't work
@@ -140,6 +141,19 @@ public class ParseEventsApi {
 		  public void done(Group group, ParseException e) {
 		    if (e == null) {
 		    	mParseApiListner.onGetGroupByIdResult(group);
+		    } else {
+		    	Log.d("debug", e.getMessage());
+		    }
+		  }
+		});	
+	}
+	
+	public void getEventById(String eventId) {
+		ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+		query.getInBackground(eventId, new GetCallback<Event>() {
+		  public void done(Event event, ParseException e) {
+		    if (e == null) {
+		    	mParseApiListner.onGetEventByIdResult(event);
 		    } else {
 		    	Log.d("debug", e.getMessage());
 		    }
