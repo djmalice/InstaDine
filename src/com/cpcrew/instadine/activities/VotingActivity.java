@@ -73,6 +73,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private Event currentEvent;
 	private Group currentGroup;
 	
+	private HashMap<String, Business> restMap;
 	private HashSet<String> mySelection;
 	private HashSet<String> prevSelection;
 	private ArrayList<Rest> restaurants;
@@ -97,6 +98,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		mySelection = new HashSet<String>();
 		Restaurants = new HashMap<String, Rest>();
 		prevSelection = new HashSet<String>();
+		restMap = new HashMap<String, Business>();
 		parseEventApi = new ParseEventsApi(this);
 		
 		findEvent(groupId);
@@ -217,8 +219,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		HashMap<String, Business> restMap = new HashMap<String, Business>();
 		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
 		for (Rest rest : restaurants) {
-			restMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
-			restCount.put(rest.getRestaurant().getId(), rest.getCount());
+			//srestMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
+			restCount.put(rest.getId(), rest.getCount());
 		}
 		Intent i = new Intent(VotingActivity.this, MapActivity.class);
 		i.putExtra("rest_map" , restMap);
@@ -278,7 +280,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 						Log.d("debug",
 								"Business Object in Voting: "
 										+ b.toString());
-						res.setRestaurant(b);  // We have the business info now !!
+						res.inflateBusinessObject(b);  // We have the business info now !!
+						restMap.put(b.getId(), b) ; // for the Search Activity
 						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -401,8 +404,10 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			} else { // new restaurant
 				rest = new Rest();
 				rest.setRestId(restId);
-				rest.setRestaurant(businessInfo);
+				rest.inflateBusinessObject(businessInfo);
+				restMap.put(businessInfo.getId(), businessInfo);
 				Restaurants.put(rest.getRestId(), rest);
+				restaurants.add(rest);
 			}
 			mySelection.add(restId);
 			rest.addUser(userId);
