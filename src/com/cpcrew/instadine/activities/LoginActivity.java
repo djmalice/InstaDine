@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,8 +22,10 @@ import android.widget.TextView;
 import com.cpcrew.instadine.InstaDineApplication;
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.models.LoggedInUser;
+import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
+import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -31,6 +36,12 @@ public class LoginActivity extends Activity {
 
 	private Button loginButton;
 	private Dialog progressDialog;
+	
+	/* used to display a FB profile picture
+	 * 
+	 * private ProfilePictureView userProfilePictureView;
+	 * 
+	 */
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +89,7 @@ public class LoginActivity extends Activity {
 		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
 			// Go to the user info activity
 			loginButton.setVisibility(View.GONE);
+			makeMeRequest();
 			newMyFriendsRequest();
 		} else if (currentUser != null) {
 			loginButton.setVisibility(View.FOCUS_FORWARD);
@@ -99,6 +111,22 @@ public class LoginActivity extends Activity {
 	}
 
 	private void onLoginButtonClicked() {
+		Session session = Session.getActiveSession();
+	    if (session != null) {
+
+	        if (!session.isClosed()) {
+	            session.closeAndClearTokenInformation();
+	            //clear your preferences if saved
+	        }
+	    } else {
+
+	        session = new Session(this);
+	        Session.setActiveSession(session);
+
+	        session.closeAndClearTokenInformation();
+	            //clear your preferences if saved
+	    }
+		
 		LoginActivity.this.progressDialog = ProgressDialog.show(
 				LoginActivity.this, "", "Logging in...", true);
 		List<String> permissions = Arrays.asList("public_profile", "user_about_me",
@@ -116,10 +144,13 @@ public class LoginActivity extends Activity {
 				} else if (user.isNew()) {
 					Log.d(InstaDineApplication.TAG,
 							"User signed up and logged in through Facebook!");
+					makeMeRequest();
 					newMyFriendsRequest();
+					
 				} else {
 					Log.d(InstaDineApplication.TAG,
 							"User logged in through Facebook!");
+					makeMeRequest();
 					newMyFriendsRequest();
 				}
 			}
@@ -128,7 +159,10 @@ public class LoginActivity extends Activity {
 
 	private void showAppMainActivity() {	
 		Intent intent = new Intent(this, GroupsListActivity.class);
-		startActivity(intent);		
+		startActivity(intent);	
+		
+		//removed login screen from backstack
+		finish();
 	}
 	
 	private void newMyFriendsRequest() {
@@ -187,5 +221,128 @@ public class LoginActivity extends Activity {
 			});
 		request.executeAsync();
 	}
+	
+	private void makeMeRequest() {
+		Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+				new Request.GraphUserCallback() {
+					@Override
+					public void onCompleted(GraphUser user, Response response) {
+						if (user != null) {
+							// Create a JSON object to hold the profile info
+							JSONObject userProfile = new JSONObject();
+							try {
+								// Populate the JSON object
+								userProfile.put("facebookId", user.getId());
+								userProfile.put("name", user.getName());
+								if ( user.getLocation() != null ) {
+									if (user.getLocation().getProperty("name") != null) {
+										userProfile.put("location", (String) user
+											.getLocation().getProperty("name"));
+									
+									}
+									else userProfile.put("location", "");
+								}
+								if (user.getProperty("gender") != null) {
+									userProfile.put("gender",
+											(String) user.getProperty("gender"));
+								}
+								if (user.getBirthday() != null) {
+									userProfile.put("birthday",
+											user.getBirthday());
+								}
+								if (user.getProperty("relationship_status") != null) {
+									userProfile
+											.put("relationship_status",
+													(String) user
+															.getProperty("relationship_status"));
+								}
+								
+								// Save the user profile info in a user property
+								ParseUser currentUser = ParseUser
+										.getCurrentUser();
+								currentUser.put("profile", userProfile);
+								currentUser.put("facebookid", user.getId());
+								//currentUser.put("username", user.getName().toString());
+								currentUser.put("first" , user.getFirstName());
+								currentUser.put("last", user.getLastName());
+								currentUser.saveInBackground();
+
+								
+								
+							} catch (JSONException e) {
+								Log.d(InstaDineApplication.TAG,
+										"Error parsing returned user data.");
+							}
+
+						} else if (response.getError() != null) {
+							if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY)
+									|| (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
+								Log.d(InstaDineApplication.TAG,
+										"The facebook session was invalidated.");
+								// Log the user out
+								ParseUser.logOut();
+							} else {
+								Log.d(InstaDineApplication.TAG,
+										"Some other error: "
+												+ response.getError()
+														.getErrorMessage());
+							}
+						}
+					}
+				});
+		request.executeAsync();
+
+	}
+	
+	/* This block is used to display user profile information
+	 * Not needed in our app, but leaving for sample usage, espcially FB profile pictureview
+	 * 
+	private void updateViewsWithProfileInfo() {
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser.get("profile") != null) {
+			JSONObject userProfile = currentUser.getJSONObject("profile");
+			try {
+				if (userProfile.getString("facebookId") != null) {
+					String facebookId = userProfile.get("facebookId")
+							.toString();
+					userProfilePictureView.setProfileId(facebookId);
+				} else {
+					// Show the default, blank user profile picture
+					userProfilePictureView.setProfileId(null);
+				}
+				if (userProfile.getString("name") != null) {
+					userNameView.setText(userProfile.getString("name"));
+				} else {
+					userNameView.setText("");
+				}
+				if (userProfile.getString("location") != null) {
+					userLocationView.setText(userProfile.getString("location"));
+				} else {
+					userLocationView.setText("");
+				}
+				if (userProfile.getString("gender") != null) {
+					userGenderView.setText(userProfile.getString("gender"));
+				} else {
+					userGenderView.setText("");
+				}
+				if (userProfile.getString("birthday") != null) {
+					userDateOfBirthView.setText(userProfile
+							.getString("birthday"));
+				} else {
+					userDateOfBirthView.setText("");
+				}
+				if (userProfile.getString("relationship_status") != null) {
+					userRelationshipView.setText(userProfile
+							.getString("relationship_status"));
+				} else {
+					userRelationshipView.setText("");
+				}
+			} catch (JSONException e) {
+				Log.d(InstaDineApplication.TAG,
+						"Error parsing saved user data.");
+			}
+		}
+	}
+	*/
 
 }

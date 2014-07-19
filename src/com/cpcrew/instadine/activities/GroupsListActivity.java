@@ -20,6 +20,8 @@ import com.cpcrew.instadine.fragments.GroupsListFragment;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
+import com.facebook.Session;
+import com.facebook.internal.Utility;
 import com.parse.ParseUser;
 
 public class GroupsListActivity extends FragmentActivity implements ParseGroupsApiListener {
