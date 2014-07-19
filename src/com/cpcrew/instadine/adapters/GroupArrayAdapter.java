@@ -73,14 +73,10 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 		String currentUser = LoggedInUser.getcurrentUser().getFirstName();
 		String result = input.replaceFirst(Pattern.quote(currentUser), "");
 		result = result.replaceAll(",$", "");
-		System.out.println(result);
 		result = result.replaceAll(", ,", ", ");
-		System.out.println(result);
 		result = result.replaceAll("^ ", "");
-		System.out.println(result);
 		result = result.replaceAll("^,", "");
 		result = result.replaceAll(",,", ", ");
-		System.out.println(result);
 		return "Me, " + result;
 	}
 	
