@@ -23,10 +23,13 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/appPrimaryColor</item>
         <item name="android:titleTextStyle">@style/MyActionBar.TitleTextStyle</item>
+         <item name="android:subtitleTextStyle">@style/MyActionBar.SubTitleTextStyle</item>
     </style>
 
     <style name="MyActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/textColorWhite</item>
     </style>
-
+	<style name="MyActionBar.SubTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/textColorWhite</item>
+    </style>
 </resources>
