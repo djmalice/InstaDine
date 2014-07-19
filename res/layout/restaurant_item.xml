@@ -54,6 +54,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="14dp"
         android:layout_toRightOf="@+id/ivRest"
+        android:layout_marginLeft="10dp"
         android:text="Restaurant Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -61,6 +62,7 @@
         android:id="@+id/ivRest"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/tvRestname"
         android:src="@drawable/ic_restaurant" />

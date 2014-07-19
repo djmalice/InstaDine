@@ -73,6 +73,10 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private TextView tvDateSelected;
 	private Button btnDateSelect;
 	private Button btnTimeSelect;
+	EditText etLocation;
+	TextView tvDate ;
+	TextView tvTime; 
+	
 	private String timeOfEvent;
 	private String dateOfEvent;
 	
@@ -181,8 +185,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     }
 
 	public void createDatePicker() {
-        tvDateSelected = (TextView) findViewById(R.id.tvDateSelected);
-        btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+  
         
         tvDateSelected.setText("--");
         btnDateSelect.setText("Set Date");
@@ -358,10 +361,17 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		restAdapter.notifyDataSetChanged();
 	}
 	
+	public void getViews() {
+		etLocation = (EditText)findViewById(R.id.etLocation);
+		tvDate = (TextView)findViewById(R.id.tvDateSelected);
+		tvTime = (TextView)findViewById(R.id.tvTimeSelected);
+		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
+		btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+	    tvDateSelected = (TextView) findViewById(R.id.tvDateSelected);
+	    btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+	}
+	
 	public void loadEvent() {
-		EditText etLocation = (EditText)findViewById(R.id.etLocation);
-		TextView tvDate = (TextView)findViewById(R.id.tvDateSelected);
-		TextView tvTime = (TextView)findViewById(R.id.tvTimeSelected);
 		
 		// Read from the currentEvent
 		etLocation.setText(currentEvent.getEventName());
@@ -550,24 +560,41 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			parseEventApi.getEventsForGroup(group);
 			// change the title of the View
 			setTitle(currentGroup.getGroupName());
+			getActionBar().setSubtitle(currentGroup.getDesc());
 		}
 	}
 
 	@Override
 	public void onGetEventsForGroupResult(List<Event> events) {
+		Button btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
+		Button btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+		
 		if (events != null && events.size() > 0) {
 			currentEvent = events.get(0);
-			loadEvent();
+			existEventView();
+			loadEvent(); // Set Existing View in loadEvent
 		} else {
 			// New Event View
-			Button btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
-			Button btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
-			btnTimeSelect.setVisibility(View.VISIBLE);
-			btnDateSelect.setVisibility(View.VISIBLE);
+			newEventView();
+			
 			createDatePicker();
 			createTimePicker();
 		}
 	}
+	
+	public void newEventView() {
+		btnTimeSelect.setVisibility(View.VISIBLE);
+		btnDateSelect.setVisibility(View.VISIBLE);
+	}
+	
+	public void existEventView() {
+		btnTimeSelect.setVisibility(View.GONE);
+		btnDateSelect.setVisibility(View.GONE);
+		etLocation.setFocusable(false);
+		etLocation.setEnabled(false);
+		//etLocation.setBackgroundResource("#00000000");
+	}
+	
 
 	@Override
 	public void onGetRestaurantsForEventResult(List<Restaurant> restaurants) {
