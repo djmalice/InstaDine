@@ -15,5 +15,7 @@
     <string name="search_label">yelpSearch</string>
     <string name="search_hint">Enter Restaurant</string>
     <string name="title_activity_search">SearchActivity</string>
+    <color name="app_yellow">#f4c766</color>
+     <color name="app_red">#f66129</color>
 
 </resources>
