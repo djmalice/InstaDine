@@ -548,6 +548,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if ( group != null ) {
 			currentGroup = group;
 			parseEventApi.getEventsForGroup(group);
+			// change the title of the View
+			setTitle(currentGroup.getGroupName());
 		}
 	}
 
