@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_cartoon"
+    android:background="@color/com_facebook_blue"
     tools:context="${packageName}.${activityClass}" >    
 
     
@@ -14,6 +14,17 @@
         android:gravity="center"
         android:text="@string/login_intro"
         android:textSize="18sp" />
+    
+	<TextView
+	    android:id="@+id/custom_font"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:text="instadine"
+	    android:textSize="90sp"
+	    android:textColor="#FFFFFF"
+	/>
 
     <Button
         android:id="@+id/loginButton"
@@ -26,5 +37,19 @@
         android:text="@string/login"
         android:textColor="#fff"
         android:textStyle="bold" />
-    
+	<!--
+    <ImageView
+        android:id="@+id/main_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/custom_font"
+        android:layout_toLeftOf="@+id/custom_font"
+        android:adjustViewBounds="true"
+        android:maxHeight="250dp"
+        android:maxWidth="250dp"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher" />
+    -->
 </RelativeLayout>

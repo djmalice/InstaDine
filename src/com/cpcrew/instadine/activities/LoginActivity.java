@@ -9,11 +9,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.cpcrew.instadine.InstaDineApplication;
 import com.cpcrew.instadine.R;
@@ -36,6 +37,13 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
+		
+		// Get access to our TextView
+		TextView txt = (TextView) findViewById(R.id.custom_font);
+		// Create the TypeFace from the TTF asset
+		Typeface font = Typeface.createFromAsset(getAssets(), "fonts/QUIGLEYW.ttf");
+		// Assign the typeface to the view
+		txt.setTypeface(font);
 
 		loginButton = (Button) findViewById(R.id.loginButton);
 		loginButton.setOnClickListener(new View.OnClickListener() {
