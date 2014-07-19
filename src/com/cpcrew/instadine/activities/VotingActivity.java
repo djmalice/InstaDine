@@ -374,7 +374,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void loadEvent() {
 		
 		// Read from the currentEvent
-		etLocation.setText(currentEvent.getEventName());
+		etLocation.setText(currentEvent.getLocation());
 		tvDate.setText(currentEvent.getDate());
 		tvTime.setText(currentEvent.getTime());
 		
@@ -442,7 +442,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
-			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, LoggedInUser.getcurrentUser().getId(), newSelections());
+			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), newSelections());
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
@@ -583,11 +583,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	}
 	
 	public void newEventView() {
+		getViews();
 		btnTimeSelect.setVisibility(View.VISIBLE);
 		btnDateSelect.setVisibility(View.VISIBLE);
 	}
 	
 	public void existEventView() {
+		getViews();
 		btnTimeSelect.setVisibility(View.GONE);
 		btnDateSelect.setVisibility(View.GONE);
 		etLocation.setFocusable(false);
