@@ -1,17 +1,18 @@
 package com.cpcrew.instadine.adapters;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.models.Group;
+import com.cpcrew.instadine.models.LoggedInUser;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -51,7 +52,8 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 		viewHolder = (ViewHolder) convertView.getTag();
 		viewHolder.tvGroupName.setText(thisGroup.getGroupName());
 		// TODO Get the members name as a string
-		viewHolder.tvGroupMembers.setText(thisGroup.getDesc());
+		//viewHolder.tvGroupMembers.setText(thisGroup.getDesc());
+		viewHolder.tvGroupMembers.setText(createDescToShow(thisGroup.getDesc()));
 		// Load the image
 		ParseFile photoFile = thisGroup.getPhotoFile();
 		if (photoFile != null) {
@@ -65,6 +67,21 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 		}
 
 		return convertView;
+	}
+	
+	private String createDescToShow(String input) {	
+		String currentUser = LoggedInUser.getcurrentUser().getFirstName();
+		String result = input.replaceFirst(Pattern.quote(currentUser), "");
+		result = result.replaceAll(",$", "");
+		System.out.println(result);
+		result = result.replaceAll(", ,", ", ");
+		System.out.println(result);
+		result = result.replaceAll("^ ", "");
+		System.out.println(result);
+		result = result.replaceAll("^,", "");
+		result = result.replaceAll(",,", ", ");
+		System.out.println(result);
+		return "Me, " + result;
 	}
 	
 
