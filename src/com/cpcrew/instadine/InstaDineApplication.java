@@ -5,6 +5,9 @@ import android.app.Application;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.Restaurant;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
@@ -18,6 +21,14 @@ public class InstaDineApplication extends Application {
 	public void onCreate() {
 				
 		super.onCreate();
+		
+		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().
+        		cacheInMemory().cacheOnDisc().build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+            .defaultDisplayImageOptions(defaultOptions)
+            .build();
+        ImageLoader.getInstance().init(config);
+        
 		ParseObject.registerSubclass(Event.class);
 		ParseObject.registerSubclass(Group.class);
 		ParseObject.registerSubclass(Restaurant.class);

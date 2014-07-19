@@ -11,13 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cpcrew.instadine.R;
-import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.Rest;
-import com.cpcrew.instadine.models.Restaurant;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
@@ -32,6 +27,9 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
     private static class ViewHolder {
     	TextView tvRestname;
     	TextView tvSelectionCount;
+    	TextView tvCity;
+    	TextView tvRating;
+    	ImageView ivRest;
 
     }
 	@Override
@@ -44,11 +42,23 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
 			convertView = inflator.inflate(R.layout.restaurant_item, parent, false);
 			viewHolder.tvRestname = (TextView)convertView.findViewById(R.id.tvRestname);
 			viewHolder.tvSelectionCount = (TextView)convertView.findViewById(R.id.tvSelectionCount);
+			viewHolder.tvCity = (TextView)convertView.findViewById(R.id.tvCity);
+			viewHolder.tvRating = (TextView)convertView.findViewById(R.id.tvRating);
+			viewHolder.ivRest = (ImageView)convertView.findViewById(R.id.ivRest);
 			convertView.setTag(viewHolder);
 		}
 		viewHolder = (ViewHolder) convertView.getTag();
 		viewHolder.tvRestname.setText(thisRest.getName());
 		viewHolder.tvSelectionCount.setText(String.valueOf(thisRest.getCount()) );
+		
+		String photoFile = thisRest.getImageUrl();
+		ImageLoader imageLoader = ImageLoader.getInstance();
+		if (photoFile != null && !(photoFile.equals(""))) {
+			imageLoader.displayImage(photoFile, viewHolder.ivRest);
+		} else {
+			viewHolder.ivRest.setVisibility(View.GONE);
+		}
+
 		return convertView;
 	}
 	
