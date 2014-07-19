@@ -186,8 +186,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 
 	public void createDatePicker() {
   
-        
-        tvDateSelected.setText("--");
         btnDateSelect.setText("Set Date");
         
         btnDateSelect.setOnClickListener(new View.OnClickListener() {
