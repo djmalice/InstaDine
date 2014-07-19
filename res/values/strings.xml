@@ -24,5 +24,6 @@
      <!--  App color experiments -->
      <color name="appPrimaryColor">#AE382A</color>
      <color name="textColorWhite">#FFFFFF</color>
+     <color name="appGrey">#36393D</color>
 
 </resources>
