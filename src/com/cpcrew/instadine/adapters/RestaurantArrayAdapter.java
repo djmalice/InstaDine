@@ -55,9 +55,10 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		if (photoFile != null && !(photoFile.equals(""))) {
 			imageLoader.displayImage(photoFile, viewHolder.ivRest);
-		} else {
-			viewHolder.ivRest.setVisibility(View.GONE);
-		}
+		} 
+//		else {
+//			viewHolder.ivRest.setVisibility(View.GONE);
+//		}
 
 		return convertView;
 	}
