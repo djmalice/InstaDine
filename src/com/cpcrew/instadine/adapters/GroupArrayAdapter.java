@@ -70,14 +70,17 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 	}
 	
 	private String createDescToShow(String input) {	
-		String currentUser = LoggedInUser.getcurrentUser().getFirstName();
-		String result = input.replaceFirst(Pattern.quote(currentUser), "");
-		result = result.replaceAll(",$", "");
-		result = result.replaceAll(", ,", ", ");
-		result = result.replaceAll("^ ", "");
-		result = result.replaceAll("^,", "");
-		result = result.replaceAll(",,", ", ");
-		return "Me, " + result;
+		if (input != null && !input.equals("")) {
+			String currentUser = LoggedInUser.getcurrentUser().getFirstName();
+			String result = input.replaceFirst(Pattern.quote(currentUser), "");
+			result = result.replaceAll(",$", "");
+			result = result.replaceAll(", ,", ", ");
+			result = result.replaceAll("^ ", "");
+			result = result.replaceAll("^,", "");
+			result = result.replaceAll(",,", ", ");
+			return "Me, " + result;
+		}
+		return input;
 	}
 	
 
