@@ -32,4 +32,15 @@
         android:onClick="onNewGroup"
         android:text="" />
 
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/button_login"
+        android:text="@string/logout"
+        android:textColor="#fff"
+        android:textStyle="bold" />
+
 </RelativeLayout>
