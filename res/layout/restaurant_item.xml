@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants"
-    
-    android:background="@drawable/container_dropshadow">
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:layout_marginBottom="5dp" >
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/container_dropshadow">
+
 
     <TextView
         android:id="@+id/tvSelectionCount"
@@ -17,6 +17,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:text="0"
+        android:gravity="center"
+        android:background="@drawable/ring_shape"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView

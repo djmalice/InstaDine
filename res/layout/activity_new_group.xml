@@ -22,6 +22,7 @@
         android:layout_toRightOf="@+id/ivGroupImage"
         android:layout_marginLeft="10dp"
         android:layout_centerHorizontal="true"
+        
         android:singleLine="false"
         android:text="@string/group_name_instructions"
         android:textAppearance="?android:attr/textAppearanceMedium" />
