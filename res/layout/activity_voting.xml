@@ -2,25 +2,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="${relativePackage}.${activityClass}" >
+
+    <RelativeLayout
+        android:id="@+id/rlactions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:background="@color/appPrimaryColor" >
 
     <Button
         android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:onClick="callSearchActivity"
-        android:text="Search" />
+        android:textColor="@color/white"
+        android:background="@drawable/search"
+        android:text="" />
 
     <Button
         android:id="@+id/btnDone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
+        android:textColor="@color/white"
+        android:background="@drawable/send"
         android:onClick="onDone"
-        android:text="Done" />
+        android:text="" />
+    
+    </RelativeLayout>
 
    <ImageView 
        android:id="@+id/ivLocation"
@@ -28,7 +41,7 @@
        android:layout_height="20dp"
        android:layout_alignParentLeft="true"
        android:layout_alignParentTop="true"
-       android:layout_marginLeft="28dp"
+       android:layout_marginLeft="25dp"
        android:layout_marginTop="10dp"
        android:src="@drawable/location1"
        />
@@ -46,8 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTimeLabel"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="47dp"
+        android:layout_alignLeft="@+id/tvLocationLabel"
+        android:layout_marginTop="15dp"
         android:text="Date " />
 
     <TextView
@@ -56,8 +69,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvDateLabel"
         android:layout_alignBottom="@+id/tvDateLabel"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/tvLocationLabel"
+        android:textColor="@color/appGrey"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:text="" />
 
     <Button
@@ -75,7 +90,7 @@
         android:id="@+id/lvRestaurants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnSearch"
+        android:layout_above="@+id/rlactions"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvDateLabel"
         android:layout_marginTop="10dp" >
@@ -88,6 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/btnDateSelect"
         android:layout_below="@+id/etLocation"
+        
         android:text="Set Time"
         android:visibility="gone" />
 
@@ -105,6 +121,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvDateSelected"
         android:layout_below="@+id/etLocation"
+        android:textColor="@color/appGrey"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:text="" />
 
     <EditText
@@ -115,8 +133,6 @@
         android:layout_toRightOf="@+id/tvTimeLabel"
         android:ems="10"
         android:text="Sunnyvale CA" >
-
-        <requestFocus />
     </EditText>
 
 </RelativeLayout>

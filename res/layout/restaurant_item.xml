@@ -16,7 +16,7 @@
         android:layout_alignBottom="@+id/tvCity"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:text="Count"
+        android:text="0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
