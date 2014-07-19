@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+ <string-array name="list_of_cities">
+<item>Alameda</item>
+<item>Albany </item>
+<item>American Canyon </item>
+<item>Antioch </item>
+<item>Atherton </item>
+<item>Belmont </item>
+<item>Belvedere </item>
+<item>Benicia </item>
+<item>Berkeley </item>
+<item>Brentwood </item>
+<item>Brisbane </item>
+<item>Burlingame </item>
+<item>Calistoga </item>
+<item>Campbell </item>
+<item>Clayton </item>
+<item>Cloverdale </item>
+<item>Colma </item>
+<item>Concord </item>
+<item>Corte Madera </item>
+<item>Cotati </item>
+<item>Cupertino </item>
+<item>Daly City </item>
+<item>Danville </item>
+<item>Dixon </item>
+<item>Dublin </item>
+<item>East Palo Alto </item>
+<item>El Cerrito </item>
+<item>Emeryville </item>
+<item>Fairfax</item>
+<item>Fairfield </item>
+<item>Foster City </item>
+<item>Fremont </item>
+<item>Gilroy </item>
+<item>Half Moon Bay </item>
+<item>Hayward </item>
+<item>Healdsburg </item>
+<item>Hercules </item>
+<item>Hillsborough </item>
+<item>Lafayette </item>
+<item>Larkspur </item>
+<item>Livermore </item>
+<item>Los Altos </item>
+<item>Los Altos Hills </item>
+<item>Los Gatos </item>
+<item>Martinez </item>
+<item>Menlo Park </item>
+<item>Mill Valley </item>
+<item>Millbrae </item>
+<item>Milpitas </item>
+<item>Monte Sereno </item>
+<item>Moraga</item>
+<item>Albany </item>
+<item>American Canyon </item>
+<item>Antioch </item>
+<item>Atherton </item>
+<item>Belmont </item>
+<item>Belvedere </item>
+<item>Benicia </item>
+<item>Berkeley </item>
+<item>Brentwood </item>
+<item>Brisbane </item>
+<item>Burlingame </item>
+<item>Calistoga </item>
+<item>Campbell </item>
+<item>Clayton </item>
+<item>Cloverdale </item>
+<item>Colma </item>
+<item>Concord </item>
+<item>Corte Madera </item>
+<item>Cotati </item>
+<item>Cupertino </item>
+<item>Daly City </item>
+<item>Danville </item>
+<item>Dixon </item>
+<item>Dublin </item>
+<item>East Palo Alto </item>
+<item>El Cerrito </item>
+<item>Emeryville </item>
+<item>Fairfax</item>
+<item>Fairfield </item>
+<item>Foster City </item>
+<item>Fremont </item>
+<item>Gilroy </item>
+<item>Half Moon Bay </item>
+<item>Hayward </item>
+<item>Healdsburg </item>
+<item>Hercules </item>
+<item>Hillsborough </item>
+<item>Lafayette </item>
+<item>Larkspur </item>
+<item>Livermore </item>
+<item>Los Altos </item>
+<item>Los Altos Hills </item>
+<item>Los Gatos </item>
+<item>Martinez </item>
+<item>Menlo Park </item>
+<item>Mill Valley </item>
+<item>Millbrae </item>
+<item>Milpitas </item>
+<item>Monte Sereno </item>
+<item>Moraga </item>
+<item>Morgan Hill </item>
+<item>Mountain View </item>
+<item>Napa </item>
+<item>Newark </item>
+<item>Novato </item>
+<item>Oakland </item>
+<item>Oakley </item>
+<item>Orinda </item>
+<item>Pacifica </item>
+<item>Palo Alto </item>
+<item>Petaluma </item>
+<item>Piedmont </item>
+<item>Pinole </item>
+<item>Pittsburg </item>
+<item>Pleasant Hill </item>
+<item>Pleasanton </item>
+<item>Portola Valley </item>
+<item>Redwood City </item>
+<item>Richmond </item>
+<item>Rio Vista </item>
+<item>Rohnert Park </item>
+<item>Ross </item>
+<item>St. Helena </item>
+<item>San Anselmo </item>
+<item>San Bruno </item>
+<item>San Carlos </item>
+<item>San Francisco </item>
+<item>San Jose </item>
+<item>San Leandro </item>
+<item>San Mateo </item>
+<item>San Pablo </item>
+<item>San Ramon </item>
+<item>San Rafael </item>
+<item>Santa Clara </item>
+<item>Santa Rosa </item>
+<item>Saratoga </item>
+<item>Sausalito </item>
+<item>Sebastopol </item>
+<item>Sonoma </item>
+<item>South San Francisco </item>
+<item>Suisun City </item>
+<item>Sunnyvale </item>
+<item>Tiburon </item>
+<item>Union City </item>
+<item>Vacaville </item>
+<item>Vallejo </item>
+<item>Walnut Creek </item>
+<item>Windsor </item>
+<item>Woodside </item>
+<item>Yountville  </item>
+</string-array>
+</resources>
