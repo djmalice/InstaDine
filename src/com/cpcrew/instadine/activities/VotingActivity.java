@@ -1,6 +1,7 @@
 package com.cpcrew.instadine.activities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,18 +34,22 @@ import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
 import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
+import com.cpcrew.instadine.api.ParseGroupsApi;
+import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
+import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Constants;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -55,7 +60,7 @@ import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
 
 public class VotingActivity extends FragmentActivity implements ParseEventApiListener, 
-	CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener {
+	CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener,ParseGroupsApiListener {
 	
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
@@ -81,6 +86,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private String dateOfEvent;
 	
 	private ParseEventsApi parseEventApi;
+	private ParseGroupsApi parseGroupsApi;
 	private Event currentEvent;
 	private Group currentGroup;
 	private String groupId = null;
@@ -88,6 +94,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private HashSet<String> mySelection;
 	private HashSet<String> prevSelection;
 	private ArrayList<Rest> restaurants;
+	private ArrayList<User> usersOfGroup;
 	
 	private RestaurantArrayAdapter restAdapter;
 	protected ListView lvRestaurants;
@@ -112,6 +119,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		restMap = new HashMap<String, Business>();
 
 		parseEventApi = new ParseEventsApi(this);
+		parseGroupsApi = new ParseGroupsApi(this);
 		
 		// Fetch the Event
 		findEvent(groupId);
@@ -499,9 +507,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			 * you can simply store the current user on the ParseInstallation.
 			 */
 			
-			ParseInstallation.getCurrentInstallation().put("groupname", currentGroup.getGroupName());
+			// ParseInstallation.getCurrentInstallation().put("groupname", currentGroup.getGroupName());
 			ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
-			
+			ArrayList<String> firstNames = new ArrayList<String>();
+			for(User u:usersOfGroup){
+				firstNames.add(u.getFirstName());
+			}
+			ParseInstallation.getCurrentInstallation().put("usersofgroup", firstNames);
 			ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
 				@Override
 				public void done(ParseException e) {
@@ -529,7 +541,10 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			ParseQuery query = ParseInstallation.getQuery();
 			
 			// Send push notification to query - in this case, only the current group's users will be notified
-			query.whereEqualTo("groupname", currentGroup.getGroupName());
+			// query.whereEqualTo("currentuser",usersOfGroup. );
+			
+			firstNames.remove(LoggedInUser.getcurrentUser().getFirstName());
+			query.whereContainedIn("currentuser",Arrays.asList(firstNames));
 			push.setQuery(query);
 			push.setData(obj);
 			push.sendInBackground(); 
@@ -556,6 +571,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if ( group != null ) {
 			currentGroup = group;
 			parseEventApi.getEventsForGroup(group);
+			parseGroupsApi.getUsersOfGroup(currentGroup);
 			// change the title of the View
 			setTitle(currentGroup.getGroupName());
 			getActionBar().setSubtitle(currentGroup.getDesc());
@@ -603,6 +619,56 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	}
 	@Override
 	public void onGetEventByIdResult(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onallUsersResults(List<User> users) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onGetUserOfGroupResults(List<User> users) {
+		// TODO Auto-generated method stub
+		if(usersOfGroup == null){
+			usersOfGroup  = new ArrayList(users);
+		} else {
+			usersOfGroup.clear();
+			usersOfGroup.addAll(users);
+		}
+		Log.d("debug", "usersOfGroup size: " + usersOfGroup.size());
+		
+		
+	}
+
+
+	@Override
+	public void onGetGroupsForUserResults(List<Group> groups) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onGetGroupResult(List<Group> group) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onGetFriendsResult(List<User> friends) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void retrieveUser(User user) {
 		// TODO Auto-generated method stub
 		
 	}

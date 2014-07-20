@@ -36,10 +36,10 @@ public class InstaDineApplication extends Application {
 		
 		//please initialize appropriate parse database!!!
 		
-		//Parse.initialize(this, "4j8uZgh6wEGO5GrOGWpgPEut9tCIFAvjdLWxeyJ2", "kllySxso8im9bcTw8XmwcjEEAlubXzdVo4GKeYF1");
+		Parse.initialize(this,"4HAN0kCTzjwij71b32MSXK3OXzqzDYg2iSxhMZ3u","SFKkmKBIsgz6bY7a5okGbQHZeg3vGNwaRmg8ZWCH");
 		
 		//RajiTest2 - Has dummy data for testing
-		Parse.initialize(this, "AoeM8jNFfUwhBBxjJlH5wN4XMAGyiE184vdpMs6d", "5OhGH8TRTu9IXvT4puLzWHCVetnWmYSmj7aXgS0N");
+		// Parse.initialize(this, "AoeM8jNFfUwhBBxjJlH5wN4XMAGyiE184vdpMs6d", "5OhGH8TRTu9IXvT4puLzWHCVetnWmYSmj7aXgS0N");
 		
 		/*// Test creation of object
       	ParseObject testObject = new ParseObject("TestObject");
