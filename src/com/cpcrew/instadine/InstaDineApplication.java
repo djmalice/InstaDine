@@ -35,8 +35,9 @@ public class InstaDineApplication extends Application {
 		//ParseObject.registerSubclass(User.class);
 		
 		//please initialize appropriate parse database!!!
-		
-		Parse.initialize(this,"4HAN0kCTzjwij71b32MSXK3OXzqzDYg2iSxhMZ3u","SFKkmKBIsgz6bY7a5okGbQHZeg3vGNwaRmg8ZWCH");
+		 
+		// Demo app
+		// Parse.initialize(this,"4HAN0kCTzjwij71b32MSXK3OXzqzDYg2iSxhMZ3u","SFKkmKBIsgz6bY7a5okGbQHZeg3vGNwaRmg8ZWCH");
 		
 		//RajiTest2 - Has dummy data for testing
 		// Parse.initialize(this, "AoeM8jNFfUwhBBxjJlH5wN4XMAGyiE184vdpMs6d", "5OhGH8TRTu9IXvT4puLzWHCVetnWmYSmj7aXgS0N");
@@ -48,6 +49,9 @@ public class InstaDineApplication extends Application {
 
     	// cpcrewcorp account - MayanTest App
     	//Parse.initialize(this, "2KdnQ3PisBoJWPavuDKHBxXnQEHWMlyESyXYBfyV", "re2zJPO0piIISY7qL07dNClFC2Iz91u2Gcw4Abfg");
+		
+		// mayanPushTest app
+		Parse.initialize(this, "pVwaIBnXu5LJdwL5pdXNE8XecjgfTaSXhBi1UDwQ", "NzJfvHzrOIlVKSB4EgbLJLho8eRXjZXYQFab69CP");
 
     	// Set your Facebook App Id in strings.xml
     	ParseFacebookUtils.initialize(getString(R.string.app_id)); 

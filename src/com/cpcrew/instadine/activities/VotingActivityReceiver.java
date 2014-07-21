@@ -6,8 +6,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.models.LoggedInUser;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +20,11 @@ import android.util.Log;
 
 public class VotingActivityReceiver extends BroadcastReceiver {
    private static final String TAG = "VotingActivityReceiver";
+   private static final int REQUEST_CODE = 11;
    public static final String intentAction = "SEND_PUSH";
+   public static final int NOTIFICATION_ID = 45;
+   private String organizer;
+   
 
    @Override
    public void onReceive(Context context, Intent intent) {
@@ -51,11 +58,13 @@ public class VotingActivityReceiver extends BroadcastReceiver {
          	   // Extract custom push data
          	   if (key.equals("customdata")) {    
          	 	// Handle push notification by invoking activity directly
-         		launchSomeActivity(context, json.getString(key));
+         		// launchSomeActivity(context, json.getString(key));
          		// OR trigger a broadcast to activity
-         		triggerBroadcastToActivity(context);
+         		triggerBroadcastToActivity(context, json.getString(key));
          		// OR create a local notification
-         		createNotification(context);
+         		// createNotification(context);
+         	    } else if (key.equals("currentuser")) {
+         	    	organizer = json.getString(key);
          	    }
                     Log.d(TAG, "..." + key + " => " + json.getString(key));
                }
@@ -65,7 +74,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
        }
    }
    
-   public static final int NOTIFICATION_ID = 45;
+   
    // Create a local dashboard notification to tell user about the event
    private void createNotification(Context context) {
        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
@@ -91,7 +100,30 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    
    // Handle push notification by sending a local broadcast 
    // to which the activity subscribes to
-   private void triggerBroadcastToActivity(Context context) {
-       LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(intentAction));
+   private void triggerBroadcastToActivity(Context context, String datavalue) {
+	
+       //LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(intentAction));
+		Intent votingIntent = new Intent(context, VotingActivity.class);
+		votingIntent.putExtra("group_id", datavalue);
+		//Intent cancelIntent = new Intent(context, ProxyActivity.class);
+
+		
+		//LoggedInUser.getcurrentUser().getFirstName() returns incorrect user
+		PendingIntent pVotingIntent = PendingIntent.getActivity(context, REQUEST_CODE, votingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pIntentCancel = PendingIntent.getActivity(context, REQUEST_CODE, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("Instadine with " + organizer + "?")
+				.setContentText("Please respond").setContentIntent(pVotingIntent)
+				 .addAction(R.drawable.ic_yes, "Yes", pVotingIntent)
+				 .addAction(R.drawable.ic_no, "No", pIntentCancel)
+				 .setTicker("Instadine request from " + organizer + "!")
+				 .setAutoCancel(true);
+	
+		NotificationManager mNotificationManager = 
+	            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+       
    }
 }

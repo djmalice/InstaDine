@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -71,7 +72,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {        	
-	    	Toast.makeText(getApplicationContext(), "onReceive invoked!", Toast.LENGTH_LONG).show();
+	    	Toast.makeText(getApplicationContext(), "onReceive VotingActivity invoked!", Toast.LENGTH_LONG).show();
 	    }
 	};
 	
@@ -98,12 +99,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	private RestaurantArrayAdapter restAdapter;
 	protected ListView lvRestaurants;
+	public static final int NOTIFICATION_ID = 45;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(NOTIFICATION_ID);
 		
 		if ( groupId == null)
 			groupId = getIntent().getStringExtra("group_id");
@@ -455,6 +459,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		// TODO Reload the page to get the Event ID
 		
+		
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
 			
@@ -465,6 +470,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				}
 			}
 		});	
+		
 	}
 	
 	public ArrayList<String> newSelections() {
@@ -488,10 +494,14 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		JSONObject obj;
 		try {
 			obj = new JSONObject();
-			obj.put("alert", "All users of " + currentGroup.getGroupName() + " are recieving this notification!");
-			obj.put("title", "New event invite!");
+			//obj.put("alert", "All users of " + currentGroup.getGroupName() + " are recieving this notification!");
+			//obj.put("alert", "New Instadine request from " + LoggedInUser.getcurrentUser().getFirstName() +"!");
+			//obj.put("alert","");
+			// obj.put("title", "New event invite!");
 			obj.put("action", VotingActivityReceiver.intentAction);
-			obj.put("customdata","My message");
+
+			obj.put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
+			obj.put("customdata", groupId);
 			
 			/* 
 			 * Every Parse application installed on a device registered for push notifications has an associated Installation object. 
@@ -508,7 +518,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			 */
 			
 			// ParseInstallation.getCurrentInstallation().put("groupname", currentGroup.getGroupName());
-			ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
+			// ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
 			ArrayList<String> firstNames = new ArrayList<String>();
 			for(User u:usersOfGroup){
 				firstNames.add(u.getFirstName());
@@ -529,6 +539,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				}
 			});
 			
+			
+			
 			/*
 			 * Once you have your data stored on your Installation objects, 
 			 * you can use a ParseQuery to target a subset of these devices. 
@@ -544,7 +556,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			// query.whereEqualTo("currentuser",usersOfGroup. );
 			
 			firstNames.remove(LoggedInUser.getcurrentUser().getFirstName());
-			query.whereContainedIn("currentuser",Arrays.asList(firstNames));
+			query.whereContainedIn("currentuser", firstNames);
+			
 			push.setQuery(query);
 			push.setData(obj);
 			push.sendInBackground(); 
