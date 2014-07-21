@@ -24,12 +24,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
-<<<<<<< HEAD
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-=======
->>>>>>> 68e370eafa2ef575945380ed2b3b27285c6a196a
 import android.widget.TextView;
 import android.widget.Toast;
 
