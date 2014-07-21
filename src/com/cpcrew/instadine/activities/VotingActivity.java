@@ -68,13 +68,14 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
  
 	Business userChoice;
 	private HashMap<String,Rest> Restaurants; 
-
+	
+	/*
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {        	
 	    	Toast.makeText(getApplicationContext(), "onReceive VotingActivity invoked!", Toast.LENGTH_LONG).show();
 	    }
-	};
+	};*/
 	
 	private TextView tvDateSelected;
 	private Button btnDateSelect;
@@ -138,12 +139,12 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	}
 
 	
-	// pushNotifications onPause routine
+	/* pushNotifications onPause routine
 	@Override
     public void onPause() {
         super.onPause();
        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-    }
+    }*/
     
 	
 	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
@@ -225,7 +226,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
         super.onResume();
         
         // pushNotifications onResume routine, calls the custom defined VotingActivityReceiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(VotingActivityReceiver.intentAction));
+        // LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(VotingActivityReceiver.intentAction));
         
         CalendarDatePickerDialog calendarDatePickerDialog = (CalendarDatePickerDialog) getSupportFragmentManager()
                 .findFragmentByTag(FRAG_TAG_DATE_PICKER);

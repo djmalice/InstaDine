@@ -44,12 +44,13 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	private static String TAG = GroupsListActivity.class.getSimpleName();
 	HashMap<String, User> allUsers;
 	
+	/*
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {        	
 	    	Toast.makeText(getApplicationContext(), "onReceive GroupsListActivity invoked!", Toast.LENGTH_LONG).show();
 	    }
-	};
+	}; */
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +129,7 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		super.onResume();
 		
         // pushNotifications onResume routine, calls the custom defined VotingActivityReceiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(VotingActivityReceiver.intentAction));
+        // LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(VotingActivityReceiver.intentAction));
 
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser != null) {
@@ -143,12 +144,12 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		}
 	}
 	
-	// pushNotifications onPause routine
+	/* pushNotifications onPause routine
 	@Override
     public void onPause() {
         super.onPause();
        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-    }
+    } */
 
 	
 	private void onLogoutButtonClicked() {
