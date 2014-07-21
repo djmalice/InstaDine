@@ -253,10 +253,10 @@
     <Button
         android:id="@+id/btnSearch"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/lvRestaurants"
-        android:layout_above="@+id/btnDone"
         android:background="@drawable/container_dropshadow"
         android:onClick="callSearchActivity"
         android:text="Add Restaurant"
@@ -264,13 +264,12 @@
 
     <Button
         android:id="@+id/btnDone"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/send"
         android:onClick="onDone"
-        android:text=""
+        android:text="DONE"
         android:textColor="@color/white" />
 
 </RelativeLayout>
