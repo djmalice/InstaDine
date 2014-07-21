@@ -97,10 +97,12 @@ public class ParseEventsApi {
 		});
 	}
 	
-	public void createEvent(Group group, String date ,String time, String loc, String userid , ArrayList<String> restid) {
+	public void createEvent(Group group, String date ,String time, String expDate, String expTime, String loc, String userid , ArrayList<String> restid) {
 		Event event = new Event();
 		event.setDate(date);
 		event.setTime(time);
+		event.setExpiryDate(expDate);
+		event.setExpiryTime(time);
 		event.setLocation(loc);
 		event.setGroup(group);
 		group.setEventPresent();

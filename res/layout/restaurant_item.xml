@@ -2,25 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
+    android:layout_marginBottom="5dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:layout_marginBottom="5dp"
-    android:background="@drawable/container_dropshadow">
+    android:background="@drawable/container_dropshadow"
+    android:descendantFocusability="blocksDescendants" >
 
+    <LinearLayout 
+        android:id="@+id/llCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ring_shape"
+        android:layout_alignBottom="@+id/tvCity"
+        android:layout_alignParentRight="true" 
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvSelectionCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCity"
-        android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:text="0"
-        android:gravity="center"
-        android:background="@drawable/ring_shape"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/tvSelectionCountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:text="Votes"
+        android:textSize="4dp"
+        android:textColor="@color/grey"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    
     <TextView
         android:id="@+id/tvRating"
         android:layout_width="wrap_content"
@@ -55,9 +71,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="14dp"
-        android:layout_toRightOf="@+id/ivRest"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="14dp"
+        android:layout_toLeftOf="@+id/llCount"
+        android:layout_toRightOf="@+id/ivRest"
         android:text="Restaurant Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -65,9 +82,9 @@
         android:id="@+id/ivRest"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/tvRestname"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/ic_restaurant" />
 
 </RelativeLayout>

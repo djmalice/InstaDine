@@ -3,36 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <RelativeLayout
-        android:id="@+id/rlactions"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/appPrimaryColor"
-        android:padding="5dp" >
-
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/search"
-            android:onClick="callSearchActivity"
-            android:text=""
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/btnDone"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/send"
-            android:onClick="onDone"
-            android:text=""
-            android:textColor="@color/white" />
-    </RelativeLayout>
+    <!-- Bottom BAR -->
 
     <ImageView
         android:id="@+id/ivLocation"
@@ -58,86 +33,243 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvTimeLabel"
+        android:layout_toRightOf="@+id/tvLocationLabel"
         android:ems="10"
         android:text="Sunnyvale CA" >
     </EditText>
 
-    <Button
-        android:id="@+id/btnTimeSelect"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginTop="20dp"
-        android:layout_alignRight="@+id/btnDateSelect"
+    <LinearLayout
+        android:id="@+id/lleventDT"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/etLocation"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/textColorWhite"
-        android:text="Set Time"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/tvTimeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_alignLeft="@+id/tvLocationLabel"
-        android:layout_below="@+id/etLocation"
-        android:text="Time " />
-
-    <TextView
-        android:id="@+id/tvTimeSelected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvDateSelected"
-        android:layout_below="@+id/etLocation"
-        android:layout_marginTop="25dp"
-        android:text=""
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="@color/appGrey" />
-
-    <TextView
-        android:id="@+id/tvDateLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvLocationLabel"
-        android:layout_below="@+id/tvTimeLabel"
-        android:layout_marginTop="30dp"
-        android:text="Date " />
-
-    <TextView
-        android:id="@+id/tvDateSelected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvDateLabel"
-        android:layout_alignBottom="@+id/tvDateLabel"
         android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/tvLocationLabel"
-        android:text=""
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="@color/appGrey" />
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal"
+        android:weightSum="1" >
 
-    <Button
-        android:id="@+id/btnDateSelect"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignBaseline="@+id/tvDateSelected"
-        android:layout_alignBottom="@+id/tvDateSelected"
-        android:layout_toRightOf="@+id/tvDateSelected"
-        android:text="Set Date "
-        android:background="@drawable/custom_button"
-        android:textColor="@color/textColorWhite"
-        android:visibility="visible" />
+        <RelativeLayout
+            android:id="@+id/rlEventTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@drawable/custombordercolor1" >
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivImage"
+                android:layout_toRightOf="@+id/ivImage"
+                android:layout_marginLeft="5dp"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvContentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivImage"
+                android:layout_alignLeft="@+id/tvContent"
+                android:layout_marginLeft="5dp"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/time2" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlEventDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/custombordercolor2" >
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/date" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivImage"
+                android:layout_toRightOf="@+id/ivImage"
+                android:layout_marginLeft="5dp"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvContentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivImage"
+                android:layout_alignLeft="@+id/tvContent"
+                android:layout_marginLeft="5dp"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llexpiryDT"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lleventDT"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:id="@+id/rlExpiryTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@drawable/custombordercolor1" >
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitEnd"
+                android:src="@drawable/time2" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivImage"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/ivImage"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvContentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivImage"
+                android:layout_alignLeft="@+id/tvContent"
+                android:layout_marginLeft="5dp"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlExpiryDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/custombordercolor2" >
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitEnd"
+                android:src="@drawable/date" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivImage"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/ivImage"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvContentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivImage"
+                android:layout_alignLeft="@+id/tvContent"
+                android:layout_marginLeft="5dp"
+                android:text="Content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llEventSummary"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llexpiryDT"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tvEventSummary"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/container_dropshadow"
+            android:padding="10dp"
+            android:singleLine="false"
+            android:text="Send an invite to your group after you pick the Date/Time and a restaurant"
+            android:textColor="@color/appPrimaryColor" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lvRestaurants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rlactions"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvDateLabel"
-        android:layout_marginTop="10dp" >
+        android:layout_below="@+id/llEventSummary" >
     </ListView>
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/lvRestaurants"
+        android:layout_above="@+id/btnDone"
+        android:background="@drawable/container_dropshadow"
+        android:onClick="callSearchActivity"
+        android:text="Add Restaurant"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/send"
+        android:onClick="onDone"
+        android:text=""
+        android:textColor="@color/white" />
 
 </RelativeLayout>

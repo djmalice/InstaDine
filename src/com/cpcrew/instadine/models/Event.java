@@ -61,6 +61,22 @@ public class Event extends ParseObject {
 		return User.wrapParseUser(getParseUser("organizer"));
 	}
 	
+	public void setExpiryTime(String time) {
+		put("expirytime", time);
+	}
+	
+	public void setExpiryDate(String date) {
+		put("expirydate", date);
+	}
+	
+	public String getExpiryTime() {
+		return getString("expirytime");
+	}
+	
+	public String getExpiryDate() {
+		return getString("expirydate");
+	}
+	
 	public String getTime() {
 		return getString("time");
 	}

@@ -23,9 +23,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,15 +71,23 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	    }
 	};
 	
-	private TextView tvDateSelected;
-	private Button btnDateSelect;
-	private Button btnTimeSelect;
-	EditText etLocation;
-	TextView tvDate ;
-	TextView tvTime; 
+	RelativeLayout eventTimeView;
+	RelativeLayout eventDateView;
+	RelativeLayout expiryTimeView;
+	RelativeLayout expiryDateView;
+	TextView tvEventTime;
+	TextView tvEventDate;
+	TextView tvExpiryTime;
+	TextView tvExpiryDate;
 	
+	EditText etLocation;	
 	private String timeOfEvent;
 	private String dateOfEvent;
+	private String timeOfExpiry;
+	private String dateOfExpiry;
+	
+	private boolean eventSelected = false;
+	private boolean expirySelected = false;
 	
 	private ParseEventsApi parseEventApi;
 	private Event currentEvent;
@@ -136,13 +145,18 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	// had created this picker before we decided to use a meal button (breakfast, lunch, dinner)
 	// leaving code here for now...
-	public void createTimePicker() {
+	public void createTimePicker(View v) {
 		
-		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
-		
-		btnTimeSelect.setOnClickListener(new View.OnClickListener() {
+		v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            	System.out.println("OnClick");
+            	if (v.getTag().equals("event")) {
+            		eventSelected = true; expirySelected = false;
+            	}
+            	else if (v.getTag().equals("expiry")) {
+            		expirySelected = true; eventSelected = false;
+            	}
                 FragmentManager fm = getSupportFragmentManager();
                 DateTime now = DateTime.now();
                 RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
@@ -159,38 +173,41 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     public void onTimeSet(RadialTimePickerDialog dialog, int hourOfDay, int minute) {
     	if (hourOfDay==0){
     		hourOfDay=12;
-    	}    	
+    	}
+    	String eventTime = null;
     	if (hourOfDay > 12) { 
     		hourOfDay = hourOfDay - 12;
-    		if (minute < 10) {
-    			btnTimeSelect.setText("" + hourOfDay + ":0" + minute + "PM");
-    			timeOfEvent = hourOfDay + ":0" + minute + "PM";
-    		}
-    		else {
-    			btnTimeSelect.setText("" + hourOfDay + ":" + minute + "PM");
-    			timeOfEvent = hourOfDay + ":" + minute + "PM";
-    		}
+    		
+    		eventTime = ( minute < 10 ) ? hourOfDay + ":0" + minute + "PM" :hourOfDay + ":" + minute + "PM"; 
     	}
     	else {
-    		if (minute < 10) {
-    			btnTimeSelect.setText("" + hourOfDay + ":0" + minute + "AM");
-    			timeOfEvent = hourOfDay + ":0" + minute + "AM";
-    		}
-    		else {
-    			btnTimeSelect.setText("" + hourOfDay + ":" + minute + "AM");
-    			timeOfEvent = hourOfDay + ":" + minute + "AM";
-    		}    		
+    		eventTime = ( minute < 10 ) ? hourOfDay + ":0" + minute + "AM" :hourOfDay + ":" + minute + "AM";     		
     	}
+    	// Based on expiryTime selected or EventTime update the data accordingly
+    	if (eventSelected) {
+    		this.timeOfEvent = eventTime;
+    		tvEventTime.setText(eventTime);
+    	}
+    	else if ( expirySelected ) {
+    		timeOfExpiry = eventTime;
+    		tvExpiryTime.setText(eventTime);
+    	}
+    	eventSelected = false; expirySelected = false;
     	 
     }
 
-	public void createDatePicker() {
-  
-        btnDateSelect.setText("Set Date");
-        
-        btnDateSelect.setOnClickListener(new View.OnClickListener() {
+	public void createDatePicker(View v) {
+   
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            	if (v.getTag().equals("event")) {
+            		eventSelected = true; expirySelected = false;
+            	}
+            	else if (v.getTag().equals("expiry")) {
+            		expirySelected = true; eventSelected = false;
+            	}
+            		
                 FragmentManager fm = getSupportFragmentManager();
                 DateTime now = DateTime.now();
                 CalendarDatePickerDialog calendarDatePickerDialog = CalendarDatePickerDialog
@@ -203,8 +220,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
     @Override
     public void onDateSet(CalendarDatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
-    	btnDateSelect.setText(monthOfYear + "/" + dayOfMonth + "/" + year);
+    	if (eventSelected) {
     	dateOfEvent = monthOfYear + "/" + dayOfMonth + "/" + year;
+    	tvEventDate.setText(dateOfEvent);
+    	}
+    	else if ( expirySelected ) {
+    		dateOfExpiry = monthOfYear + "/" + dayOfMonth + "/" + year;
+    		tvExpiryDate.setText(dateOfExpiry);
+    	}
+    	eventSelected = false; expirySelected = false;
     }
     
     @Override
@@ -361,20 +385,26 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	public void getViews() {
 		etLocation = (EditText)findViewById(R.id.etLocation);
-		tvDate = (TextView)findViewById(R.id.tvDateSelected);
-		tvTime = (TextView)findViewById(R.id.tvTimeSelected);
-		btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
-		btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
-	    tvDateSelected = (TextView) findViewById(R.id.tvDateSelected);
-	    btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
+		
+		eventTimeView = (RelativeLayout)findViewById(R.id.rlEventTime);
+		eventDateView = (RelativeLayout)findViewById(R.id.rlEventDate);
+		expiryTimeView = (RelativeLayout)findViewById(R.id.rlExpiryTime);
+		expiryDateView = (RelativeLayout)findViewById(R.id.rlExpiryDate);
 	}
 	
 	public void loadEvent() {
 		
 		// Read from the currentEvent
 		etLocation.setText(currentEvent.getLocation());
-		tvDate.setText(currentEvent.getDate());
-		tvTime.setText(currentEvent.getTime());
+		tvEventDate.setText(currentEvent.getDate());
+		tvEventTime.setText(currentEvent.getTime());
+		
+		String expiryTime = " at " + currentEvent.getExpiryTime() + " on " + currentEvent.getExpiryDate();
+		
+		
+		//Event Message to the group
+		TextView tvEventSummary = (TextView)findViewById(R.id.tvEventSummary);
+		tvEventSummary.setText("The event decision will be made at " + expiryTime);
 		
 		// load the restaurant id and count
 		List<String> prevSelections =  currentEvent.getSelection();
@@ -396,8 +426,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			populateBusinessInfo();
 			
 		}
-		etLocation.setEnabled(false);
-		tvDate.setEnabled(false);
+		
 		// Show in the listView
 		
 	}
@@ -440,13 +469,11 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
-			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), newSelections());
+			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, dateOfExpiry, timeOfExpiry, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), newSelections());
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
-		
-		// TODO Reload the page to get the Event ID
-		
+				
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
 			
@@ -564,8 +591,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 
 	@Override
 	public void onGetEventsForGroupResult(List<Event> events) {
-		Button btnTimeSelect = (Button) findViewById(R.id.btnTimeSelect);
-		Button btnDateSelect = (Button) findViewById(R.id.btnDateSelect);
 		
 		if (events != null && events.size() > 0) {
 			currentEvent = events.get(0);
@@ -575,21 +600,76 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			// New Event View
 			newEventView();
 			
-			createDatePicker();
-			createTimePicker();
+			
 		}
 	}
 	
 	public void newEventView() {
 		getViews();
-		btnTimeSelect.setVisibility(View.VISIBLE);
-		btnDateSelect.setVisibility(View.VISIBLE);
+		LinearLayout ll = (LinearLayout) findViewById(R.id.llexpiryDT);	
+		ll.setVisibility(View.VISIBLE);
+		
+		// Event Time
+		
+		tvEventTime = (TextView) eventTimeView.findViewById(R.id.tvContent);
+		tvEventTime.setText("");
+		tvEventTime.setTag("event");
+		TextView tvEventTimeLabel = (TextView) eventTimeView.findViewById(R.id.tvContentLabel);
+		tvEventTimeLabel.setText("Set Time");
+		tvEventTimeLabel.setTag("event");
+		createTimePicker(tvEventTimeLabel);
+		
+		// Event  Date
+	
+		tvEventDate = (TextView) eventDateView.findViewById(R.id.tvContent);
+		tvEventDate.setText("");
+		tvEventDate.setTag("event");
+		TextView tvEventDateLabel = (TextView) eventDateView.findViewById(R.id.tvContentLabel);
+		tvEventDateLabel.setText("Set Date");
+		tvEventDateLabel.setTag("event");
+		createDatePicker(tvEventDateLabel);
+		
+		// Expiry Time
+		tvExpiryTime = (TextView) expiryTimeView.findViewById(R.id.tvContent);
+		tvExpiryTime.setText("");
+		tvExpiryTime.setTag("expiry");
+		TextView tvExpiryTimeLabel = (TextView) expiryTimeView.findViewById(R.id.tvContentLabel);
+		tvExpiryTimeLabel.setText("Expiry Time");
+		tvExpiryTimeLabel.setTag("expiry");
+		createTimePicker(tvExpiryTimeLabel);
+		
+		// Expiry  Date
+		tvExpiryDate = (TextView) expiryDateView.findViewById(R.id.tvContent);
+		tvExpiryDate.setText("");
+		tvExpiryDate.setTag("expiry");
+		TextView tvExpiryDateLabel = (TextView) expiryDateView.findViewById(R.id.tvContentLabel);
+		tvExpiryDateLabel.setText("Expiry Date");
+		tvExpiryDateLabel.setTag("expiry");
+		createDatePicker(tvExpiryDateLabel);
 	}
 	
 	public void existEventView() {
 		getViews();
-		btnTimeSelect.setVisibility(View.GONE);
-		btnDateSelect.setVisibility(View.GONE);
+		
+		eventTimeView.setEnabled(false);
+		eventDateView.setEnabled(false);
+		
+		// Event Time
+		tvEventTime = (TextView) eventTimeView.findViewById(R.id.tvContent);
+		tvEventTime.setText("");
+		tvEventTime.setTag("event");
+		TextView tvEventTimeLabel = (TextView) eventTimeView.findViewById(R.id.tvContentLabel);
+		tvEventTimeLabel.setText("Time");
+		tvEventTimeLabel.setTag("event");
+	
+		// Event  Date
+		tvEventDate = (TextView) eventDateView.findViewById(R.id.tvContent);
+		tvEventDate.setText("");
+		tvEventDate.setTag("event");
+		TextView tvEventDateLabel = (TextView) eventDateView.findViewById(R.id.tvContentLabel);
+		tvEventDateLabel.setText("Date");
+		tvEventDateLabel.setTag("event");
+
 		etLocation.setFocusable(false);
 		etLocation.setEnabled(false);
 		//etLocation.setBackgroundResource("#00000000");
