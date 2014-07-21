@@ -11,10 +11,10 @@
         android:layout_height="fill_parent"
         android:visibility="gone" />
 
-    <ListView
+    <eu.erikw.PullToRefreshListView
         android:id="@+id/lvGroups"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content" />
+    
 
 </LinearLayout>
