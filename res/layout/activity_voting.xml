@@ -130,14 +130,14 @@
         android:textColor="@color/textColorWhite"
         android:visibility="visible" />
 
-    <ListView
+    <eu.erikw.PullToRefreshListView
         android:id="@+id/lvRestaurants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rlactions"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvDateLabel"
-        android:layout_marginTop="10dp" >
-    </ListView>
+        android:layout_marginTop="10dp"
+    />
 
 </RelativeLayout>

@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +52,9 @@ import com.parse.ParseQuery;
 import com.parse.PushService;
 import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
+
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 public class VotingActivity extends FragmentActivity implements ParseEventApiListener, 
 	CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener {
@@ -90,7 +92,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private ArrayList<Rest> restaurants;
 	
 	private RestaurantArrayAdapter restAdapter;
-	protected ListView lvRestaurants;
+	protected PullToRefreshListView lvRestaurants;
 	
 
 	@Override
@@ -101,7 +103,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if ( groupId == null)
 			groupId = getIntent().getStringExtra("group_id");
 		setContentView(R.layout.activity_voting);
-		lvRestaurants = (ListView) findViewById(R.id.lvRestaurants);
+		lvRestaurants = (PullToRefreshListView) findViewById(R.id.lvRestaurants);
 		
 		//initialize
 		restaurants = new ArrayList<Rest>();
@@ -118,7 +120,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		restAdapter = new RestaurantArrayAdapter(this, restaurants);
 		lvRestaurants.setAdapter(restAdapter);
-
+		lvRestaurants.setOnRefreshListener(new OnRefreshListener() {
+			
+			@Override
+			public void onRefresh() {
+				findEvent(groupId);
+				lvRestaurants.onRefreshComplete();
+				
+			}
+		});
 		onRestaurantSelected();		
 
         // Specify an Activity to handle all pushes by default
@@ -372,6 +382,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void loadEvent() {
 		
 		// Read from the currentEvent
+	
 		etLocation.setText(currentEvent.getLocation());
 		tvDate.setText(currentEvent.getDate());
 		tvTime.setText(currentEvent.getTime());
