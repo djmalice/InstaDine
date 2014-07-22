@@ -3,29 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E74638"
-    tools:context="${packageName}.${activityClass}" >    
-
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:gravity="center"
-        android:text="@string/login_intro"
-        android:textSize="18sp" />
-    
+    android:background="#FFA44D"
+    tools:context="${packageName}.${activityClass}" >
+	
 	<TextView
-	    android:id="@+id/custom_font"
+	    android:id="@+id/app_tagline1"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_centerHorizontal="true"
-	    android:layout_centerVertical="true"
-	    android:text="instadine"
-	    android:textSize="90sp"
+   	    android:layout_centerHorizontal="true"
+	
+		android:layout_below="@+id/app_title"
+		android:layout_marginTop="-20dp"
+	    android:text=" Dine with friends."
+	    android:textSize="25sp"
 	    android:textColor="#FFFFFF"
 	/>
-
+	
+	<TextView
+	    android:id="@+id/app_tagline2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+   	    android:layout_centerHorizontal="true"
+		android:layout_below="@+id/app_tagline1"
+		android:layout_marginTop="-10dp"
+	    android:text=" Instantly."
+	    android:textSize="25sp"
+	    android:textColor="#FFFFFF"
+	/>
+	
     <Button
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
@@ -37,6 +42,25 @@
         android:text="@string/login"
         android:textColor="#fff"
         android:textStyle="bold" />
+    
+    
+    <!--
+    <com.facebook.widget.LoginButton
+            xmlns:fb="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/login_button"
+            android:layout_width="249dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="30dp"
+            android:scaleType="centerInside"
+            android:text="@string/login"
+            fb:login_text="Sign in with Facebook"
+            fb:logout_text="" />
+     -->
+    
 	<!--
     <ImageView
         android:id="@+id/main_logo"
@@ -52,4 +76,16 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher" />
     -->
+
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+   	    android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="170dp"
+        android:text="instadine"
+        android:textColor="#FFFFFF"
+        android:textSize="100sp" />
+
 </RelativeLayout>

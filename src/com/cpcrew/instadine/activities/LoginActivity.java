@@ -27,6 +27,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -50,13 +51,23 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		// Get access to our TextView
-		TextView txt = (TextView) findViewById(R.id.custom_font);
+		TextView appTitle = (TextView) findViewById(R.id.app_title);
+		TextView appTagLine1 = (TextView) findViewById(R.id.app_tagline1);
+		TextView appTagLine2 = (TextView) findViewById(R.id.app_tagline2);
 		// Create the TypeFace from the TTF asset
-		Typeface font = Typeface.createFromAsset(getAssets(), "fonts/QUIGLEYW.ttf");
+		Typeface QUIGLEYW = Typeface.createFromAsset(getAssets(), "fonts/QUIGLEYW.ttf");
+		Typeface SaginawBold = Typeface.createFromAsset(getAssets(), "fonts/SaginawBold.ttf");
 		// Assign the typeface to the view
-		txt.setTypeface(font);
+		appTitle.setTypeface(QUIGLEYW);
+		appTagLine1.setTypeface(SaginawBold);
+		appTagLine2.setTypeface(SaginawBold);
+
 
 		loginButton = (Button) findViewById(R.id.loginButton);
+		
+		//final LoginButton button = (LoginButton) findViewById(R.id.login_button);
+		//button.setBackgroundResource(R.drawable.button_login);
+		
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -163,6 +174,7 @@ public class LoginActivity extends Activity {
 		
 		//removed login screen from backstack
 		finish();
+		
 	}
 	
 	private void newMyFriendsRequest() {
