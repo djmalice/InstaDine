@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,12 +34,15 @@ import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
 import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
+import com.cpcrew.instadine.api.ParseGroupsApi;
+import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
+import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Constants;
 import com.cpcrew.instadine.utils.Utils;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
@@ -46,6 +50,7 @@ import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -59,7 +64,7 @@ import eu.erikw.PullToRefreshListView;
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 public class VotingActivity extends FragmentActivity implements ParseEventApiListener, 
-	CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener {
+	CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener,ParseGroupsApiListener {
 	
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
@@ -70,7 +75,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {        	
-	    	Toast.makeText(getApplicationContext(), "onReceive invoked!", Toast.LENGTH_LONG).show();
+	    	Toast.makeText(getApplicationContext(), "onReceive VotingActivity invoked!", Toast.LENGTH_LONG).show();
 	    }
 	};
 	
@@ -93,6 +98,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private boolean expirySelected = false;
 	
 	private ParseEventsApi parseEventApi;
+	private ParseGroupsApi parseGroupsApi;
 	private Event currentEvent;
 	private Group currentGroup;
 	private String groupId = null;
@@ -100,15 +106,20 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private HashSet<String> mySelection;
 	private HashSet<String> prevSelection;
 	private ArrayList<Rest> restaurants;
+	private ArrayList<User> usersOfGroup;
 	
 	private RestaurantArrayAdapter restAdapter;
 	protected PullToRefreshListView lvRestaurants;
+	
+	public static final int NOTIFICATION_ID = 45;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(NOTIFICATION_ID);
 		
 		if ( groupId == null)
 			groupId = getIntent().getStringExtra("group_id");
@@ -124,6 +135,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		restMap = new HashMap<String, Business>();
 
 		parseEventApi = new ParseEventsApi(this);
+		parseGroupsApi = new ParseGroupsApi(this);
 		
 		// Fetch the Event
 		findEvent(groupId);
@@ -506,7 +518,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
 		}
-				
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
 			
@@ -540,10 +551,14 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		JSONObject obj;
 		try {
 			obj = new JSONObject();
-			obj.put("alert", "All users of " + currentGroup.getGroupName() + " are recieving this notification!");
-			obj.put("title", "New event invite!");
+			//obj.put("alert", "All users of " + currentGroup.getGroupName() + " are recieving this notification!");
+			//obj.put("alert", "New Instadine request from " + LoggedInUser.getcurrentUser().getFirstName() +"!");
+			//obj.put("alert","");
+			// obj.put("title", "New event invite!");
 			obj.put("action", VotingActivityReceiver.intentAction);
-			obj.put("customdata","My message");
+
+			obj.put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
+			obj.put("customdata", groupId);
 			
 			/* 
 			 * Every Parse application installed on a device registered for push notifications has an associated Installation object. 
@@ -559,9 +574,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			 * you can simply store the current user on the ParseInstallation.
 			 */
 			
-			ParseInstallation.getCurrentInstallation().put("groupname", currentGroup.getGroupName());
-			ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
-			
+			// ParseInstallation.getCurrentInstallation().put("groupname", currentGroup.getGroupName());
+			// ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
+			ArrayList<String> firstNames = new ArrayList<String>();
+			for(User u:usersOfGroup){
+				firstNames.add(u.getFirstName());
+			}
+			ParseInstallation.getCurrentInstallation().put("usersofgroup", firstNames);
 			ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
 				@Override
 				public void done(ParseException e) {
@@ -577,6 +596,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				}
 			});
 			
+			
+			
 			/*
 			 * Once you have your data stored on your Installation objects, 
 			 * you can use a ParseQuery to target a subset of these devices. 
@@ -589,7 +610,11 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			ParseQuery query = ParseInstallation.getQuery();
 			
 			// Send push notification to query - in this case, only the current group's users will be notified
-			query.whereEqualTo("groupname", currentGroup.getGroupName());
+			// query.whereEqualTo("currentuser",usersOfGroup. );
+			
+			firstNames.remove(LoggedInUser.getcurrentUser().getFirstName());
+			query.whereContainedIn("currentuser", firstNames);
+			
 			push.setQuery(query);
 			push.setData(obj);
 			push.sendInBackground(); 
@@ -616,6 +641,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if ( group != null ) {
 			currentGroup = group;
 			parseEventApi.getEventsForGroup(group);
+			parseGroupsApi.getUsersOfGroup(currentGroup);
 			// change the title of the View
 			setTitle(currentGroup.getGroupName());
 			getActionBar().setSubtitle(currentGroup.getDesc());
@@ -731,5 +757,55 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			}
 		}
 		return restarauntSelected;
+	}
+
+
+	@Override
+	public void onallUsersResults(List<User> users) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onGetUserOfGroupResults(List<User> users) {
+		// TODO Auto-generated method stub
+		if(usersOfGroup == null){
+			usersOfGroup  = new ArrayList(users);
+		} else {
+			usersOfGroup.clear();
+			usersOfGroup.addAll(users);
+		}
+		Log.d("debug", "usersOfGroup size: " + usersOfGroup.size());
+		
+		
+	}
+
+
+	@Override
+	public void onGetGroupsForUserResults(List<Group> groups) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onGetGroupResult(List<Group> group) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onGetFriendsResult(List<User> friends) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void retrieveUser(User user) {
+		// TODO Auto-generated method stub
+		
 	}
 }

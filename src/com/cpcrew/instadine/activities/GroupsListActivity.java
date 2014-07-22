@@ -3,15 +3,20 @@ package com.cpcrew.instadine.activities;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.api.ParseGroupsApi;
@@ -22,7 +27,13 @@ import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
 import com.facebook.Session;
 import com.facebook.internal.Utility;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.PushService;
+import com.parse.RefreshCallback;
+import com.parse.SaveCallback;
 
 public class GroupsListActivity extends FragmentActivity implements ParseGroupsApiListener {
 	
@@ -32,6 +43,13 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	private ParseGroupsApi  parseApi;
 	private static String TAG = GroupsListActivity.class.getSimpleName();
 	HashMap<String, User> allUsers;
+	
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {        	
+	    	Toast.makeText(getApplicationContext(), "onReceive GroupsListActivity invoked!", Toast.LENGTH_LONG).show();
+	    }
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +76,34 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 		parseApi.getAllUsers();
 		parseApi.getGroupsForUser(LoggedInUser.getcurrentUser());
 		//testGetGroups();
+		
+		// Get the latest values from the ParseInstallation object.
+		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
+			
+			@Override
+			public void done(ParseObject object, ParseException e) {
+				if (e == null) {
+
+					ParseInstallation.getCurrentInstallation().put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
+					ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+						@Override
+						public void done(ParseException e) {
+							if (e == null) {
+								Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
+								toast.show();
+							} else {
+								e.printStackTrace();
+
+								Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Save Failed :(" , Toast.LENGTH_SHORT);
+								toast.show();
+							}
+						}
+					});
+					
+				}
+			}
+		});	
+		PushService.setDefaultPushCallback(this, GroupsListActivity.class);
 
 	}
 	
@@ -80,6 +126,9 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+        // pushNotifications onResume routine, calls the custom defined VotingActivityReceiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(VotingActivityReceiver.intentAction));
 
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser != null) {
@@ -93,6 +142,13 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 			startLoginActivity();
 		}
 	}
+	
+	// pushNotifications onPause routine
+	@Override
+    public void onPause() {
+        super.onPause();
+       LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
 
 	
 	private void onLogoutButtonClicked() {
