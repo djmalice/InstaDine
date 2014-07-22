@@ -35,7 +35,7 @@ import com.parse.PushService;
 import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
 
-public class GroupsListActivity extends FragmentActivity implements ParseGroupsApiListener {
+public class GroupsListActivity extends FragmentActivity implements eu.erikw.PullToRefreshListView.OnRefreshListener,ParseGroupsApiListener {
 	
 	private Button logoutButton;
 	
@@ -241,6 +241,12 @@ public class GroupsListActivity extends FragmentActivity implements ParseGroupsA
 			parseApi.getGroupsForUser(user);
 		}
 
+	}
+
+	@Override
+	public void onRefresh() {
+		// TODO Auto-generated method stub
+		parseApi.getGroupsForUser(LoggedInUser.getcurrentUser());
 	}
 	
 }
