@@ -28,7 +28,11 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
     	TextView tvRestname;
     	TextView tvSelectionCount;
     	TextView tvCity;
-    	TextView tvRating;
+    	ImageView star1;
+    	ImageView star2;
+    	ImageView star3;
+    	ImageView star4;
+    	ImageView star5;
     	ImageView ivRest;
 
     }
@@ -43,14 +47,18 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
 			viewHolder.tvRestname = (TextView)convertView.findViewById(R.id.tvRestname);
 			viewHolder.tvSelectionCount = (TextView)convertView.findViewById(R.id.tvSelectionCount);
 			viewHolder.tvCity = (TextView)convertView.findViewById(R.id.tvCity);
-			viewHolder.tvRating = (TextView)convertView.findViewById(R.id.tvRating);
+			viewHolder.star1 = (ImageView)convertView.findViewById(R.id.ivStar1);
+			viewHolder.star2 = (ImageView)convertView.findViewById(R.id.ivStar2);
+			viewHolder.star3 = (ImageView)convertView.findViewById(R.id.ivStar3);
+			viewHolder.star4 = (ImageView)convertView.findViewById(R.id.ivStar4);
+			viewHolder.star5 = (ImageView)convertView.findViewById(R.id.ivStar5);
 			viewHolder.ivRest = (ImageView)convertView.findViewById(R.id.ivRest);
 			convertView.setTag(viewHolder);
 		}
 		viewHolder = (ViewHolder) convertView.getTag();
 		viewHolder.tvRestname.setText(thisRest.getName());
 		viewHolder.tvSelectionCount.setText(String.valueOf(thisRest.getCount()) );
-		
+		placeStars(viewHolder, thisRest.getRating());
 		String photoFile = thisRest.getImageUrl();
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		if (photoFile != null && !(photoFile.equals(""))) {
@@ -61,6 +69,20 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest>{
 //		}
 
 		return convertView;
+	}
+	
+	public void placeStars(ViewHolder viewHolder, double rating) {
+		float roundedRating = Math.round(rating);
+		if (roundedRating >= 1)
+			viewHolder.star1.setImageResource(R.drawable.apptheme_rate_star_small_on_holo_light);
+		if (roundedRating >= 2)
+			viewHolder.star2.setImageResource(R.drawable.apptheme_rate_star_small_on_holo_light);
+		if (roundedRating >= 3)
+			viewHolder.star3.setImageResource(R.drawable.apptheme_rate_star_small_on_holo_light);
+		if (roundedRating >= 4)
+			viewHolder.star4.setImageResource(R.drawable.apptheme_rate_star_small_on_holo_light);
+		if (roundedRating >= 5)
+			viewHolder.star5.setImageResource(R.drawable.apptheme_rate_star_small_on_holo_light);		
 	}
 	
 

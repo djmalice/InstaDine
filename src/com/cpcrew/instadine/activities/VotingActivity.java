@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +40,7 @@ import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.utils.Constants;
+import com.cpcrew.instadine.utils.Utils;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 import com.loopj.android.http.AsyncHttpClient;
@@ -161,7 +161,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	System.out.println("OnClick");
             	if (v.getTag().equals("event")) {
             		eventSelected = true; expirySelected = false;
             	}
@@ -189,6 +188,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     	if (hourOfDay > 12) { 
     		hourOfDay = hourOfDay - 12;
     		
+    		// There should be a space before PM/AM , is a problem for parsing date.
     		eventTime = ( minute < 10 ) ? hourOfDay + ":0" + minute + "PM" :hourOfDay + ":" + minute + "PM"; 
     	}
     	else {
@@ -406,23 +406,44 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void loadEvent() {
 		
 		// Read from the currentEvent
-	
 		etLocation.setText(currentEvent.getLocation());
 		tvEventDate.setText(currentEvent.getDate());
 		tvEventTime.setText(currentEvent.getTime());
 		
-		String expiryTime = " at " + currentEvent.getExpiryTime() + " on " + currentEvent.getExpiryDate();
+		// Decider Message
+		String deciderMessage = null;
+		String expiryTime = "on " + currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime();
+		if (currentEvent.getDate() != null
+				&& currentEvent.getExpiryDate() != null) {
+			if (Utils.isTimeGreaterThan(currentEvent.getDate() + " "
+					+ currentEvent.getTime(), currentEvent.getExpiryDate()
+					+ " " + currentEvent.getExpiryTime())) {
+				// Has Expired
+				deciderMessage = "Voting is complete. "
+						+ currentGroup.getGroupName() + " is going to "
+						+ highestVotedRestaraunt() + " on "
+						+ currentEvent.getDate() + " " + currentEvent.getTime();
+			} else {
+				// Still voting going on.
+				deciderMessage = currentGroup.getGroupName()
+						+ " is still voting. See results when voting expires "
+						+ expiryTime;
+			}
+		} else {
+			// No event date and expiry date
+			deciderMessage = currentGroup.getGroupName() + " is deciding a Restaraunt ";
+		}
 		
 		
 		//Event Message to the group
 		TextView tvEventSummary = (TextView)findViewById(R.id.tvEventSummary);
-		tvEventSummary.setText("The event decision will be made at " + expiryTime);
+		tvEventSummary.setText(deciderMessage);
 		
 		// load the restaurant id and count
 		List<String> prevSelections =  currentEvent.getSelection();
 		if (prevSelections != null) {
 			for (int i = 0; i < prevSelections.size(); ++i) {
-
+				
 				String restId = Event.getSelectionRest(prevSelections.get(i));
 				String userId = Event.getSelectionUser(prevSelections.get(i));
 				addRestaurant(restId, userId);
@@ -697,5 +718,18 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void onGetEventByIdResult(Event event) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	// currently does not handle ties
+	public String highestVotedRestaraunt() {
+		int votes = 0;
+		String restarauntSelected = null ;
+		for (Rest rest : restaurants ) {
+			if ( rest.getCount() > votes ) {
+				votes = rest.getCount();
+				restarauntSelected = rest.getName();
+			}
+		}
+		return restarauntSelected;
 	}
 }
