@@ -14,33 +14,4 @@
         android:layout_alignParentTop="true" >
     </FrameLayout>
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:background="@color/grey"
-        android:layout_above="@+id/btnAdd" />
-
-    <Button
-        android:id="@+id/btnAdd"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ic_add"
-        android:onClick="onNewGroup"
-        android:text="" />
-
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/button_login"
-        android:text="@string/logout"
-        android:textColor="#fff"
-        android:textStyle="bold" />
-
 </RelativeLayout>

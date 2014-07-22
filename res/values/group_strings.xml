@@ -4,7 +4,7 @@
     <string name="group_members_hint">List of people</string>
     <string name="group_image_desc">Group Image</string>
     <string name="group_name_instructions">Please give dining experience a name and optional group icon</string>
-    <string name="group_name_subject_hint">Type dining group subject here...</string>
+    <string name="group_name_subject_hint">Name your dining group here...</string>
     <string name="group_next">Next</string>
     <string name="group_create">Create</string>
     <string name="group_done">Done</string>

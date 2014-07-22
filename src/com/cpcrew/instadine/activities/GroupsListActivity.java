@@ -37,7 +37,6 @@ import com.parse.SaveCallback;
 
 public class GroupsListActivity extends FragmentActivity implements eu.erikw.PullToRefreshListView.OnRefreshListener,ParseGroupsApiListener {
 	
-	private Button logoutButton;
 	
 	GroupsListFragment mFragment;
 	private ParseGroupsApi  parseApi;
@@ -55,17 +54,6 @@ public class GroupsListActivity extends FragmentActivity implements eu.erikw.Pul
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_groups_list);	
-		
-		logoutButton = (Button) findViewById(R.id.logoutButton);
-		logoutButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onLogoutButtonClicked();
-			}
-		});
-		
-		// keep logout button invisible for now
-		logoutButton.setVisibility(View.GONE);
 		
 		parseApi = new ParseGroupsApi(this);
 		mFragment = new GroupsListFragment();
@@ -110,7 +98,7 @@ public class GroupsListActivity extends FragmentActivity implements eu.erikw.Pul
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_group_list, menu);
         return true;
     }
     
@@ -151,14 +139,6 @@ public class GroupsListActivity extends FragmentActivity implements eu.erikw.Pul
     }
 
 	
-	private void onLogoutButtonClicked() {
-		// Log the user out
-		ParseUser.logOut();
-		
-		// Go to the login view
-		startLoginActivity();
-	}
-	
 	private void startLoginActivity() {
 		Intent intent = new Intent(this, LoginActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -175,7 +155,7 @@ public class GroupsListActivity extends FragmentActivity implements eu.erikw.Pul
 		parseApi.retrieveUser("ftATYWIhjA");
 	}
 	
-	public void onNewGroup(View v) {
+	public void onNewGroup(MenuItem mi) {
 		Intent intent = new Intent(this,NewGroupActivity.class);
 		startActivity(intent);
 	}
@@ -216,6 +196,9 @@ public class GroupsListActivity extends FragmentActivity implements eu.erikw.Pul
 	public void onGetGroupsForUserResults(List<Group> groups) {
 		// Update the listView
 		Log.d(TAG, " returned to onGetGroupsForUserResults");
+		if(groups.size() == 0) {
+			getActionBar().setTitle("Create new group");
+		}
 		mFragment.setGroupsAdapter(groups);
 		
 	}

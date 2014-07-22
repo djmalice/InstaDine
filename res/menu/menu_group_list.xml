@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/miCreate"
+        android:icon="@drawable/ic_action_add_white"
+        android:onClick="onNewGroup" 
+        android:showAsAction="always"
+        android:title="Create">
+    </item>
+   
+</menu>
