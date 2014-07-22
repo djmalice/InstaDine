@@ -115,9 +115,13 @@ public class Business implements Serializable {
             return b;
         }
 
-			
-			// b.rating = jsonObject.getDouble("rating");
-        	
+		try {	
+			b.rating = jsonObject.getDouble("rating");
+		} catch(JSONException e){
+			e.printStackTrace();
+			b.rating = 0;
+		}
+		
         	
 		try {
         	b.phone =jsonObject.getString("formatted_phone_number");
