@@ -428,8 +428,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		String expiryTime = "on " + currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime();
 		if (currentEvent.getDate() != null
 				&& currentEvent.getExpiryDate() != null) {
-			if (Utils.isTimeGreaterThan(currentEvent.getDate() + " "
-					+ currentEvent.getTime(), currentEvent.getExpiryDate()
+			if (Utils.isTimeGreaterThanNow(currentEvent.getExpiryDate()
 					+ " " + currentEvent.getExpiryTime())) {
 				// Has Expired
 				deciderMessage = "Voting is complete. "

@@ -21,16 +21,17 @@ public class Utils {
 	 * @param dateStop
 	 * @return
 	 */
-	public static boolean isTimeGreaterThan(String dateNow, String dateStop) {
+	public static boolean isTimeGreaterThanNow(String dateStop) {
 
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mma");
 
 		Date d1;
 		try {
-			d1 = df.parse(dateNow);
+			d1 = new Date();
 			Date d2 = df.parse(dateStop);
 			long d1Ms = d1.getTime();
 			long d2Ms = d2.getTime();
+			System.out.println(d1 + ":::" + d2);
 			if (d2Ms > d1Ms)
 				return false;
 			else
