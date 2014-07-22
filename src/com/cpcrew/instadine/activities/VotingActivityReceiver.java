@@ -1,12 +1,16 @@
 package com.cpcrew.instadine.activities;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.models.LoggedInUser;
+import com.cpcrew.instadine.models.User;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,24 +21,40 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class VotingActivityReceiver extends BroadcastReceiver {
    private static final String TAG = "VotingActivityReceiver";
    private static final int REQUEST_CODE = 11;
    public static final String intentAction = "SEND_PUSH";
    public static final int NOTIFICATION_ID = 45;
+
    private String organizer;
-   
+   private String groupName;
+   private String groupId;
+   //private ArrayList<String> firstNames = new ArrayList<String>();
+   private JSONArray firstNamesJSON = new JSONArray();
+   private ArrayList<String> firstNames;
 
    @Override
    public void onReceive(Context context, Intent intent) {
+
        if (intent == null) {
            Log.d(TAG, "Receiver intent null");
-       } else {
-          // Parse push message and handle accordingly
-          processPush(context, intent);
+       } else if (intent.getIntExtra("notificationId", 0) == 77) {
+    	   
+           int notificationId = intent.getIntExtra("notificationId", 0);
+           NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+           manager.cancel(notificationId);
+           Toast.makeText(context, "onReceive VotingActivity invoked for ID " + notificationId, Toast.LENGTH_LONG).show();
        }
-   }
+       else {
+           
+    	   	// Parse push message and handle accordingly
+    	   	processPush(context, intent);
+       		}
+      }
+
    
    /*
     * The Intent object which is passed to the receiver contains an extras Bundle with two useful mappings. 
@@ -55,18 +75,26 @@ public class VotingActivityReceiver extends BroadcastReceiver {
                Iterator<String> itr = json.keys();
                while (itr.hasNext()) {
                    String key = (String) itr.next();
-         	   // Extract custom push data
-         	   if (key.equals("customdata")) {    
-         	 	// Handle push notification by invoking activity directly
-         		// launchSomeActivity(context, json.getString(key));
-         		// OR trigger a broadcast to activity
-         		triggerBroadcastToActivity(context, json.getString(key));
-         		// OR create a local notification
-         		// createNotification(context);
-         	    } else if (key.equals("currentuser")) {
-         	    	organizer = json.getString(key);
-         	    }
-                    Log.d(TAG, "..." + key + " => " + json.getString(key));
+	         	   // Extract custom push data
+                   if (key.equals("currentuser")) {
+	         	    	organizer = json.getString(key);
+	         	   	} else if (key.equals("groupid")) {    
+	         	   		groupId = json.getString(key);
+	         	    } else if (key.equals("groupname")) {
+	         	    	groupName = json.getString(key);
+	         	    } else if (key.equals("otherusers")) { 
+	         	    	firstNamesJSON = json.getJSONArray(key);
+	         	    	Log.d(TAG, "..." + key + " => " + json.getJSONArray(key));
+	         	    	
+	         	    	firstNames = new ArrayList<String>();
+	         	    	
+	        			for (int x=0; x < firstNamesJSON.length(); x++) {
+	        				//firstNames.set(x, firstNamesJSON.getString(x));
+	        				firstNames.add(firstNamesJSON.getString(x));
+	        			}
+	         	    	triggerBroadcastToActivity(context);
+	         	    } else 
+	         	    	Log.d(TAG, "..." + key + " => " + json.getString(key));
                }
        	    } catch (JSONException ex) {
        		Log.d(TAG, "JSON failed!");
@@ -100,24 +128,28 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    
    // Handle push notification by sending a local broadcast 
    // to which the activity subscribes to
-   private void triggerBroadcastToActivity(Context context, String datavalue) {
+   private void triggerBroadcastToActivity(Context context) {
 	
        //LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(intentAction));
 		Intent votingIntent = new Intent(context, VotingActivity.class);
-		votingIntent.putExtra("group_id", datavalue);
-		//Intent cancelIntent = new Intent(context, ProxyActivity.class);
+		votingIntent.putExtra("group_id", groupId);
 
+		Intent cancelIntent = new Intent(context, VotingActivityReceiver.class);
+		cancelIntent.putExtra("notificationId", 77);
 		
 		//LoggedInUser.getcurrentUser().getFirstName() returns incorrect user
 		PendingIntent pVotingIntent = PendingIntent.getActivity(context, REQUEST_CODE, votingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		PendingIntent pIntentCancel = PendingIntent.getActivity(context, REQUEST_CODE, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pIntentCancel = PendingIntent.getActivity(context, 0, cancelIntent, 0);
+		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
-				.setContentTitle("Instadine with " + organizer + "?")
-				.setContentText("Please respond").setContentIntent(pVotingIntent)
+				.setContentTitle("Instadine with " + groupName + "!")
+				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentIntent(pVotingIntent)
 				 .addAction(R.drawable.ic_yes, "Yes", pVotingIntent)
 				 .addAction(R.drawable.ic_no, "No", pIntentCancel)
 				 .setTicker("Instadine request from " + organizer + "!")
+				 .setProgress(0, 0, true)
 				 .setAutoCancel(true);
 	
 		NotificationManager mNotificationManager = 

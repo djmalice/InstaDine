@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -558,7 +559,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			obj.put("action", VotingActivityReceiver.intentAction);
 
 			obj.put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
-			obj.put("customdata", groupId);
+			obj.put("groupid", groupId);
 			
 			/* 
 			 * Every Parse application installed on a device registered for push notifications has an associated Installation object. 
@@ -580,6 +581,12 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			for(User u:usersOfGroup){
 				firstNames.add(u.getFirstName());
 			}
+			
+			/*JSONArray firstNamesJSON = new JSONArray();
+			for(User u:usersOfGroup){
+				firstNamesJSON.put(u.getFirstName());
+			}*/
+			
 			ParseInstallation.getCurrentInstallation().put("usersofgroup", firstNames);
 			ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
 				@Override
@@ -613,7 +620,22 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			// query.whereEqualTo("currentuser",usersOfGroup. );
 			
 			firstNames.remove(LoggedInUser.getcurrentUser().getFirstName());
+			
 			query.whereContainedIn("currentuser", firstNames);
+			
+			obj.put("groupname", currentGroup.getGroupName());
+			
+			JSONArray firstNamesJSON = null;
+			try {
+				firstNamesJSON = new JSONArray();
+				for (int x=0; x < firstNames.size(); x++) {
+					firstNamesJSON.put(x, firstNames.get(x));
+					} 
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}		
+			
+			obj.put("otherusers", firstNamesJSON);
 			
 			push.setQuery(query);
 			push.setData(obj);
