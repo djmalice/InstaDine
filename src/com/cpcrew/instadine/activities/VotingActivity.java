@@ -360,13 +360,12 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view,
 					int position, long id) {
-				Rest listItem = (Rest) lvRestaurants.getItemAtPosition(position);
+				Rest listItem = (Rest) lvRestaurants.getItemAtPosition(position+1);
 				// Is the Restaurant already selected
 				boolean removeSelection = false;
 				for (String cs : mySelection) {
 					if (listItem.getRestId().equals(cs)) 
-						removeSelection = true;
-					
+						removeSelection = true;		
 				}
 				if ( removeSelection == false )
 					addRestaurantSelection(listItem);
