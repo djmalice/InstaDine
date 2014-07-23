@@ -2,7 +2,6 @@ package com.cpcrew.instadine.adapters;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.models.User;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -36,7 +36,7 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 
 	private static class ViewHolder {
 		TextView tvName;
-		ParseImageView pivPhoto;
+		ImageView pivPhoto;
 		ImageView ivSelected;
 		CheckBox cbSelect;
 
@@ -51,7 +51,7 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
 			convertView = inflator
 					.inflate(R.layout.contact_item, parent, false);
-			viewHolder.pivPhoto = (ParseImageView) convertView
+			viewHolder.pivPhoto = (ImageView) convertView
 					.findViewById(R.id.ivPhoto);
 			viewHolder.tvName = (TextView) convertView
 					.findViewById(R.id.tvName);
@@ -75,17 +75,10 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 			addClickHandlerToCheckBox(viewHolder.cbSelect);
 		}
 		// Load the image TODO - Verify the right API
-		ParseFile photoFile = user.getProfileImage();
-		if (photoFile != null) {
-			viewHolder.pivPhoto.setParseFile(photoFile);
-			viewHolder.pivPhoto.loadInBackground(new GetDataCallback() {
-				@Override
-				public void done(byte[] data, ParseException e) {
-					// nothing to do
-				}
-			});
-		}
 
+		ImageLoader imageLoader = ImageLoader.getInstance();
+		//populate view with tweet data
+		imageLoader.displayImage("https://graph.facebook.com/" + user.getFacebookId() + "/picture?type=large", viewHolder.pivPhoto);
 		return convertView;
 	}
 	
