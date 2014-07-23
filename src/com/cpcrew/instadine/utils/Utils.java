@@ -47,11 +47,12 @@ public class Utils {
 		try {
 			d1 = new Date();
 			System.out.println(t2);
-			Date d2 = df.parse(t2 + " PST");
+			Date d2 = df.parse(t2 + " PDT");
 			Date d3 = df2.parse(t3);
 			long d1Ms = d1.getTime();
 			long d2Ms = d2.getTime();
 			
+			System.out.println("D2 " + d2.getTime());
 			if (isPm ){
 				// Workaround since AM/PM written by pickers are not parsed
 				// Not changing on the pickers to avoid breaking existing data
