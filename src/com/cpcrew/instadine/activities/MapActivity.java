@@ -60,7 +60,8 @@ public class MapActivity extends FragmentActivity implements
 	private GoogleMap map;
 	private LocationClient mLocationClient;
 	RestaurantDropDownAdapter adapter;
-	TextView tvTitle;
+	TextView tvRestaurantName;
+	TextView tvLocation;
 	HashMap<String, Business> restMap;
 	HashMap<String, Business> searchBusiness;
 	HashMap<String, Integer> restCount;
@@ -93,7 +94,7 @@ public class MapActivity extends FragmentActivity implements
 			@Override
 			public boolean onMarkerClick(Marker arg0) {
 				// TODO Auto-generated method stub
-				tvTitle.setText(arg0.getTitle());
+				tvRestaurantName.setText(arg0.getTitle());
 //				Log.d("debug","searchBusiness: " + searchBusiness.toString());
 //				Log.d("debug","Marker.get(arg0): " + markerMap.get(arg0));
 				if(restMap.get(markerMap.get(arg0)) == null) {
@@ -117,8 +118,8 @@ public class MapActivity extends FragmentActivity implements
 		
 		
 		
-		tvTitle = (TextView)findViewById(R.id.tvTitle);
-		
+		tvRestaurantName = (TextView)findViewById(R.id.tvRestaurantName);
+		tvLocation = (TextView)findViewById(R.id.tvLocation);
 		
 		// AutoComplete SearchBar
 		ActionBar actionBar = getActionBar(); // you can use ABS or the non-bc ActionBar
