@@ -51,7 +51,6 @@ import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -244,6 +243,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
     @Override
     public void onDateSet(CalendarDatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+    	++monthOfYear;
     	if (eventSelected) {
     	dateOfEvent = monthOfYear + "/" + dayOfMonth + "/" + year;
     	tvEventDate.setText(dateOfEvent);
@@ -340,6 +340,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 						res.inflateBusinessObject(b);  // We have the business info now !!
 						restMap.put(b.getId(), b) ; // for the Search Activity
 						restAdapter.notifyDataSetChanged(); // Notify the ListView
+						updateDeciderView();
 						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -422,34 +423,6 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		tvEventDate.setText(currentEvent.getDate());
 		tvEventTime.setText(currentEvent.getTime());
 		
-		// Decider Message
-		String deciderMessage = null;
-		String expiryTime = "on " + currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime();
-		if (currentEvent.getDate() != null
-				&& currentEvent.getExpiryDate() != null) {
-			if (Utils.isTimeGreaterThanNow(currentEvent.getExpiryDate()
-					+ " " + currentEvent.getExpiryTime())) {
-				// Has Expired
-				deciderMessage = "Voting is complete. "
-						+ currentGroup.getGroupName() + " is going to "
-						+ highestVotedRestaraunt() + " on "
-						+ currentEvent.getDate() + " " + currentEvent.getTime();
-			} else {
-				// Still voting going on.
-				deciderMessage = currentGroup.getGroupName()
-						+ " is still voting. See results when voting expires "
-						+ expiryTime;
-			}
-		} else {
-			// No event date and expiry date
-			deciderMessage = currentGroup.getGroupName() + " is deciding a Restaraunt ";
-		}
-		
-		
-		//Event Message to the group
-		TextView tvEventSummary = (TextView)findViewById(R.id.tvEventSummary);
-		tvEventSummary.setText(deciderMessage);
-		
 		// load the restaurant id and count
 		List<String> prevSelections =  currentEvent.getSelection();
 		if (prevSelections != null) {
@@ -473,6 +446,34 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		// Show in the listView
 		
+	}
+	
+	public void updateDeciderView() {
+		// Decider Message
+		String deciderMessage = null;
+		String expiryTime = "on " + currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime();
+		if (currentEvent.getDate() != null
+				&& currentEvent.getExpiryDate() != null) {
+			if (Utils.isTimeGreaterThanNow(currentEvent.getExpiryDate()
+					+ " " + currentEvent.getExpiryTime())) {
+				// Has Expired
+				deciderMessage = "Voting is complete. "
+						+ currentGroup.getGroupName() + " is going to "
+						+ highestVotedRestaraunt() + " on "
+						+ currentEvent.getDate() + " " + currentEvent.getTime();
+			} else {
+				// Still voting going on.
+				deciderMessage = currentGroup.getGroupName()
+						+ " is still voting. See results when voting expires "
+						+ expiryTime;
+			}
+		} else {
+			// No event date and expiry date
+			deciderMessage = currentGroup.getGroupName() + " is deciding a Restaraunt ";
+		}
+		//Event Message to the group
+		TextView tvEventSummary = (TextView)findViewById(R.id.tvEventSummary);
+		tvEventSummary.setText(deciderMessage);
 	}
 	
 	public void addRestaurant(String restId, String userId ) {
