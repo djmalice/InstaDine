@@ -110,6 +110,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/tvRestname"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/ic_restaurant" />
+        android:src="@drawable/instadine_red" />
 
 </RelativeLayout>
