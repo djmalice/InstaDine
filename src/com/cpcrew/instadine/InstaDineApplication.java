@@ -51,7 +51,10 @@ public class InstaDineApplication extends Application {
     	//Parse.initialize(this, "2KdnQ3PisBoJWPavuDKHBxXnQEHWMlyESyXYBfyV", "re2zJPO0piIISY7qL07dNClFC2Iz91u2Gcw4Abfg");
 		
 		// mayanPushTest app
-		Parse.initialize(this, "pVwaIBnXu5LJdwL5pdXNE8XecjgfTaSXhBi1UDwQ", "NzJfvHzrOIlVKSB4EgbLJLho8eRXjZXYQFab69CP");
+		// Parse.initialize(this, "pVwaIBnXu5LJdwL5pdXNE8XecjgfTaSXhBi1UDwQ", "NzJfvHzrOIlVKSB4EgbLJLho8eRXjZXYQFab69CP");
+		
+		// mayanPushTest2 app
+		Parse.initialize(this, "yWbtnjMQSOQ6sEYfggFQpdWzLW85FGnRyE6gWmkh", "AxElu0wPiJeg2uqupxltW0aqdoo1PpOLJ9zMNbUy");
 
     	// Set your Facebook App Id in strings.xml
     	ParseFacebookUtils.initialize(getString(R.string.app_id)); 

@@ -94,6 +94,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private String timeOfExpiry;
 	private String dateOfExpiry;
 	
+	private String selectedRestaurant;
+	
 	private boolean eventSelected = false;
 	private boolean expirySelected = false;
 	
@@ -306,6 +308,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		  } else {
 			  System.out.println(" Returned null from Search Activity");
 		  }
+		  selectedRestaurant = userChoice.getName();
 
 	  }
 	} 
@@ -517,7 +520,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	}
 
 	public void onDone(View v) {
-		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
 			// updateDeciderView();  //Data is still not in the database. Cannot be done.
 			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, dateOfExpiry, timeOfExpiry, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), newSelections());
@@ -561,7 +564,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			//obj.put("alert", "New Instadine request from " + LoggedInUser.getcurrentUser().getFirstName() +"!");
 			//obj.put("alert","");
 			// obj.put("title", "New event invite!");
-			obj.put("action", VotingActivityReceiver.intentAction);
+			if (restAdapter.getCount() > 1) {
+				obj.put("action", VotingActivityReceiver.intentPushNewRestaurant);
+				obj.put("restname", selectedRestaurant);
+				//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
+				//selectedRestaurant = null;
+			} else if (restAdapter.getCount() == 1) {
+				obj.put("action", VotingActivityReceiver.intentAction);
+				obj.put("restname", selectedRestaurant);
+			}
 
 			obj.put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
 			obj.put("groupid", groupId);
