@@ -119,6 +119,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="SEND_PUSH" />
+                <action android:name="SEND_REST" />
             </intent-filter>
         </receiver>
 
