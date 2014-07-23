@@ -287,6 +287,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		i.putExtra("rest_map" , restMap);
 		i.putExtra("rest_count",restCount);
 		startActivityForResult(i,Constants.MAP_REQUEST_CODE);
+		overridePendingTransition(R.anim.right_in, R.anim.left_out);
 		
 	}
 	
