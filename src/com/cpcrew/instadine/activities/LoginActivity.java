@@ -174,6 +174,8 @@ public class LoginActivity extends Activity {
 		
 		//removed login screen from backstack
 		finish();
+		overridePendingTransition(R.anim.splash_fade_in,  
+                R.anim.splash_fade_out);  
 		
 	}
 	
