@@ -518,6 +518,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	public void onDone(View v) {
 		Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
+			updateDeciderView();
 			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, dateOfExpiry, timeOfExpiry, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), newSelections());
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
