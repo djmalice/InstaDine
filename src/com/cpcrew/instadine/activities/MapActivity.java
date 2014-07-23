@@ -62,6 +62,7 @@ public class MapActivity extends FragmentActivity implements
 	RestaurantDropDownAdapter adapter;
 	TextView tvRestaurantName;
 	TextView tvLocation;
+	TextView tvVote;
 	HashMap<String, Business> restMap;
 	HashMap<String, Business> searchBusiness;
 	HashMap<String, Integer> restCount;
@@ -103,6 +104,13 @@ public class MapActivity extends FragmentActivity implements
 //					Log.d("debug","restMap: " + restMap.toString());
 					markerSelectedBusiness = restMap.get(markerMap.get(arg0));
 				}
+				tvRestaurantName.setText(arg0.getTitle());
+				tvLocation.setText(markerSelectedBusiness.getCity());
+				// Log.d("debug", "get from map:" + restCount.get(markerSelectedBusiness.getId()));
+//				Log.d("debug", "RestCOunt: " + restCount.toString());
+//				if(restCount.get(markerSelectedBusiness.getId()) != null) {
+//					tvVote.setText(restCount.get(markerSelectedBusiness.getId()).toString());
+//				}
 				return false;
 			}
 		});
@@ -120,7 +128,7 @@ public class MapActivity extends FragmentActivity implements
 		
 		tvRestaurantName = (TextView)findViewById(R.id.tvRestaurantName);
 		tvLocation = (TextView)findViewById(R.id.tvLocation);
-		
+		tvVote = (TextView)findViewById(R.id.tvSelectionCount);
 		// AutoComplete SearchBar
 		ActionBar actionBar = getActionBar(); // you can use ABS or the non-bc ActionBar
 	    actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_HOME

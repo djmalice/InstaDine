@@ -17,7 +17,7 @@
         android:background="@drawable/container_dropshadow"
         android:descendantFocusability="blocksDescendants"
         android:layout_width="wrap_content"
-        android:layout_height="60dp" >
+        android:layout_height="70dp" >
         
         
     <ImageButton
@@ -27,22 +27,24 @@
         android:background="@color/transparent"
         android:layout_alignParentRight="true"
         android:src="@drawable/map_done"
-        android:onClick="sendSelectionToVoting" />
+        android:onClick="sendSelectionToVoting"
+        android:layout_centerVertical="true" />
 
         <LinearLayout
             android:id="@+id/llCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvLocation"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/ibDone"
+            android:layout_marginRight="8dp"
             android:background="@drawable/ring_shape"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:gravity="center_horizontal|center_vertical" >
 
             <TextView
                 android:id="@+id/tvVoteCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -50,11 +52,10 @@
                 android:id="@+id/tvVoteCountLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
                 android:text="Votes"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/grey"
-                android:textSize="4dp" />
+                android:textSize="8dp" />
         </LinearLayout>
 
         <TextView
@@ -63,46 +64,24 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvRestaurantName"
             android:layout_below="@+id/tvRestaurantName"
-            android:text=""
+            android:text="Location"
+            android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <LinearLayout
-            android:id="@+id/llRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tvLocation"
-            android:layout_below="@+id/tvLocation"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/tvRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rating: "
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-       
-        </LinearLayout>
-
-        <TextView
+       <TextView
             android:id="@+id/tvRestaurantName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="14dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
             android:layout_toLeftOf="@+id/llCount"
-            android:layout_toRightOf="@+id/ivRestaurant"
-            android:text="Restaurant Name"
+            android:text="Select from Map"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <ImageView
-            android:id="@+id/ivRestaurant"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignTop="@+id/tvRestaurant"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_restaurant" />
+      
         </RelativeLayout>
 
 </LinearLayout>
