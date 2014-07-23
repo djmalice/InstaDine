@@ -361,6 +361,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view,
 					int position, long id) {
+				LinearLayout llCount = (LinearLayout) view.findViewById(R.id.llCount);
 				Rest listItem = (Rest) lvRestaurants.getItemAtPosition(position+1);
 				// Is the Restaurant already selected
 				boolean removeSelection = false;
@@ -368,8 +369,11 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 					if (listItem.getRestId().equals(cs)) 
 						removeSelection = true;		
 				}
-				if ( removeSelection == false )
+				if ( removeSelection == false ) {
 					addRestaurantSelection(listItem);
+					if (llCount != null)
+						restAdapter.flipit(llCount);
+				}
 				else
 					removeRestaruantSelection(listItem);
 				
