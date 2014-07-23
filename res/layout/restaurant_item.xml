@@ -15,13 +15,13 @@
         android:layout_alignBottom="@+id/tvCity"
         android:layout_alignParentRight="true"
         android:background="@drawable/ring_shape"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical" >
 
         <TextView
             android:id="@+id/tvSelectionCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -29,7 +29,6 @@
             android:id="@+id/tvSelectionCountLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
             android:text="Votes"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/grey"
