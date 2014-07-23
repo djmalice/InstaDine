@@ -34,7 +34,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
 	private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
 	private static final String OUT_JSON = "/json";
 
-	private static final String API_KEY = "AIzaSyDUWcjTHpCoU93QIFWHJ_glTbd4wfiP8bw";
+	private static final String API_KEY = "AIzaSyBLBDUeiHv7L6Yry6ybWXobIt38Rc40bIA";
 	private ArrayList<Business> resultList;
 	
 	public RestaurantDropDownAdapter(Context context, int resource) {
