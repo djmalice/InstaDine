@@ -32,7 +32,7 @@
             android:text="Votes"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/grey"
-            android:textSize="4dp" />
+            android:textSize="8dp" />
     </LinearLayout>
 
     <TextView
