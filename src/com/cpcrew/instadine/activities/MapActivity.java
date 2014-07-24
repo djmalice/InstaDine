@@ -238,7 +238,7 @@ public class MapActivity extends FragmentActivity implements
 		final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 		final String TYPE_DETAILS = "/details";
 		final String OUT_JSON = "/json";
-		final String API_KEY = "AIzaSyBLBDUeiHv7L6Yry6ybWXobIt38Rc40bIA";
+		final String API_KEY = "AIzaSyBAZ3Lnc15HxezxeoffyTP7RoG1m-x6rpc";
 		StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DETAILS + OUT_JSON);
 		AsyncHttpClient client = new AsyncHttpClient();
 		RequestParams params = new RequestParams();
