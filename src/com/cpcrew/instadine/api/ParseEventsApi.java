@@ -102,7 +102,7 @@ public class ParseEventsApi {
 		event.setDate(date);
 		event.setTime(time);
 		event.setExpiryDate(expDate);
-		event.setExpiryTime(time);
+		event.setExpiryTime(expTime);
 		event.setLocation(loc);
 		event.setGroup(group);
 		group.setEventPresent();
