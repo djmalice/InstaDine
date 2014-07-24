@@ -28,6 +28,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    private static final int REQUEST_CODE = 11;
    public static final String intentAction = "SEND_PUSH";
    public static final String intentPushNewRestaurant = "SEND_REST";
+   public static final String intentPushUpdateVotes = "SEND_VOTES";
    public static final int NOTIFICATION_ID = 45;
 
    private String organizer;
@@ -67,7 +68,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    private void processPush(Context context, Intent intent) {
        String action = intent.getAction();
        Log.d(TAG, "got action " + action );
-       if (action.equals(intentAction) || action.equals(intentPushNewRestaurant))
+       if (action.equals(intentAction) || action.equals(intentPushNewRestaurant) || action.equals(intentPushUpdateVotes))
        {
            String channel = intent.getExtras().getString("com.parse.Channel");
            try {       	
@@ -99,6 +100,8 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 	        				triggerBroadcastToActivity(context);
 	        			} else if (action.equals(intentPushNewRestaurant)) { 
 	        				createNotification(context); 
+	        			} else if (action.equals(intentPushUpdateVotes)) { 
+	        				createNotificationUpdateVotes(context); 
 	        			}
 	         	    } else 
 	         	    	Log.d(TAG, "..." + key + " => " + json.getString(key));
@@ -108,6 +111,28 @@ public class VotingActivityReceiver extends BroadcastReceiver {
        	    }
        }
    }
+   
+   private void createNotificationUpdateVotes(Context context) {
+	   
+	   Intent votingIntent = new Intent(context, VotingActivity.class);
+	   votingIntent.putExtra("group_id", groupId);
+	   
+	   PendingIntent pVotingIntent = PendingIntent.getActivity(context, REQUEST_CODE, votingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle(organizer + " just voted!")
+				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentIntent(pVotingIntent)
+				 .setTicker(organizer + " just voted!")
+				 .setProgress(0, 0, true)
+				 .setAutoCancel(true);
+	
+		NotificationManager mNotificationManager = 
+	            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+    		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+       }
    
    
    // Create a local dashboard notification to tell user about the event
