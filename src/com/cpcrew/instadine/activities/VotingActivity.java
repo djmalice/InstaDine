@@ -534,9 +534,9 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			@Override
 			public void done(ParseObject object, ParseException e) {
 				if (e == null) {
-					pushToVotingActivity();
-					finish();
+					pushToVotingActivity();	
 				}
+				finish();
 			}
 		});	
 	}
