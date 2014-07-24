@@ -486,7 +486,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	public void addRestaurant(String restId, String userId ) {
 		Rest rest;
-		if (!mySelection.contains(restId)) { // user already selected restaurant
+		//if (!mySelection.contains(restId)) { // user already selected restaurant BUG FIX: Doesn't update if another user has made the same selection as you )
 
 			if (Restaurants.containsKey(restId)) { // preexisting
 				rest = Restaurants.get(restId);
@@ -497,11 +497,11 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				restaurants.add(rest);
 			}
 			rest.addUser(userId);
-		}
+		//}
 	}
 	
 	public void addRestaurantWithBusinessInfo(String restId, String userId , Business businessInfo) {
-		if (!mySelection.contains(restId)) { // user already selected restaurant
+		//if (!mySelection.contains(restId)) { // user already selected restaurant  ( BUG FIX: Doesn't update if another user has made the same selection as you )
 			Rest rest;
 			if (Restaurants.containsKey(restId)) { // preexisting restaurant
 				rest = Restaurants.get(restId);
@@ -516,7 +516,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			mySelection.add(restId);
 			rest.addUser(userId);
 			restAdapter.notifyDataSetChanged();
-		}	
+		//}	
 	}
 
 	public void onDone(View v) {
@@ -534,6 +534,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			public void done(ParseObject object, ParseException e) {
 				if (e == null) {
 					pushToVotingActivity();
+					finish();
 				}
 			}
 		});	
