@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.models.User;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -36,7 +37,7 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 
 	private static class ViewHolder {
 		TextView tvName;
-		ImageView pivPhoto;
+		CircularImageView pivPhoto;
 		ImageView ivSelected;
 		CheckBox cbSelect;
 
@@ -51,8 +52,10 @@ public class ContactArrayAdapter extends ArrayAdapter<User> {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
 			convertView = inflator
 					.inflate(R.layout.contact_item, parent, false);
-			viewHolder.pivPhoto = (ImageView) convertView
+			viewHolder.pivPhoto = (CircularImageView) convertView
 					.findViewById(R.id.ivPhoto);
+			viewHolder.pivPhoto.setBorderWidth(2);
+			viewHolder.pivPhoto.addShadow();
 			viewHolder.tvName = (TextView) convertView
 					.findViewById(R.id.tvName);
 			viewHolder.ivSelected = (ImageView)convertView.findViewById(R.id.ivSelected);
