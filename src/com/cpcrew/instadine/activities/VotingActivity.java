@@ -94,7 +94,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private String timeOfExpiry;
 	private String dateOfExpiry;
 	
-	private String selectedRestaurant;
+	private String selectedRestaurant=null;
 	
 	private boolean eventSelected = false;
 	private boolean expirySelected = false;
@@ -564,12 +564,17 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			//obj.put("alert", "New Instadine request from " + LoggedInUser.getcurrentUser().getFirstName() +"!");
 			//obj.put("alert","");
 			// obj.put("title", "New event invite!");
-			if (restAdapter.getCount() > 1) {
+			if ((restAdapter.getCount() > 1) && (selectedRestaurant != null)) {
 				obj.put("action", VotingActivityReceiver.intentPushNewRestaurant);
 				obj.put("restname", selectedRestaurant);
 				//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
-				//selectedRestaurant = null;
-			} else if (restAdapter.getCount() == 1) {
+				selectedRestaurant = null;
+			} else if ((restAdapter.getCount() > 1) && (selectedRestaurant == null)) {
+				obj.put("action", VotingActivityReceiver.intentPushUpdateVotes);
+				//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
+			}
+			
+			else if (restAdapter.getCount() == 1) {
 				obj.put("action", VotingActivityReceiver.intentAction);
 				obj.put("restname", selectedRestaurant);
 			}
