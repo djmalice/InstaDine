@@ -502,11 +502,10 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	
 	public void addRestaurantWithBusinessInfo(String restId, String userId , Business businessInfo) {
 		if (!mySelection.contains(restId)) { // user already selected restaurant
-			Rest rest;
+			Rest rest = new Rest();
 			if (Restaurants.containsKey(restId)) { // preexisting restaurant
 				rest = Restaurants.get(restId);
 			} else { // new restaurant
-				rest = new Rest();
 				rest.setRestId(restId);
 				rest.inflateBusinessObject(businessInfo);
 				restMap.put(businessInfo.getId(), businessInfo);
