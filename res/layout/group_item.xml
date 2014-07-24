@@ -11,10 +11,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
+        android:padding="2dp"
         android:background="@drawable/curved_rectangle_border_lightred"
         android:src="@drawable/group_red"
-        android:padding="2dp"
         android:contentDescription="@string/group_image_desc" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ivGroupPhoto"
         android:layout_toRightOf="@+id/ivGroupPhoto"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="25dp"
         android:text="@string/group_name_hint"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvGroupName"
         android:layout_alignLeft="@+id/tvGroupName"
+        android:layout_marginBottom="13dp"
         android:text="@string/group_members_hint"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -40,7 +41,7 @@
         android:id="@+id/ibGroupAction"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_above="@+id/tvGroupMembers"
+        android:layout_centerInParent="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:scaleType="fitXY"
