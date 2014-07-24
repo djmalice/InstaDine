@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.AdapterView.OnItemClickListener;
  
 /**
  * sub class of {@link android.widget.AutoCompleteTextView} that includes a clear (dismiss / close) button with
@@ -91,6 +92,12 @@ public class ClearableAutoCompleteTextView extends AutoCompleteTextView {
  
 	public void setOnClearListener(final OnClearListener clearListener) {
 		this.onClearListener = clearListener;
+	}
+	
+	@Override
+	public void setOnItemClickListener(OnItemClickListener l) {
+		// TODO Auto-generated method stub
+		super.setOnItemClickListener(l);
 	}
  
 	public void hideClearButton() {

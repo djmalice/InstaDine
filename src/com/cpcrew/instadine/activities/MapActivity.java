@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
 import com.cpcrew.instadine.models.Business;
+import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView;
+import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView.OnClearListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -52,8 +54,8 @@ public class MapActivity extends FragmentActivity implements
 		GooglePlayServicesClient.OnConnectionFailedListener {
 	
 	ImageView searchIcon;
-	//ClearableAutoCompleteTextView searchBox;
-	AutoCompleteTextView searchBox;
+	ClearableAutoCompleteTextView searchBox;
+	//AutoCompleteTextView searchBox;
 	Business listSelectedBusiness;
 	Business markerSelectedBusiness;
 	private SupportMapFragment mapFragment;
@@ -144,7 +146,7 @@ public class MapActivity extends FragmentActivity implements
 	    
 	    
 	   // searchBox =  (ClearableAutoCompleteTextView) v.findViewById(R.id.search_box);
-	    searchBox =  (AutoCompleteTextView) v.findViewById(R.id.search_box);
+	    searchBox =  (ClearableAutoCompleteTextView) v.findViewById(R.id.search_box);
 	    adapter = new RestaurantDropDownAdapter(this, R.layout.actionbar_search_item);
 	    searchBox.setAdapter(adapter);
 	    
@@ -185,14 +187,14 @@ public class MapActivity extends FragmentActivity implements
 			}
 		});
 		
-		/*searchBox.setOnClearListener(new OnClearListener() {
+		searchBox.setOnClearListener(new OnClearListener() {
 			
 			@Override
 			public void onClear() {
 				toggleSearch(true);
 			}
 		});
-		*/
+		
 		searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	 
 			@Override
