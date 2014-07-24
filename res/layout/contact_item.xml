@@ -5,10 +5,11 @@
     android:gravity="center"
     android:orientation="horizontal" >
 
-    <com.parse.ParseImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/ivPhoto"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
         android:layout_marginLeft="15dp"
         android:src="@drawable/ic_contact" />
 

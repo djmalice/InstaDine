@@ -12,7 +12,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/ic_group"
+        android:background="@drawable/curved_rectangle_border_lightred"
+        android:src="@drawable/group_red"
+        android:padding="2dp"
         android:contentDescription="@string/group_image_desc" />
 
     <TextView
@@ -36,10 +38,12 @@
 
     <ImageButton
         android:id="@+id/ibGroupAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivGroupPhoto"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_above="@+id/tvGroupMembers"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:scaleType="fitXY"
         android:background="@null"
         android:contentDescription="@string/group_image_desc"
         android:src="@drawable/ic_right_arrow" />

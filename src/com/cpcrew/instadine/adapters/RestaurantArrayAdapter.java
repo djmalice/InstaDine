@@ -38,6 +38,7 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 		ImageView star4;
 		ImageView star5;
 		ImageView ivRest;
+		TextView tvSelectionCountLabel;
 
 	}
 
@@ -54,6 +55,8 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 					.findViewById(R.id.tvRestname);
 			viewHolder.tvSelectionCount = (TextView) convertView
 					.findViewById(R.id.tvSelectionCount);
+			viewHolder.tvSelectionCountLabel = (TextView) convertView
+					.findViewById(R.id.tvSelectionCountLabel);
 			viewHolder.tvCity = (TextView) convertView
 					.findViewById(R.id.tvCity);
 			viewHolder.star1 = (ImageView) convertView
@@ -85,7 +88,9 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 		// else {
 		// viewHolder.ivRest.setVisibility(View.GONE);
 		// }
-
+		
+		if (this.getCount() > 1) viewHolder.tvSelectionCountLabel.setText("votes");
+		else viewHolder.tvSelectionCountLabel.setText("vote");
 		return convertView;
 	}
 

@@ -27,11 +27,14 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    private static final String TAG = "VotingActivityReceiver";
    private static final int REQUEST_CODE = 11;
    public static final String intentAction = "SEND_PUSH";
+   public static final String intentPushNewRestaurant = "SEND_REST";
+   public static final String intentPushUpdateVotes = "SEND_VOTES";
    public static final int NOTIFICATION_ID = 45;
 
    private String organizer;
    private String groupName;
    private String groupId;
+   private String restName;
    //private ArrayList<String> firstNames = new ArrayList<String>();
    private JSONArray firstNamesJSON = new JSONArray();
    private ArrayList<String> firstNames;
@@ -65,7 +68,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    private void processPush(Context context, Intent intent) {
        String action = intent.getAction();
        Log.d(TAG, "got action " + action );
-       if (action.equals(intentAction))
+       if (action.equals(intentAction) || action.equals(intentPushNewRestaurant) || action.equals(intentPushUpdateVotes))
        {
            String channel = intent.getExtras().getString("com.parse.Channel");
            try {       	
@@ -76,7 +79,9 @@ public class VotingActivityReceiver extends BroadcastReceiver {
                while (itr.hasNext()) {
                    String key = (String) itr.next();
 	         	   // Extract custom push data
-                   if (key.equals("currentuser")) {
+                   if (key.equals("restname")) {
+                	   restName = json.getString(key);
+                   } else if (key.equals("currentuser")) {
 	         	    	organizer = json.getString(key);
 	         	   	} else if (key.equals("groupid")) {    
 	         	   		groupId = json.getString(key);
@@ -91,8 +96,13 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 	        			for (int x=0; x < firstNamesJSON.length(); x++) {
 	        				//firstNames.set(x, firstNamesJSON.getString(x));
 	        				firstNames.add(firstNamesJSON.getString(x));
+	        			} if (action.equals(intentAction)) {
+	        				triggerBroadcastToActivity(context);
+	        			} else if (action.equals(intentPushNewRestaurant)) { 
+	        				createNotification(context); 
+	        			} else if (action.equals(intentPushUpdateVotes)) { 
+	        				createNotificationUpdateVotes(context); 
 	        			}
-	         	    	triggerBroadcastToActivity(context);
 	         	    } else 
 	         	    	Log.d(TAG, "..." + key + " => " + json.getString(key));
                }
@@ -102,14 +112,50 @@ public class VotingActivityReceiver extends BroadcastReceiver {
        }
    }
    
+   private void createNotificationUpdateVotes(Context context) {
+	   
+	   Intent votingIntent = new Intent(context, VotingActivity.class);
+	   votingIntent.putExtra("group_id", groupId);
+	   
+	   PendingIntent pVotingIntent = PendingIntent.getActivity(context, REQUEST_CODE, votingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle(organizer + " just voted!")
+				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentIntent(pVotingIntent)
+				 .setTicker(organizer + " just voted!")
+				 .setProgress(0, 0, true)
+				 .setAutoCancel(true);
+	
+		NotificationManager mNotificationManager = 
+	            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+    		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+       }
+   
    
    // Create a local dashboard notification to tell user about the event
    private void createNotification(Context context) {
-       NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
-          		R.drawable.ic_launcher).setContentTitle("Local InstaDine Notification");
-       NotificationManager mNotificationManager = (NotificationManager) context
-          		.getSystemService(Context.NOTIFICATION_SERVICE);
-       mNotificationManager.notify(45, mBuilder.build());
+	   
+	   Intent votingIntent = new Intent(context, VotingActivity.class);
+	   votingIntent.putExtra("group_id", groupId);
+	   
+	   PendingIntent pVotingIntent = PendingIntent.getActivity(context, REQUEST_CODE, votingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle(organizer + " added " + restName + " in " + groupName)
+				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentIntent(pVotingIntent)
+				 .setTicker(organizer + " just added " + restName + "!")
+				 .setProgress(0, 0, true)
+				 .setAutoCancel(true);
+	
+		NotificationManager mNotificationManager = 
+	            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
    }
    
    // Handle push notification by invoking activity directly

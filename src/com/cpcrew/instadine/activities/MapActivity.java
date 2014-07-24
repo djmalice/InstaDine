@@ -481,6 +481,7 @@ public class MapActivity extends FragmentActivity implements
 			data.putExtra("user_choice", markerSelectedBusiness);
 			setResult(RESULT_OK, data);
 			finish();
+			overridePendingTransition(R.anim.left_in, R.anim.right_out);
 		}
 		
 		

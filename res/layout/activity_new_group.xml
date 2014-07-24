@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/ic_group" />
+        android:src="@drawable/group_red" />
    
     <TextView
         android:id="@+id/tvLabel"
