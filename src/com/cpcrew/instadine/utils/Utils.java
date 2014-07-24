@@ -71,5 +71,23 @@ public class Utils {
 		}
 		
 	}
+	
+	public static String toDisplayDate(String dt) {
+		if ( dt != null && !dt.equals("" )) {
+			SimpleDateFormat inF = new SimpleDateFormat("MM/dd/yyyy");
+			SimpleDateFormat outF = new SimpleDateFormat("MMM dd, yyyy");
+			Date date;
+			try {
+				date = inF.parse(dt);
+				return outF.format(date);	
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "";
+			}
+			
+		}
+		return "";
+	}
 
 }
