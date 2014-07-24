@@ -15,7 +15,10 @@
         android:inputType="textAutoComplete"
         android:popupBackground="@color/white"
         android:textColor="#FFFFFF"
-        android:hint="Search for Restaurants" />
+        android:layout_marginRight="5dp"
+        android:hint="Search for Restaurants"
+        android:dropDownSelector="@drawable/apptheme_item_background_holo_light"
+   />
    
    <ImageView
          android:id="@+id/action_search"

@@ -59,7 +59,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
 		Business venue = getItem(position);
 		convertView.setTag(venue);
 		 
-			venueName.setText(venue.getName());
+			venueName.setText(" " + venue.getName());
 			venueAddress.setText(venue.getCity());
 			
  

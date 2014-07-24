@@ -2,21 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:textAlignment="gravity" >
+    android:textAlignment="gravity"
+    android:drawable="@drawable/selectable_background_myactionbar"
+    android:background="@+color/dropDownGrey">
  
     <TextView
         android:id="@+id/search_item_venue_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/white"
+        android:textSize="18dp"
          />
  
     <TextView
         android:id="@+id/search_item_venue_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="2dp"
         android:layout_below="@+id/search_item_venue_name"
-        android:textColor="@color/black" />
+        android:textSize="12dp"
+        android:textColor="@color/white" />
  
  
 </RelativeLayout>
