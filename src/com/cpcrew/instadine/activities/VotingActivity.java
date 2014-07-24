@@ -322,7 +322,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 			final String TYPE_DETAILS = "/details";
 			final String OUT_JSON = "/json";
-			final String API_KEY = "AIzaSyBAZ3Lnc15HxezxeoffyTP7RoG1m-x6rpc";
+			final String API_KEY = com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;
 			StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DETAILS
 					+ OUT_JSON);
 			AsyncHttpClient client = new AsyncHttpClient();

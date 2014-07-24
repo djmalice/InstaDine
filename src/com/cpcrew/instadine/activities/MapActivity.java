@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -240,7 +241,7 @@ public class MapActivity extends FragmentActivity implements
 		final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 		final String TYPE_DETAILS = "/details";
 		final String OUT_JSON = "/json";
-		final String API_KEY = "AIzaSyBAZ3Lnc15HxezxeoffyTP7RoG1m-x6rpc";
+		final String API_KEY = com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;
 		StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DETAILS + OUT_JSON);
 		AsyncHttpClient client = new AsyncHttpClient();
 		RequestParams params = new RequestParams();
@@ -279,13 +280,13 @@ public class MapActivity extends FragmentActivity implements
 	    Marker res = map.addMarker(new MarkerOptions()
 	                              .position(restaurant)
 	                              .title(business.getName())
-	                              .snippet("Fine Dining")
-	                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));;
+	                              .flat(true)
+	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker)));
 	    markerMap.put(res, business.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
 	    
 		
-	    // res.showInfoWindow();
+	    res.showInfoWindow();
 	    // Add to temporary search business map for all markers in the system
 	    
 	    searchBusiness.put(business.getId(), business);
