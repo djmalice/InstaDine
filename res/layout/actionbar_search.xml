@@ -12,13 +12,15 @@
         android:layout_gravity="center"
         android:dropDownVerticalOffset="5dp"
         android:dropDownWidth="wrap_content"
-        android:inputType="textAutoComplete|textAutoCorrect"
+        android:inputType="textAutoComplete"
         android:popupBackground="@color/white"
-        android:textColor="#000000" />
+        android:textColor="#FFFFFF"
+        android:hint="Search for Restaurants" />
   
 	<ImageView
         android:id="@+id/action_search"
         android:layout_marginRight="5dp"
+        
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_gravity="right"
