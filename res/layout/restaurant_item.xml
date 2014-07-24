@@ -8,32 +8,6 @@
     android:background="@drawable/container_dropshadow"
     android:descendantFocusability="blocksDescendants" >
 
-    <LinearLayout
-        android:id="@+id/llCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCity"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ring_shape"
-        android:orientation="vertical"
-        android:gravity="center_horizontal|center_vertical" >
-
-        <TextView
-            android:id="@+id/tvSelectionCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/tvSelectionCountLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vote"
-            android:textColor="@color/grey"
-            android:textSize="8dp" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tvCity"
         android:layout_width="wrap_content"
@@ -43,54 +17,7 @@
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <LinearLayout
-        android:id="@+id/llRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvCity"
-        android:layout_below="@+id/tvCity"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/tvRatingLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rating: "
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <ImageView
-            android:id="@+id/ivStar1"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
-        <ImageView
-            android:id="@+id/ivStar2"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="3dp"
-            android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
-        <ImageView
-            android:id="@+id/ivStar3"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="3dp"
-            android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
-        <ImageView
-            android:id="@+id/ivStar4"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="3dp"
-            android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
-        <ImageView
-            android:id="@+id/ivStar5"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="3dp"
-            android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
-    </LinearLayout>
-
-    <TextView
+   <TextView
         android:id="@+id/tvRestname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

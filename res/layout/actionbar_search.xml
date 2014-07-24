@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:dropDownVerticalOffset="5dp"
         android:dropDownWidth="wrap_content"
-        android:inputType="textAutoCorrect"
+        android:inputType="textAutoComplete"
         android:popupBackground="@color/white"
         android:textColor="#FFFFFF"
         android:hint="Search for Restaurants" />
