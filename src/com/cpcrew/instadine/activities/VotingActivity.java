@@ -248,11 +248,11 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
     	++monthOfYear;
     	if (eventSelected) {
     	dateOfEvent = monthOfYear + "/" + dayOfMonth + "/" + year;
-    	tvEventDate.setText(dateOfEvent);
+    	tvEventDate.setText(Utils.toDisplayDate(dateOfEvent) );
     	}
     	else if ( expirySelected ) {
     		dateOfExpiry = monthOfYear + "/" + dayOfMonth + "/" + year;
-    		tvExpiryDate.setText(dateOfExpiry);
+    		tvExpiryDate.setText(Utils.toDisplayDate(dateOfExpiry) );
     	}
     	eventSelected = false; expirySelected = false;
     }
@@ -428,7 +428,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		
 		// Read from the currentEvent
 		etLocation.setText(currentEvent.getLocation());
-		tvEventDate.setText(currentEvent.getDate());
+		tvEventDate.setText(Utils.toDisplayDate(currentEvent.getDate()) );
 		tvEventTime.setText(currentEvent.getTime());
 		
 		// load the restaurant id and count
