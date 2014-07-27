@@ -19,6 +19,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -37,6 +38,7 @@ import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
+import com.cpcrew.instadine.fragments.RestarauntListFragment;
 import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
@@ -104,14 +106,16 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 	private Event currentEvent;
 	private Group currentGroup;
 	private String groupId = null;
-	private HashMap<String, Business> restMap;
-	private HashSet<String> mySelection;
-	private HashSet<String> prevSelection;
-	private ArrayList<Rest> restaurants;
+//	private HashMap<String, Business> restMap;
+//	private HashSet<String> mySelection;
+//	private HashSet<String> prevSelection;
+//	private ArrayList<Rest> restaurants;
 	private ArrayList<User> usersOfGroup;
 	
-	private RestaurantArrayAdapter restAdapter;
-	protected PullToRefreshListView lvRestaurants;
+//	private RestaurantArrayAdapter restAdapter;
+//	protected PullToRefreshListView lvRestaurants;
+	
+	private RestarauntListFragment restFragment;
 	
 	public static final int NOTIFICATION_ID = 45;
 	
@@ -126,34 +130,38 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if ( groupId == null)
 			groupId = getIntent().getStringExtra("group_id");
 		setContentView(R.layout.activity_voting);
-		lvRestaurants = (PullToRefreshListView) findViewById(R.id.lvRestaurants);
-		
-		//initialize
-		restaurants = new ArrayList<Rest>();
-
-		mySelection = new HashSet<String>();
-		Restaurants = new HashMap<String, Rest>();
-		prevSelection = new HashSet<String>();
-		restMap = new HashMap<String, Business>();
+//		lvRestaurants = (PullToRefreshListView) findViewById(R.id.lvRestaurants);
+//		
+//		//initialize
+//		restaurants = new ArrayList<Rest>();
+//
+//		mySelection = new HashSet<String>();
+//		Restaurants = new HashMap<String, Rest>();
+//		prevSelection = new HashSet<String>();
+//		restMap = new HashMap<String, Business>();
 
 		parseEventApi = new ParseEventsApi(this);
 		parseGroupsApi = new ParseGroupsApi(this);
 		
+		restFragment = new RestarauntListFragment();
 		// Fetch the Event
 		findEvent(groupId);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flRestContainer, restFragment);
+		ft.commit();
 		
-		restAdapter = new RestaurantArrayAdapter(this, restaurants);
-		lvRestaurants.setAdapter(restAdapter);
-		lvRestaurants.setOnRefreshListener(new OnRefreshListener() {
-			
-			@Override
-			public void onRefresh() {
-				findEvent(groupId);
-				lvRestaurants.onRefreshComplete();
-				
-			}
-		});
-		onRestaurantSelected();		
+//		restAdapter = new RestaurantArrayAdapter(this, restaurants);
+//		lvRestaurants.setAdapter(restAdapter);
+//		lvRestaurants.setOnRefreshListener(new OnRefreshListener() {
+//			
+//			@Override
+//			public void onRefresh() {
+//				findEvent(groupId);
+//				lvRestaurants.onRefreshComplete();
+//				
+//			}
+//		});
+//		onRestaurantSelected();		
 
         // Specify an Activity to handle all pushes by default
 		PushService.setDefaultPushCallback(this, VotingActivity.class);
@@ -276,12 +284,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
         if (rtpd != null) {
             rtpd.setOnTimeSetListener(this);
         }        
-    }    
-	
+    } 
+    
+ 
+    /*
 	public void callSearchActivity(View v){
 		
 		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
-		for (Rest rest : restaurants) {
+		ArrayList<Rest> restaurantsT = restFragment.getRestarauntsArray();
+		for (Rest rest : restaurantsT) {
 			//srestMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
 			restCount.put(rest.getId(), rest.getCount());
 		}
@@ -292,6 +303,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		overridePendingTransition(R.anim.right_in, R.anim.left_out);
 		
 	}
+	
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -312,6 +324,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 
 	  }
 	} 
+	
+
 	
 	public void populateBusinessInfo() {
 		// Given a list of restaurant IDs return business Objects
@@ -359,7 +373,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			});
 		}			
 	}
-		
+	
 	public void onRestaurantSelected() {
 		lvRestaurants.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -415,6 +429,8 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		restAdapter.notifyDataSetChanged();
 	}
 	
+	*/
+	
 	public void getViews() {
 		etLocation = (EditText)findViewById(R.id.etLocation);
 		
@@ -438,17 +454,17 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				
 				String restId = Event.getSelectionRest(prevSelections.get(i));
 				String userId = Event.getSelectionUser(prevSelections.get(i));
-				addRestaurant(restId, userId);
+				restFragment.addRestaurant(restId, userId);
 				// TODO Not sure if I need to have the previous Selection information
 				// since we do not allow more than one selection.
 				// Add my previous selections
 				if (userId.equals(LoggedInUser.getcurrentUser().getId())) { // comes after addRestaurant(..)
-					mySelection.add(restId);
-					prevSelection.add(restId);
+					restFragment.addMySelection(restId);
+					restFragment.addMyPrevSelection(restId);
 				}
 			}
 			// restaurants is populated with Business info.
-			populateBusinessInfo();
+			restFragment.populateBusinessInfo();
 			
 		}
 		
@@ -467,7 +483,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				// Has Expired
 				deciderMessage = "Voting is complete. "
 						+ currentGroup.getGroupName() + " is going to "
-						+ highestVotedRestaraunt() + " on "
+						+ restFragment.highestVotedRestaraunt() + " on "
 						+ currentEvent.getDate() + " " + currentEvent.getTime();
 			} else {
 				// Still voting going on.
@@ -483,7 +499,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		TextView tvEventSummary = (TextView)findViewById(R.id.tvEventSummary);
 		tvEventSummary.setText(deciderMessage);
 	}
-	
+/*	
 	public void addRestaurant(String restId, String userId ) {
 		Rest rest;
 		//if (!mySelection.contains(restId)) { // user already selected restaurant BUG FIX: Doesn't update if another user has made the same selection as you )
@@ -519,14 +535,15 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			restAdapter.notifyDataSetChanged();
 		//}	
 	}
+	*/
 
 	public void onDone(View v) {
 		//Toast.makeText(this,"Sending out invitations to " + currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 		if (currentEvent == null) {
 			// updateDeciderView();  //Data is still not in the database. Cannot be done.
-			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, dateOfExpiry, timeOfExpiry, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), newSelections());
+			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent, dateOfExpiry, timeOfExpiry, etLocation.getText().toString(), LoggedInUser.getcurrentUser().getId(), restFragment.newSelections());
 		} else {
-			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), newSelections() );
+			parseEventApi.updateEvent(currentEvent, LoggedInUser.getcurrentUser().getId(), restFragment.newSelections() );
 		}
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(new RefreshCallback() {
@@ -541,6 +558,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		});	
 	}
 	
+/*
 	public ArrayList<String> newSelections() {
 		Set<String> symmetricDiff = new HashSet<String>(mySelection);
 		symmetricDiff.addAll(prevSelection);
@@ -556,6 +574,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		System.out.println("Num selections " + symmetricDiff.size());
 		return list;
 	}
+	*/
 	
 	public void pushToVotingActivity() {
 
@@ -566,17 +585,16 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 			//obj.put("alert", "New Instadine request from " + LoggedInUser.getcurrentUser().getFirstName() +"!");
 			//obj.put("alert","");
 			// obj.put("title", "New event invite!");
-			if ((restAdapter.getCount() > 1) && (selectedRestaurant != null)) {
+			if ((restFragment.getCount() > 1) && (selectedRestaurant != null)) {
 				obj.put("action", VotingActivityReceiver.intentPushNewRestaurant);
 				obj.put("restname", selectedRestaurant);
 				//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
 				selectedRestaurant = null;
-			} else if ((restAdapter.getCount() > 1) && (selectedRestaurant == null)) {
+			} else if ((restFragment.getCount() > 1) && (selectedRestaurant == null)) {
 				obj.put("action", VotingActivityReceiver.intentPushUpdateVotes);
 				//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
 			}
-			
-			else if (restAdapter.getCount() == 1) {
+						else if (restFragment.getCount() == 1) {
 				obj.put("action", VotingActivityReceiver.intentAction);
 				obj.put("restname", selectedRestaurant);
 			}
@@ -790,7 +808,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		// TODO Auto-generated method stub
 		
 	}
-	
+	/*
 	// currently does not handle ties
 	public String highestVotedRestaraunt() {
 		int votes = 0;
@@ -803,6 +821,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		}
 		return restarauntSelected;
 	}
+	*/
 
 
 	@Override
