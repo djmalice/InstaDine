@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
 public class Business implements Serializable {
@@ -125,7 +126,7 @@ public class Business implements Serializable {
         	
 		try {
         	b.phone =jsonObject.getString("formatted_phone_number");
-        	b.imageUrl = jsonObject.getString("icon");
+        	
         	
         } catch (JSONException e) {
             e.printStackTrace();
@@ -133,6 +134,24 @@ public class Business implements Serializable {
             b.imageUrl = null;
             return b;
         }
+		
+		
+		try {
+			JSONArray photos = jsonObject.getJSONArray("photos");
+			String photo_reference = photos.getJSONObject(0).getString("photo_reference");
+			b.imageUrl = com.cpcrew.instadine.utils.Constants.GOOGLE_PHOTO_SEARCH + "&photoreference=" + 
+							photo_reference + "&key=" + 
+							com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;
+		} catch (JSONException e){
+			b.imageUrl = null;
+		}
+		
+		
+		
+		
+		
+		
+		
 		// Return new object
 		return b;
 	}
