@@ -49,7 +49,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
            int notificationId = intent.getIntExtra("notificationId", 0);
            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
            manager.cancel(notificationId);
-           Toast.makeText(context, "onReceive VotingActivity invoked for ID " + notificationId, Toast.LENGTH_LONG).show();
+           //Toast.makeText(context, "onReceive VotingActivity invoked for ID " + notificationId, Toast.LENGTH_LONG).show();
        }
        else {
            

@@ -6,31 +6,31 @@
        
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#00FCECEB" />
+            <solid android:color="#00c67369" />
         </shape>
     </item>
      <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#10FCECEB" />
+            <solid android:color="#10c67369" />
         </shape>
     </item>
      <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#20FCECEB" />
+            <solid android:color="#20c67369" />
         </shape>
     </item>
      <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#30FCECEB" />
+            <solid android:color="#30c67369" />
         </shape>
     </item>
     <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#40FCECEB" />
+            <solid android:color="#40c67369" />
         </shape>
     </item>
 
@@ -40,7 +40,7 @@
 
          <gradient
                 android:angle="270"
-                android:endColor="#FCECEB"
+                android:endColor="#c67369"
                 android:startColor="@android:color/white" /> 
 	    <corners android:radius="3dp" />
 	</shape>

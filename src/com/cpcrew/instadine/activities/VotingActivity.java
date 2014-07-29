@@ -126,6 +126,7 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 		if ( groupId == null)
 			groupId = getIntent().getStringExtra("group_id");
 		setContentView(R.layout.activity_voting);
+		//getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.appPrimaryColor) );
 		lvRestaurants = (PullToRefreshListView) findViewById(R.id.lvRestaurants);
 		
 		//initialize
@@ -615,13 +616,13 @@ public class VotingActivity extends FragmentActivity implements ParseEventApiLis
 				@Override
 				public void done(ParseException e) {
 					if (e == null) {
-						Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
-						toast.show();
+						//Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
+						//toast.show();
 					} else {
 						e.printStackTrace();
 
-						Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Save Failed :(" , Toast.LENGTH_SHORT);
-						toast.show();
+						//Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Save Failed :(" , Toast.LENGTH_SHORT);
+						//toast.show();
 					}
 				}
 			});

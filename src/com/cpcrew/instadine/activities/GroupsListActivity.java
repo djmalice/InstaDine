@@ -77,8 +77,8 @@ public class GroupsListActivity extends FragmentActivity implements eu.erikw.Pul
 						@Override
 						public void done(ParseException e) {
 							if (e == null) {
-								Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
-								toast.show();
+								//Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
+								//toast.show();
 							} else {
 								e.printStackTrace();
 
