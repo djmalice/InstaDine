@@ -18,9 +18,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.cpcrew.instadine.R;
@@ -53,6 +55,8 @@ public class RestarauntListFragment extends Fragment {
 	private RestaurantArrayAdapter restAdapter;
 	protected PullToRefreshListView lvRestaurants;
 
+	private Button btnSearch;
+
 	Business userChoice;
 
 	@Override
@@ -66,7 +70,7 @@ public class RestarauntListFragment extends Fragment {
 		Restaurants = new HashMap<String, Rest>();
 		prevSelection = new HashSet<String>();
 		restMap = new HashMap<String, Business>();
-		
+
 		restAdapter = new RestaurantArrayAdapter(getActivity(), restaurants);
 	}
 
@@ -77,8 +81,18 @@ public class RestarauntListFragment extends Fragment {
 		lvRestaurants = (PullToRefreshListView) v
 				.findViewById(R.id.lvRestaurants);
 
-		
 		lvRestaurants.setAdapter(restAdapter);
+		btnSearch = (Button) v.findViewById(R.id.btnSearch);
+		btnSearch.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				callSearchActivity();
+			}
+
+		});
+
+		// TODO Cannot refresh the activity Should change to refresh only
+		// restaraunts
 		// lvRestaurants.setOnRefreshListener(new OnRefreshListener() {
 		//
 		// // doesn't work anymore
@@ -90,6 +104,7 @@ public class RestarauntListFragment extends Fragment {
 		//
 		// }
 		// });
+		
 		onRestaurantSelected();
 		return v;
 	}
@@ -97,21 +112,21 @@ public class RestarauntListFragment extends Fragment {
 	public ArrayList<Rest> getRestarauntsArray() {
 		return restaurants;
 	}
-	
+
 	public void addMySelection(String restId) {
 		mySelection.add(restId);
-		
+
 	}
-	
+
 	public void addMyPrevSelection(String restId) {
 		prevSelection.add(restId);
 	}
-	
+
 	public int getCount() {
 		return restAdapter.getCount();
 	}
 
-	public void callSearchActivity(View v) {
+	public void callSearchActivity() {
 		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
 		for (Rest rest : restaurants) {
 			// srestMap.put(rest.getRestaurant().getId(), rest.getRestaurant());
@@ -293,7 +308,7 @@ public class RestarauntListFragment extends Fragment {
 						restAdapter.notifyDataSetChanged(); // Notify the
 															// ListView
 						// updateDeciderView(); TODO has to be a callback
- 
+
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -307,13 +322,13 @@ public class RestarauntListFragment extends Fragment {
 			});
 		}
 	}
-	
+
 	// currently does not handle ties
 	public String highestVotedRestaraunt() {
 		int votes = 0;
-		String restarauntSelected = null ;
-		for (Rest rest : restaurants ) {
-			if ( rest.getCount() > votes ) {
+		String restarauntSelected = null;
+		for (Rest rest : restaurants) {
+			if (rest.getCount() > votes) {
 				votes = rest.getCount();
 				restarauntSelected = rest.getName();
 			}
