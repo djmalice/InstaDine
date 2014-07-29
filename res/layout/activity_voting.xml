@@ -242,46 +242,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llEventSummary"
+        android:layout_above="@+id/btnDone"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/llRview"
+        <FrameLayout
+            android:id="@+id/flRestContainer"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="0.1" >
+            android:layout_height="fill_parent" >
+        </FrameLayout>
 
-            <eu.erikw.PullToRefreshListView
-                android:id="@+id/lvRestaurants"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llButtons"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/container_dropshadow"
-                android:onClick="callSearchActivity"
-                android:padding="5dp"
-                android:text="+ Add Restaurant"
-                android:textColor="@color/black" />
-
-            <Button
-                android:id="@+id/btnDone"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:onClick="onDone"
-                android:text="DONE"
-                android:textColor="@color/white" />
-        </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:onClick="onDone"
+        android:text="DONE"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
