@@ -89,7 +89,7 @@ public class NewGroupActivity extends Activity implements ParseGroupsApiListener
 		// TODO change the colors appropriate to this theme
 		miNext.getIcon().setColorFilter(0x4500aced, PorterDuff.Mode.MULTIPLY);
 		miNext.setEnabled(false);
-		invalidateOptionsMenu();
+		// invalidateOptionsMenu();
 		isNextEnabled = false;
 	}
 

@@ -4,7 +4,8 @@
           android:icon="@drawable/ic_next"
           android:title="@string/group_next"
           android:onClick="onNext"
-          android:showAsAction="always"/>
+          android:showAsAction="always"
+          android:enabled="false"/>
     
 
 </menu>
