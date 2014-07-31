@@ -15,8 +15,8 @@
         android:layout_alignBottom="@+id/tvCity"
         android:layout_alignParentRight="true"
         android:background="@drawable/ring_shape"
-        android:orientation="vertical"
-        android:gravity="center_horizontal|center_vertical" >
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/tvSelectionCount"
@@ -64,24 +64,28 @@
             android:layout_height="15dp"
             android:layout_marginLeft="5dp"
             android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
+
         <ImageView
             android:id="@+id/ivStar2"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginLeft="3dp"
             android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
+
         <ImageView
             android:id="@+id/ivStar3"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginLeft="3dp"
             android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
+
         <ImageView
             android:id="@+id/ivStar4"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginLeft="3dp"
             android:src="@drawable/apptheme_rate_star_small_off_holo_light" />
+
         <ImageView
             android:id="@+id/ivStar5"
             android:layout_width="15dp"
@@ -110,5 +114,25 @@
         android:layout_alignTop="@+id/tvRestname"
         android:layout_marginLeft="5dp"
         android:src="@drawable/instadine_red" />
+
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ededed"
+        android:layout_below="@+id/llRating" />
+
+    <GridView
+        android:id="@+id/gvUsers"
+        android:layout_alignLeft="@+id/tvRestname"
+        android:layout_below="@+id/vDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="20dp"
+        android:gravity="center"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
 
 </RelativeLayout>

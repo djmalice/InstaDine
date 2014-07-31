@@ -3,6 +3,7 @@
  */
 package com.cpcrew.instadine.models;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -94,6 +95,17 @@ public class Rest {
 		
 	}
 	
-
-
+	// To show the user images
+	private HashMap<String, String> groupUserFacebookIds;
+	
+	public HashMap<String, String> getGroupUserFacebookIds() {
+		return groupUserFacebookIds;
+	}
+	
+	public void addGroupUser(String userid, String facebookId) {
+		if(groupUserFacebookIds == null)
+			groupUserFacebookIds = new HashMap<String, String>();
+		groupUserFacebookIds.put(userid, facebookId);
+	}
+	
 }

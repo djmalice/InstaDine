@@ -1,6 +1,7 @@
 package com.cpcrew.instadine.adapters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -13,6 +14,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 		ImageView star5;
 		ImageView ivRest;
 		TextView tvSelectionCountLabel;
+		GridView gvUsers;
 
 	}
 
@@ -51,6 +54,13 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
 			convertView = inflator.inflate(R.layout.restaurant_item, parent,
 					false);
+			
+			// user Images
+			viewHolder.gvUsers = (GridView)convertView.findViewById(R.id.gvUsers);
+			assert(viewHolder.gvUsers != null);
+			
+			
+			
 			viewHolder.tvRestname = (TextView) convertView
 					.findViewById(R.id.tvRestname);
 			viewHolder.tvSelectionCount = (TextView) convertView
@@ -74,6 +84,9 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 			convertView.setTag(viewHolder);
 		}
 		viewHolder = (ViewHolder) convertView.getTag();
+		HashMap<String, String> fbidmap = thisRest.getGroupUserFacebookIds();
+		
+		viewHolder.gvUsers.setAdapter(new ImageAdapter(getContext(), new ArrayList(fbidmap.values())));
 		viewHolder.tvRestname.setText(thisRest.getName());
 		viewHolder.tvSelectionCount
 				.setText(String.valueOf(thisRest.getCount()));
