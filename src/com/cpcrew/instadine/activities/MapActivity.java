@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.SyncStateContract.Constants;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -23,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +38,7 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -209,7 +208,7 @@ public class MapActivity extends FragmentActivity implements
 			
 		});
 		
-		
+		setupCustomInfoWindowForMap();
 		
 		// load restaurants from restMap and restCount provided by voting activity
 		displayRestOnMap();
@@ -263,7 +262,7 @@ public class MapActivity extends FragmentActivity implements
 						e.printStackTrace();
 					}
 		        	
-    				displayMapMarker(listSelectedBusiness);
+    				displayMapMarker(listSelectedBusiness,true);
 		        };
 		        
 
@@ -275,13 +274,22 @@ public class MapActivity extends FragmentActivity implements
 		);
     }
 	
-	public void displayMapMarker(Business business){
+	public void displayMapMarker(Business business,boolean currentUserChoice){
 		final LatLng restaurant = new LatLng(business.getLat(), business.getLongi());
-	    Marker res = map.addMarker(new MarkerOptions()
+		Marker res;
+		if(currentUserChoice) {
+			res = map.addMarker(new MarkerOptions()
+            .position(restaurant)
+            .title(business.getName())
+            .flat(true)
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))); 
+		} else {
+			res = map.addMarker(new MarkerOptions()
 	                              .position(restaurant)
 	                              .title(business.getName())
 	                              .flat(true)
-	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker)));
+	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_map_marker)));
+		}
 	    markerMap.put(res, business.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
 	    
@@ -322,7 +330,7 @@ public class MapActivity extends FragmentActivity implements
 	// Setup markers on map for previously selected restaurants
 	public void displayRestOnMap(){
 		for(Business b:restMap.values()){
-			displayMapMarker(b);
+			displayMapMarker(b,false);
 		}
 			
 	}
@@ -491,7 +499,33 @@ public class MapActivity extends FragmentActivity implements
 	}
 	
 	
-	
+public void setupCustomInfoWindowForMap(){
+	map.setInfoWindowAdapter(new InfoWindowAdapter() {
+		
+		@Override
+		public View getInfoWindow(Marker arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public View getInfoContents(Marker arg0) {
+			View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+			 
+            // Getting the position from the marker
+            String restName = arg0.getTitle();
+
+            // Getting reference to the TextView to set latitude
+            TextView tvInfoWindowRestName = (TextView) v.findViewById(R.id.tvInfoWindowRestName);
+
+            // Setting the rest name
+            tvInfoWindowRestName.setText(restName);
+
+            // Returning the view containing InfoWindow contents
+            return v;
+		}
+	});
+}
 	
 	
 	
