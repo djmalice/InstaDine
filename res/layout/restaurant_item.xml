@@ -118,8 +118,8 @@
     <View
         android:id="@+id/vDivider"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:layout_height="2dp"
+        android:background="#ededed"
         android:layout_below="@+id/llRating" />
 
     <GridView
