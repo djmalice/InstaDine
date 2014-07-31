@@ -2,9 +2,7 @@ package com.cpcrew.instadine.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -24,8 +22,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
-import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
 import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
@@ -46,13 +41,10 @@ import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.models.User;
-import com.cpcrew.instadine.utils.Constants;
 import com.cpcrew.instadine.utils.Utils;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.google.android.gms.internal.mf;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -61,9 +53,6 @@ import com.parse.ParseQuery;
 import com.parse.PushService;
 import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
-
-import eu.erikw.PullToRefreshListView;
-import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 public class VotingActivity extends FragmentActivity implements
 		ParseEventApiListener, CalendarDatePickerDialog.OnDateSetListener,
@@ -111,7 +100,8 @@ public class VotingActivity extends FragmentActivity implements
 	private String groupId = null;
 
 	private ArrayList<User> usersOfGroup;
-
+	private HashMap<String, String> groupUsersFacebookIds;
+	
 	private RestarauntListFragment restFragment;
 
 	public static final int NOTIFICATION_ID = 45;
@@ -513,7 +503,6 @@ public class VotingActivity extends FragmentActivity implements
 
 		if (group != null) {
 			currentGroup = group;
-			parseEventApi.getEventsForGroup(group);
 			parseGroupsApi.getUsersOfGroup(currentGroup);
 			// change the title of the View
 			setTitle(currentGroup.getGroupName());
@@ -639,7 +628,16 @@ public class VotingActivity extends FragmentActivity implements
 			usersOfGroup.clear();
 			usersOfGroup.addAll(users);
 		}
+		if (groupUsersFacebookIds != null) groupUsersFacebookIds.clear();
+		else groupUsersFacebookIds = new HashMap<String, String>();
+		for (User user : usersOfGroup) {
+			groupUsersFacebookIds.put(user.getId(), user.getFacebookId());
+		}
+		restFragment.setFacebookIds(groupUsersFacebookIds);
 		Log.d("debug", "usersOfGroup size: " + usersOfGroup.size());
+		
+		// Get the Events
+		parseEventApi.getEventsForGroup(currentGroup);
 
 	}
 

@@ -89,5 +89,9 @@ public class Utils {
 		}
 		return "";
 	}
+	
+	public static String getFacebookImageUrl(String facebookId) {
+		return ("https://graph.facebook.com/" + facebookId + "/picture?type=large");
+	}
 
 }

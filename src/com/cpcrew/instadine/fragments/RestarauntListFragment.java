@@ -23,10 +23,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.activities.MapActivity;
+import com.cpcrew.instadine.adapters.ImageAdapter;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
 import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.LoggedInUser;
@@ -54,6 +56,8 @@ public class RestarauntListFragment extends Fragment {
 	private ArrayList<Rest> restaurants;
 	private RestaurantArrayAdapter restAdapter;
 	protected PullToRefreshListView lvRestaurants;
+	private HashMap<String, String> groupUsersFacebookIds;
+
 
 	private Button btnSearch;
 
@@ -70,8 +74,10 @@ public class RestarauntListFragment extends Fragment {
 		Restaurants = new HashMap<String, Rest>();
 		prevSelection = new HashSet<String>();
 		restMap = new HashMap<String, Business>();
-
+		groupUsersFacebookIds = new HashMap<String,String>();
 		restAdapter = new RestaurantArrayAdapter(getActivity(), restaurants);
+
+		
 	}
 
 	@Override
@@ -90,6 +96,8 @@ public class RestarauntListFragment extends Fragment {
 			}
 
 		});
+		
+		
 
 		// TODO Cannot refresh the activity Should change to refresh only
 		// restaraunts
@@ -107,6 +115,11 @@ public class RestarauntListFragment extends Fragment {
 		
 		onRestaurantSelected();
 		return v;
+	}
+	
+	public void setFacebookIds(HashMap<String, String> fbMap) {
+		groupUsersFacebookIds.clear();
+		groupUsersFacebookIds.putAll(fbMap);
 	}
 
 	public ArrayList<Rest> getRestarauntsArray() {
@@ -208,12 +221,14 @@ public class RestarauntListFragment extends Fragment {
 		for (Rest rt : restaurants) {
 			if (rt.getRestId().equals(restaurant.getRestId())) {
 				rt.addUser(LoggedInUser.getcurrentUser().getId());
+				restaurant.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
 				isActionDone = true;
 			}
 		}
 		if (isActionDone == false) {
 			restaurants.add(restaurant);
 			restaurant.addUser(LoggedInUser.getcurrentUser().getId());
+			restaurant.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
 		}
 		restAdapter.notifyDataSetChanged();
 	}
@@ -231,8 +246,11 @@ public class RestarauntListFragment extends Fragment {
 			rest.setRestId(restId);
 			Restaurants.put(rest.getRestId(), rest);
 			restaurants.add(rest);
+			
 		}
 		rest.addUser(userId);
+		assert(groupUsersFacebookIds!=null);
+		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
 		// }
 	}
 
@@ -255,6 +273,7 @@ public class RestarauntListFragment extends Fragment {
 		}
 		mySelection.add(restId);
 		rest.addUser(userId);
+		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
 		restAdapter.notifyDataSetChanged();
 		// }
 	}
