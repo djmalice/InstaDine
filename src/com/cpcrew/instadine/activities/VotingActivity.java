@@ -24,6 +24,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -377,6 +378,8 @@ public class VotingActivity extends FragmentActivity implements
 	public void onDone(View v) {
 		// Toast.makeText(this,"Sending out invitations to " +
 		// currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
+		
+		final Button btnDone = (Button) findViewById(R.id.btnDone);
 		if (panelCollapsed) {
 		if (currentEvent == null) {
 			// updateDeciderView(); //Data is still not in the database. Cannot
@@ -400,6 +403,9 @@ public class VotingActivity extends FragmentActivity implements
 							pushToVotingActivity();
 						}
 						if ( panelCollapsed) {
+							
+							btnDone.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_action_drop_list, 0, 0, 0);
+							btnDone.setText(R.string.undoneAction);
 //							Rest rest = restFragment.highestVotedRestaraunt();
 //							Bundle args = new Bundle();
 //							args.putSerializable("votedRest", rest);
@@ -416,6 +422,8 @@ public class VotingActivity extends FragmentActivity implements
 					}
 				});
 		} else {
+			btnDone.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_yes, 0, 0, 0);
+			btnDone.setText(R.string.doneAction);
 			mLayout.collapsePanel();
 			panelCollapsed = true;
 		}

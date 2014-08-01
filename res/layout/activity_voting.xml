@@ -17,7 +17,7 @@
         android:text="DONE"
         android:textColor="@color/white"
         sothree:overlay="true"
-        sothree:panelHeight="68dp"
+        sothree:panelHeight="60dp"
         sothree:paralaxOffset="10dp"
         sothree:shadowHeight="4dp" >
 
@@ -293,7 +293,7 @@
         <LinearLayout
             android:id="@+id/dragView"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="425dp"
             android:background="#eeeeee"
             android:clickable="true"
             android:focusable="false"
@@ -304,8 +304,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:onClick="onDone"
-                android:text="DONE"
+                android:text="Make my choices"
                 android:textColor="@color/white"
+                android:drawableLeft="@drawable/ic_yes"
                 android:layout_alignParentTop="true" />
 
             <FrameLayout

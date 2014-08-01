@@ -8,12 +8,14 @@
         android:id="@+id/tvMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TEST"
+        android:text=""
         android:gravity="center_horizontal"
         style="@android:style/TextAppearance.Large"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"/>
 
  <!--    <ImageView
         android:id="@+id/ivRestImage"
@@ -29,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvMessage"
+        android:layout_alignParentBottom="true"
         android:divider="@null"
         android:dividerHeight="0dp" />
 

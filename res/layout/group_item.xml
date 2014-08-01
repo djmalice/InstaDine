@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:padding="2dp"
         android:background="@drawable/curved_rectangle_border_lightred"
-        android:src="@drawable/group_red"
+        android:src="@drawable/group_happyred"
         android:contentDescription="@string/group_image_desc" />
 
     <TextView
