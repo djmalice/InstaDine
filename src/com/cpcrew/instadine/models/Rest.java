@@ -3,6 +3,7 @@
  */
 package com.cpcrew.instadine.models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -11,7 +12,7 @@ import java.util.HashSet;
  * @author raji
  *
  */
-public class Rest {
+public class Rest implements Serializable {
 	
 	//private Business restaurant;
 	private String id;

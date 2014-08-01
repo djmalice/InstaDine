@@ -343,13 +343,13 @@ public class RestarauntListFragment extends Fragment {
 	}
 
 	// currently does not handle ties
-	public String highestVotedRestaraunt() {
+	public Rest highestVotedRestaraunt() {
 		int votes = 0;
-		String restarauntSelected = null;
+		Rest restarauntSelected = null;
 		for (Rest rest : restaurants) {
 			if (rest.getCount() > votes) {
 				votes = rest.getCount();
-				restarauntSelected = rest.getName();
+				return rest;
 			}
 		}
 		return restarauntSelected;

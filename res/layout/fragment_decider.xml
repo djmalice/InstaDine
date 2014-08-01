@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true" >
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="TEST"
+        android:gravity="center_horizontal"
+        style="@android:style/TextAppearance.Large"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+
+ <!--    <ImageView
+        android:id="@+id/ivRestImage"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/group_red" />
+ -->
+    <ListView
+        android:id="@+id/lvRestaurant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessage"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
+
+</RelativeLayout>

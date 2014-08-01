@@ -1,5 +1,7 @@
 package com.cpcrew.instadine.activities;
 
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,7 @@ import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
+import com.cpcrew.instadine.fragments.DeciderViewFragment;
 import com.cpcrew.instadine.fragments.RestarauntListFragment;
 import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
@@ -44,7 +47,6 @@ import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Utils;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-import com.google.android.gms.internal.mf;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -53,6 +55,8 @@ import com.parse.ParseQuery;
 import com.parse.PushService;
 import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class VotingActivity extends FragmentActivity implements
 		ParseEventApiListener, CalendarDatePickerDialog.OnDateSetListener,
@@ -60,6 +64,7 @@ public class VotingActivity extends FragmentActivity implements
 
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
+	private static String TAG = VotingActivity.class.getSimpleName();
 
 	Business userChoice;
 	private HashMap<String, Rest> Restaurants;
@@ -98,11 +103,14 @@ public class VotingActivity extends FragmentActivity implements
 	private Event currentEvent;
 	private Group currentGroup;
 	private String groupId = null;
-
 	private ArrayList<User> usersOfGroup;
 	private HashMap<String, String> groupUsersFacebookIds;
 	
 	private RestarauntListFragment restFragment;
+	
+	// SlidingUp Panel
+	private SlidingUpPanelLayout mLayout;
+	private boolean panelCollapsed = true;
 
 	public static final int NOTIFICATION_ID = 45;
 
@@ -127,6 +135,38 @@ public class VotingActivity extends FragmentActivity implements
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flRestContainer, restFragment);
 		ft.commit();
+
+		
+        mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_panel);
+        mLayout.setPanelSlideListener(new PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+                //setActionBarTranslation(mLayout.getCurrentParalaxOffset());
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+                Log.i(TAG, "onPanelExpanded");
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+                Log.i(TAG, "onPanelCollapsed");
+
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+                Log.i(TAG, "onPanelAnchored");
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+                Log.i(TAG, "onPanelHidden");
+            }
+        });
 
 		// Specify an Activity to handle all pushes by default
 		PushService.setDefaultPushCallback(this, VotingActivity.class);
@@ -316,7 +356,7 @@ public class VotingActivity extends FragmentActivity implements
 				// Has Expired
 				deciderMessage = "Voting is complete. "
 						+ currentGroup.getGroupName() + " is going to "
-						+ restFragment.highestVotedRestaraunt() + " on "
+						+ restFragment.highestVotedRestaraunt().getName() + " on "
 						+ currentEvent.getDate() + " " + currentEvent.getTime();
 			} else {
 				// Still voting going on.
@@ -337,6 +377,7 @@ public class VotingActivity extends FragmentActivity implements
 	public void onDone(View v) {
 		// Toast.makeText(this,"Sending out invitations to " +
 		// currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
+		if (panelCollapsed) {
 		if (currentEvent == null) {
 			// updateDeciderView(); //Data is still not in the database. Cannot
 			// be done.
@@ -358,11 +399,31 @@ public class VotingActivity extends FragmentActivity implements
 						if (e == null) {
 							pushToVotingActivity();
 						}
-						finish();
+						if ( panelCollapsed) {
+//							Rest rest = restFragment.highestVotedRestaraunt();
+//							Bundle args = new Bundle();
+//							args.putSerializable("votedRest", rest);
+//							args.putSerializable("groupmap", rest.getGroupUserFacebookIds());
+							DeciderViewFragment deciderFragment = new DeciderViewFragment();
+//							deciderFragment.setArguments(args);
+							FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+							ft.replace(R.id.flDeciderContainer, deciderFragment);
+							ft.commit();
+							mLayout.expandPanel();
+							panelCollapsed = false;
+						}
+						//finish();
 					}
 				});
+		} else {
+			mLayout.collapsePanel();
+			panelCollapsed = true;
+		}
 	}
-
+	
+	public Rest getHighestVotedRestaraunt() {
+		return restFragment.highestVotedRestaraunt();
+	}
 	public void pushToVotingActivity() {
 
 		JSONObject obj;

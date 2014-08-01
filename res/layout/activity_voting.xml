@@ -7,260 +7,314 @@
     android:focusableInTouchMode="true"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <!-- Bottom BAR -->
-
-    <ImageView
-        android:id="@+id/ivLocation"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/location1" />
-
-    <TextView
-        android:id="@+id/tvLocationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/ivLocation"
-        android:text="Near " />
-
-    <EditText
-        android:id="@+id/etLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvLocationLabel"
-        android:ems="10"
-        android:text="Sunnyvale CA" >
-    </EditText>
-
-    <LinearLayout
-        android:id="@+id/lleventDT"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etLocation"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal"
-        android:weightSum="1" >
-
-        <RelativeLayout
-            android:id="@+id/rlEventTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="@drawable/custombordercolor1" >
-
-            <TextView
-                android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ivImage"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/ivImage"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-
-            <ImageView
-                android:id="@+id/ivImage"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/time2" />
-
-            <TextView
-                android:id="@+id/tvContentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/ivImage"
-                android:layout_alignLeft="@+id/tvContent"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlEventDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/custombordercolor2" >
-
-            <ImageView
-                android:id="@+id/ivImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/date" />
-
-            <TextView
-                android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ivImage"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/ivImage"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tvContentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/ivImage"
-                android:layout_alignLeft="@+id/tvContent"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llexpiryDT"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lleventDT"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:visibility="gone" >
-
-        <RelativeLayout
-            android:id="@+id/rlExpiryTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="@drawable/custombordercolor1" >
-
-            <ImageView
-                android:id="@+id/ivImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:adjustViewBounds="true"
-                android:scaleType="fitEnd"
-                android:src="@drawable/time2" />
-
-            <TextView
-                android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ivImage"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/ivImage"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tvContentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/ivImage"
-                android:layout_alignLeft="@+id/tvContent"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlExpiryDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/custombordercolor2" >
-
-            <ImageView
-                android:id="@+id/ivImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:adjustViewBounds="true"
-                android:scaleType="fitEnd"
-                android:src="@drawable/date" />
-
-            <TextView
-                android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ivImage"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/ivImage"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tvContentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/ivImage"
-                android:layout_alignLeft="@+id/tvContent"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llEventSummary"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llexpiryDT"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/tvEventSummary"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/container_dropshadow_lightred"
-            android:padding="10dp"
-            android:singleLine="false"
-            android:text="Send an invite to your group after you pick the Date/Time and a restaurant"
-            android:textColor="@color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llAll"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llEventSummary"
-        android:layout_above="@+id/btnDone"
-        android:orientation="vertical" >
-
-        <FrameLayout
-            android:id="@+id/flRestContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnDone"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
         android:onClick="onDone"
         android:text="DONE"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        sothree:overlay="true"
+        sothree:panelHeight="68dp"
+        sothree:paralaxOffset="10dp"
+        sothree:shadowHeight="4dp" >
+
+        <!-- MAIN CONTENT -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true" >
+
+            <!-- Bottom BAR -->
+
+            <ImageView
+                android:id="@+id/ivLocation"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/location1" />
+
+            <TextView
+                android:id="@+id/tvLocationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/ivLocation"
+                android:text="Near " />
+
+            <EditText
+                android:id="@+id/etLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/tvLocationLabel"
+                android:ems="10"
+                android:text="Sunnyvale CA" >
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/lleventDT"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etLocation"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:weightSum="1" >
+
+                <RelativeLayout
+                    android:id="@+id/rlEventTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/custombordercolor1" >
+
+                    <TextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/ivImage"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/ivImage"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/ivImage"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/time2" />
+
+                    <TextView
+                        android:id="@+id/tvContentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/ivImage"
+                        android:layout_alignLeft="@+id/tvContent"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlEventDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/custombordercolor2" >
+
+                    <ImageView
+                        android:id="@+id/ivImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/date" />
+
+                    <TextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/ivImage"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/ivImage"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tvContentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/ivImage"
+                        android:layout_alignLeft="@+id/tvContent"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llexpiryDT"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lleventDT"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <RelativeLayout
+                    android:id="@+id/rlExpiryTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/custombordercolor1" >
+
+                    <ImageView
+                        android:id="@+id/ivImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/time2" />
+
+                    <TextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/ivImage"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/ivImage"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tvContentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/ivImage"
+                        android:layout_alignLeft="@+id/tvContent"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlExpiryDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/custombordercolor2" >
+
+                    <ImageView
+                        android:id="@+id/ivImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/date" />
+
+                    <TextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/ivImage"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/ivImage"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tvContentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/ivImage"
+                        android:layout_alignLeft="@+id/tvContent"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEventSummary"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llexpiryDT"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tvEventSummary"
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/container_dropshadow_lightred"
+                    android:padding="10dp"
+                    android:singleLine="false"
+                    android:text="Send an invite to your group after you pick the Date/Time and a restaurant"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llAll"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llEventSummary"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:id="@+id/flRestContainer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+                </FrameLayout>
+            </LinearLayout>
+
+            <!--
+                 <Button
+                android:id="@+id/btnDone"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:onClick="onDone"
+                android:text="DONE"
+                android:textColor="@color/white" />
+            -->
+        </RelativeLayout>
+
+        <!-- SLIDING CONTENT -->
+        <!-- SLIDING LAYOUT -->
+
+        <LinearLayout
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:background="#eeeeee"
+            android:clickable="true"
+            android:focusable="false"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btnDone"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:onClick="onDone"
+                android:text="DONE"
+                android:textColor="@color/white"
+                android:layout_alignParentTop="true" />
+
+            <FrameLayout
+                android:id="@+id/flDeciderContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+            </FrameLayout>  
+        </LinearLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </RelativeLayout>
