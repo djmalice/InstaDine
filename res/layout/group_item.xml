@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants" >
+    android:descendantFocusability="blocksDescendants"
+    android:background="#efebef" >
 
     <com.parse.ParseImageView
         android:id="@+id/ivGroupPhoto"
@@ -12,20 +13,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-        android:padding="2dp"
+        android:padding="4dp"
         android:background="@drawable/curved_rectangle_border_lightred"
         android:src="@drawable/group_happyred"
         android:contentDescription="@string/group_image_desc" />
-
-    <TextView
-        android:id="@+id/tvGroupName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivGroupPhoto"
-        android:layout_toRightOf="@+id/ivGroupPhoto"
-        android:layout_marginLeft="25dp"
-        android:text="@string/group_name_hint"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tvGroupMembers"
@@ -35,6 +26,7 @@
         android:layout_alignLeft="@+id/tvGroupName"
         android:layout_marginBottom="13dp"
         android:text="@string/group_members_hint"
+        android:textColor="@color/appGrey"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ImageButton
@@ -48,5 +40,15 @@
         android:background="@null"
         android:contentDescription="@string/group_image_desc"
         android:src="@drawable/ic_right_arrow" />
+
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivGroupPhoto"
+        android:layout_marginLeft="26dp"
+        android:layout_toRightOf="@+id/ivGroupPhoto"
+        android:text="@string/group_name_hint"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

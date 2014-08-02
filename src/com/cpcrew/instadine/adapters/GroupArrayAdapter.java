@@ -78,6 +78,7 @@ public class GroupArrayAdapter extends ArrayAdapter<Group>{
 			result = result.replaceAll("^ ", "");
 			result = result.replaceAll("^,", "");
 			result = result.replaceAll(",,", ", ");
+			result = result.replaceAll(" ,", ", ");
 			return "Me, " + result;
 		}
 		return input;
