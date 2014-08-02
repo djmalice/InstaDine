@@ -31,32 +31,35 @@
         android:id="@+id/rlSearch"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp" 
+        android:layout_marginTop="30dp" 
         android:layout_marginRight="10dp"
         android:layout_alignParentLeft="true" 
         android:layout_below="@+id/tvAddContactLabel"
-        android:background="@drawable/customborder" >
+        android:gravity="center_vertical"
+        android:background="@drawable/curved_rectangle_border_lightred" >
 
         <AutoCompleteTextView
             android:id="@+id/tvAddContact"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
-            android:gravity="left"
+            android:gravity="left|center_vertical"
+            android:layout_marginLeft="10dp"
             android:background="#00000000"
             android:completionThreshold="1" 
             android:hint="@string/group_add_contact_hint" />
 
         <ImageButton
             android:id="@+id/btnOpenContacts"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignRight="@+id/tvAddContact"
             android:background="@null"
-            android:src="@drawable/ic_add"
             android:onClick="onOpenContacts"
+            android:scaleType="fitXY"
+            android:src="@drawable/add_contact"
             android:text="@string/group_open_contacts" />
 
     </RelativeLayout>

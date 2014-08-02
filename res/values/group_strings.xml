@@ -8,8 +8,8 @@
     <string name="group_next">Next</string>
     <string name="group_create">Create</string>
     <string name="group_done">Done</string>
-    <string name="group_add_contact">ADD GROUP PARTICIPANTS</string>
-    <string name="group_add_contact_hint">Type contact name...</string>
+    <string name="group_add_contact">Please select your friends</string>
+    <string name="group_add_contact_hint">Enter a friend\'s name...</string>
     <string name="group_open_contacts">Open contacts</string>
     
     <color name="white">@android:color/white</color>

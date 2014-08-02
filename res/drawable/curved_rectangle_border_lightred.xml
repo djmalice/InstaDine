@@ -6,7 +6,7 @@
             
 
             <stroke
-                android:width="2dp"
+                android:width="1dp"
                 android:color="@color/appPrimaryColor" />
 
             <padding
@@ -16,10 +16,10 @@
                 android:top="1dp" />
 
             <corners
-                android:bottomLeftRadius="7dp"
-                android:bottomRightRadius="7dp"
-                android:topLeftRadius="7dp"
-                android:topRightRadius="7dp" />
+                android:bottomLeftRadius="5dp"
+                android:bottomRightRadius="5dp"
+                android:topLeftRadius="5dp"
+                android:topRightRadius="5dp" />
         </shape>
     </item>
 
