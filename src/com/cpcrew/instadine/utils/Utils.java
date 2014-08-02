@@ -5,9 +5,8 @@ package com.cpcrew.instadine.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * @author raji
@@ -75,7 +74,7 @@ public class Utils {
 	public static String toDisplayDate(String dt) {
 		if ( dt != null && !dt.equals("" )) {
 			SimpleDateFormat inF = new SimpleDateFormat("MM/dd/yyyy");
-			SimpleDateFormat outF = new SimpleDateFormat("MMM dd, yyyy");
+			SimpleDateFormat outF = new SimpleDateFormat("MMM dd");
 			Date date;
 			try {
 				date = inF.parse(dt);
@@ -88,6 +87,14 @@ public class Utils {
 			
 		}
 		return "";
+	}
+	
+	public static String toDisplayNow() {
+		
+		SimpleDateFormat outF = new SimpleDateFormat("MMM dd");
+		Date today = Calendar.getInstance().getTime();        
+		String reportDate = outF.format(today);
+		return reportDate;
 	}
 	
 	public static String getFacebookImageUrl(String facebookId) {
