@@ -38,6 +38,7 @@ import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.fragments.DeciderViewFragment;
 import com.cpcrew.instadine.fragments.RestarauntListFragment;
+import com.cpcrew.instadine.fragments.RestarauntListFragment.RefreshListener;
 import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
@@ -61,7 +62,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class VotingActivity extends FragmentActivity implements
 		ParseEventApiListener, CalendarDatePickerDialog.OnDateSetListener,
-		RadialTimePickerDialog.OnTimeSetListener, ParseGroupsApiListener {
+		RadialTimePickerDialog.OnTimeSetListener, ParseGroupsApiListener, RefreshListener {
 
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
@@ -422,6 +423,9 @@ public class VotingActivity extends FragmentActivity implements
 					}
 				});
 		} else {
+			// Return to main activity
+			// Refresh main activity
+			refreshEvent();
 			btnDone.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_yes, 0, 0, 0);
 			btnDone.setText(R.string.doneAction);
 			mLayout.collapsePanel();
@@ -669,6 +673,12 @@ public class VotingActivity extends FragmentActivity implements
 		etLocation.setEnabled(false);
 		// etLocation.setBackgroundResource("#00000000");
 	}
+	
+	public void refreshEvent() {
+		if ( groupId != null ) {
+			findEvent(groupId);
+		}
+	}
 
 	@Override
 	public void onGetRestaurantsForEventResult(List<Restaurant> restaurants) {
@@ -732,5 +742,12 @@ public class VotingActivity extends FragmentActivity implements
 	public void retrieveUser(User user) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onParentRefresh() {
+		Log.d(TAG, "Refreshing the Event");
+		refreshEvent();
+		
 	}
 }
