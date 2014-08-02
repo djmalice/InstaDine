@@ -99,6 +99,7 @@ public class VotingActivity extends FragmentActivity implements
 
 	private boolean eventSelected = false;
 	private boolean expirySelected = false;
+	private boolean isEnabledSlidingPanel = false;
 
 	private ParseEventsApi parseEventApi;
 	private ParseGroupsApi parseGroupsApi;
@@ -403,8 +404,8 @@ public class VotingActivity extends FragmentActivity implements
 						if (e == null) {
 							pushToVotingActivity();
 						}
-						if ( panelCollapsed) {
-							
+						if (  isEnabledSlidingPanel) {
+							// if (isPanelCollapsed) {
 							btnDone.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_action_drop_list, 0, 0, 0);
 							btnDone.setText(R.string.undoneAction);
 //							Rest rest = restFragment.highestVotedRestaraunt();
@@ -418,18 +419,22 @@ public class VotingActivity extends FragmentActivity implements
 							ft.commit();
 							mLayout.expandPanel();
 							panelCollapsed = false;
+						} else {
+							finish();
 						}
-						//finish();
 					}
 				});
 		} else {
-			// Return to main activity
-			// Refresh main activity
-			refreshEvent();
-			btnDone.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_yes, 0, 0, 0);
-			btnDone.setText(R.string.doneAction);
-			mLayout.collapsePanel();
-			panelCollapsed = true;
+			if (isEnabledSlidingPanel) {
+				// Return to main activity
+				// Refresh main activity
+				refreshEvent();
+				btnDone.setCompoundDrawablesWithIntrinsicBounds(
+						R.drawable.ic_yes, 0, 0, 0);
+				btnDone.setText(R.string.doneAction);
+				mLayout.collapsePanel();
+				panelCollapsed = true;
+			}
 		}
 	}
 	
