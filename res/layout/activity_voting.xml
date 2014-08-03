@@ -211,6 +211,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/llexpiryDT"
         android:layout_marginTop="10dp"
+        android:gravity="center|bottom"
         android:orientation="horizontal"
         android:visibility="gone" >
 
@@ -251,6 +252,7 @@
             android:id="@+id/llButtons"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:gravity="center|bottom"
             android:orientation="vertical" >
 
             <Button
@@ -264,14 +266,28 @@
                 android:text="+ Add Restaurant"
                 android:textColor="@color/black" />
 
-            <Button
-                android:id="@+id/btnDone"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:onClick="onDone"
-                android:text="DONE"
-                android:textColor="@color/white" />
->
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="7" >
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="2"
+                    android:text="Let's go"
+                    android:textColor="@color/white"/>
+
+                <Button
+                    android:id="@+id/btnDone"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="5"
+                    android:onClick="onDone"
+                    android:text="Share my choices"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
