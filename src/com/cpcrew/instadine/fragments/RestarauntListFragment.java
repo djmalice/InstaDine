@@ -30,7 +30,6 @@ import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.activities.MapActivity;
 import com.cpcrew.instadine.adapters.ImageAdapter;
 import com.cpcrew.instadine.adapters.RestaurantArrayAdapter;
-import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.utils.Constants;
@@ -50,7 +49,7 @@ public class RestarauntListFragment extends Fragment {
 	private String selectedRestaurant = null;
 
 	private HashMap<String, Rest> Restaurants;
-	private HashMap<String, Business> restMap;
+	private HashMap<String, Rest> restMap;
 	private HashSet<String> mySelection;
 	private HashSet<String> prevSelection;
 	private ArrayList<Rest> restaurants;
@@ -61,7 +60,7 @@ public class RestarauntListFragment extends Fragment {
 
 	private Button btnSearch;
 
-	Business userChoice;
+	Rest userChoice;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +72,7 @@ public class RestarauntListFragment extends Fragment {
 		mySelection = new HashSet<String>();
 		Restaurants = new HashMap<String, Rest>();
 		prevSelection = new HashSet<String>();
-		restMap = new HashMap<String, Business>();
+		restMap = new HashMap<String, Rest>();
 		groupUsersFacebookIds = new HashMap<String,String>();
 		restAdapter = new RestaurantArrayAdapter(getActivity(), restaurants);
 
@@ -148,6 +147,7 @@ public class RestarauntListFragment extends Fragment {
 		Intent i = new Intent(getActivity(), MapActivity.class);
 		i.putExtra("rest_map", restMap);
 		i.putExtra("rest_count", restCount);
+		i.putExtra("user_fb_map",groupUsersFacebookIds);
 		startActivityForResult(i, Constants.MAP_REQUEST_CODE);
 		getActivity().overridePendingTransition(R.anim.right_in,
 				R.anim.left_out);
@@ -161,7 +161,7 @@ public class RestarauntListFragment extends Fragment {
 				&& requestCode == Constants.MAP_REQUEST_CODE) {
 
 			// User selected choice from MapActivity
-			userChoice = (Business) data.getSerializableExtra("user_choice");
+			userChoice = (Rest) data.getSerializableExtra("user_choice");
 
 			if (userChoice != null) {
 				// Refresh the Restaurant ListView
@@ -255,7 +255,7 @@ public class RestarauntListFragment extends Fragment {
 	}
 
 	public void addRestaurantWithBusinessInfo(String restId, String userId,
-			Business businessInfo) {
+			Rest restInfo) {
 
 		// if (!mySelection.contains(restId)) { // user already selected
 		// restaurant ( BUG FIX: Doesn't update if another user has made the
@@ -264,16 +264,14 @@ public class RestarauntListFragment extends Fragment {
 		if (Restaurants.containsKey(restId)) { // preexisting restaurant
 			rest = Restaurants.get(restId);
 		} else { // new restaurant
-			rest = new Rest();
-			rest.setRestId(restId);
-			rest.inflateBusinessObject(businessInfo);
-			restMap.put(businessInfo.getId(), businessInfo);
-			Restaurants.put(rest.getRestId(), rest);
-			restaurants.add(rest);
+			
+			restMap.put(restInfo.getId(), restInfo);
+			Restaurants.put(restInfo.getId(), restInfo);
+			restaurants.add(restInfo);
 		}
 		mySelection.add(restId);
-		rest.addUser(userId);
-		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
+		restInfo.addUser(userId);
+		restInfo.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
 		restAdapter.notifyDataSetChanged();
 		// }
 	}
@@ -315,15 +313,14 @@ public class RestarauntListFragment extends Fragment {
 				public void onSuccess(JSONObject response) {
 
 					try {
-						Business b = new Business();
+						Rest r = new Rest();
 						JSONObject jsonObject = response
 								.getJSONObject("result");
-						b = Business.fromDetailJson(jsonObject);
+						r = Rest.fromDetailJson(jsonObject);
 						Log.d("debug",
-								"Business Object in Voting: " + b.toString());
-						res.inflateBusinessObject(b); // We have the business
-														// info now !!
-						restMap.put(b.getId(), b); // for the Search Activity
+								"Business Object in Voting: " + r.toString());
+						res.inflateRestaurantDetails(r);
+						restMap.put(r.getId(), r); // for the Search Activity
 						restAdapter.notifyDataSetChanged(); // Notify the
 															// ListView
 						// updateDeciderView(); TODO has to be a callback

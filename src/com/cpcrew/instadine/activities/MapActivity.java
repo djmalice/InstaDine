@@ -22,13 +22,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
+import com.cpcrew.instadine.adapters.ImageAdapter;
 import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
-import com.cpcrew.instadine.models.Business;
+
+import com.cpcrew.instadine.models.Rest;
+import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView.OnClearListener;
 import com.google.android.gms.common.ConnectionResult;
@@ -56,8 +60,8 @@ public class MapActivity extends FragmentActivity implements
 	ImageView searchIcon;
 	ClearableAutoCompleteTextView searchBox;
 	//AutoCompleteTextView searchBox;
-	Business listSelectedBusiness;
-	Business markerSelectedBusiness;
+	Rest listSelectedRest;
+	Rest markerSelectedRest;
 	private SupportMapFragment mapFragment;
 	private GoogleMap map;
 	private LocationClient mLocationClient;
@@ -65,10 +69,11 @@ public class MapActivity extends FragmentActivity implements
 	TextView tvRestaurantName;
 	TextView tvLocation;
 	TextView tvVote;
-	HashMap<String, Business> restMap;
-	HashMap<String, Business> searchBusiness;
+	HashMap<String, Rest> restMap;
+	HashMap<String, Rest> searchBusiness;
 	HashMap<String, Integer> restCount;
 	HashMap<Marker,String> markerMap;
+	HashMap<String,String> groupUsersFacebookIds;
 	/*
 	 * Define a request code to send to Google Play services This code is
 	 * returned in Activity.onActivityResult
@@ -101,13 +106,13 @@ public class MapActivity extends FragmentActivity implements
 //				Log.d("debug","searchBusiness: " + searchBusiness.toString());
 //				Log.d("debug","Marker.get(arg0): " + markerMap.get(arg0));
 				if(restMap.get(markerMap.get(arg0)) == null) {
-					markerSelectedBusiness = searchBusiness.get(markerMap.get(arg0));
+					markerSelectedRest = searchBusiness.get(markerMap.get(arg0));
 				} else {
 //					Log.d("debug","restMap: " + restMap.toString());
-					markerSelectedBusiness = restMap.get(markerMap.get(arg0));
+					markerSelectedRest = restMap.get(markerMap.get(arg0));
 				}
 				tvRestaurantName.setText(arg0.getTitle());
-				tvLocation.setText(markerSelectedBusiness.getCity());
+				tvLocation.setText(markerSelectedRest.getCity());
 				// Log.d("debug", "get from map:" + restCount.get(markerSelectedBusiness.getId()));
 //				Log.d("debug", "RestCOunt: " + restCount.toString());
 //				if(restCount.get(markerSelectedBusiness.getId()) != null) {
@@ -117,12 +122,13 @@ public class MapActivity extends FragmentActivity implements
 			}
 		});
 		Intent intent = getIntent();
-		restMap = new HashMap<String,Business>();
+		restMap = new HashMap<String,Rest>();
 		restCount = new HashMap<String,Integer>();
 		markerMap = new HashMap<Marker, String>();
-		searchBusiness = new HashMap<String,Business>();
-	    restMap = (HashMap<String, Business>)intent.getSerializableExtra("rest_map");
+		searchBusiness = new HashMap<String,Rest>();
+	    restMap = (HashMap<String, Rest>)intent.getSerializableExtra("rest_map");
 	    restCount = (HashMap<String, Integer>)intent.getSerializableExtra("rest_count");
+	    groupUsersFacebookIds = (HashMap<String,String>)intent.getSerializableExtra("user_fb_map");
 	    // Log.d("HashMapTest", restMap.get("key").toString());
 		
 		
@@ -199,9 +205,9 @@ public class MapActivity extends FragmentActivity implements
 	 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Business business = (Business) parent.getItemAtPosition(position);
-				searchBox.setText(business.getName());
-				fetchBusinessLocation(business);
+				Rest rest = (Rest) parent.getItemAtPosition(position);
+				searchBox.setText(rest.getName());
+				fetchBusinessLocation(rest);
 				
 				
 			}
@@ -235,7 +241,7 @@ public class MapActivity extends FragmentActivity implements
 		
 	}
 	
-	public void fetchBusinessLocation(Business b){
+	public void fetchBusinessLocation(Rest r){
 		
 		final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 		final String TYPE_DETAILS = "/details";
@@ -245,7 +251,7 @@ public class MapActivity extends FragmentActivity implements
 		AsyncHttpClient client = new AsyncHttpClient();
 		RequestParams params = new RequestParams();
 		params.put("key", API_KEY);
-		params.put("placeid", b.getId());
+		params.put("placeid", r.getId());
 		client.get(sb.toString(), params, new
 		    JsonHttpResponseHandler() {
 			
@@ -254,15 +260,15 @@ public class MapActivity extends FragmentActivity implements
 		        	
     				try {
 						 JSONObject jsonObject = response.getJSONObject("result");
-						 listSelectedBusiness = Business.fromDetailJson(jsonObject);
-				         Log.d("debug", " List Business Object: " + listSelectedBusiness.toString());
+						 listSelectedRest = Rest.fromDetailJson(jsonObject);
+				         Log.d("debug", " List Business Object: " + listSelectedRest.toString());
 				        
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 		        	
-    				displayMapMarker(listSelectedBusiness,true);
+    				displayMapMarker(listSelectedRest,true);
 		        };
 		        
 
@@ -274,30 +280,30 @@ public class MapActivity extends FragmentActivity implements
 		);
     }
 	
-	public void displayMapMarker(Business business,boolean currentUserChoice){
-		final LatLng restaurant = new LatLng(business.getLat(), business.getLongi());
+	public void displayMapMarker(Rest rest,boolean currentUserChoice){
+		final LatLng restaurant = new LatLng(rest.getLat(), rest.getLongi());
 		Marker res;
 		if(currentUserChoice) {
 			res = map.addMarker(new MarkerOptions()
             .position(restaurant)
-            .title(business.getName())
+            .title(rest.getName())
             .flat(true)
             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))); 
 		} else {
 			res = map.addMarker(new MarkerOptions()
 	                              .position(restaurant)
-	                              .title(business.getName())
+	                              .title(rest.getName())
 	                              .flat(true)
 	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_map_marker)));
 		}
-	    markerMap.put(res, business.getId());
+	    markerMap.put(res, rest.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
 	    
 		
 	    res.showInfoWindow();
 	    // Add to temporary search business map for all markers in the system
 	    
-	    searchBusiness.put(business.getId(), business);
+	    searchBusiness.put(rest.getId(), rest);
 	    
 	}
 	
@@ -329,8 +335,8 @@ public class MapActivity extends FragmentActivity implements
 	
 	// Setup markers on map for previously selected restaurants
 	public void displayRestOnMap(){
-		for(Business b:restMap.values()){
-			displayMapMarker(b,false);
+		for(Rest r:restMap.values()){
+			displayMapMarker(r,false);
 		}
 			
 	}
@@ -471,25 +477,25 @@ public class MapActivity extends FragmentActivity implements
 		
 	
 	public void sendSelectionToVoting(View v){
-		if (markerSelectedBusiness == null) {
+		if (markerSelectedRest == null) {
 			Toast.makeText(getBaseContext(),
 					"Please select a marker before pressing done",
 					Toast.LENGTH_LONG).show();
 		} else {
-			if (restMap.containsKey(markerSelectedBusiness.getId())) {
-				restCount.put(markerSelectedBusiness.getId(),
-						restCount.get(markerSelectedBusiness.getId()) + 1);
+			if (restMap.containsKey(markerSelectedRest.getId())) {
+				restCount.put(markerSelectedRest.getId(),
+						restCount.get(markerSelectedRest.getId()) + 1);
 			} else {
-				restMap.put(markerSelectedBusiness.getId(),
-						markerSelectedBusiness);
-				restCount.put(markerSelectedBusiness.getId(), 1);
+				restMap.put(markerSelectedRest.getId(),
+						markerSelectedRest);
+				restCount.put(markerSelectedRest.getId(), 1);
 			}
 
 			// Send to voting acitivity
 			Intent data = new Intent();
 			data.putExtra("rest_map", restMap);
 			data.putExtra("rest_count", restCount);
-			data.putExtra("user_choice", markerSelectedBusiness);
+			data.putExtra("user_choice", markerSelectedRest);
 			setResult(RESULT_OK, data);
 			finish();
 			overridePendingTransition(R.anim.left_in, R.anim.right_out);
@@ -501,6 +507,7 @@ public class MapActivity extends FragmentActivity implements
 	
 public void setupCustomInfoWindowForMap(){
 	map.setInfoWindowAdapter(new InfoWindowAdapter() {
+		ImageAdapter userImages = new ImageAdapter(getBaseContext(),null);
 		
 		@Override
 		public View getInfoWindow(Marker arg0) {
@@ -515,9 +522,18 @@ public void setupCustomInfoWindowForMap(){
             // Getting the position from the marker
             String restName = arg0.getTitle();
 
-            // Getting reference to the TextView to set latitude
+            // Getting reference to the TextView to set Restaurant Name
             TextView tvInfoWindowRestName = (TextView) v.findViewById(R.id.tvInfoWindowRestName);
-
+            Rest thisRest = restMap.get(markerMap.get(arg0));
+            Log.d("debug", "thisRest: " + thisRest.toString());
+            HashMap<String, String> fbidmap = thisRest.getGroupUserFacebookIds();
+            	
+            
+            //Getting reference to GirdView to set User Images
+            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
+           /* if(!fbidmap.values().isEmpty()) { 
+            	gvInfoWindowUserImages.setAdapter(new ImageAdapter(getBaseContext(), new ArrayList<String>(fbidmap.values())));
+            }*/
             // Setting the rest name
             tvInfoWindowRestName.setText(restName);
 

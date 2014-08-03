@@ -34,7 +34,6 @@ import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.fragments.RestarauntListFragment;
-import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
@@ -61,7 +60,7 @@ public class VotingActivity extends FragmentActivity implements
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
 
-	Business userChoice;
+	// Rest userChoice;
 	private HashMap<String, Rest> Restaurants;
 
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {

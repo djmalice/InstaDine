@@ -23,10 +23,9 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.cpcrew.instadine.R;
-import com.cpcrew.instadine.models.Business;
-import com.cpcrew.instadine.models.Restaurant;
+import com.cpcrew.instadine.models.Rest;
 
-public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
+public class RestaurantDropDownAdapter extends ArrayAdapter<Rest> implements
 		Filterable {
 	private static final String LOG_TAG = "DEBUG";
 
@@ -35,7 +34,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
 	private static final String OUT_JSON = "/json";
 
 	private static final String API_KEY = com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;
-	private ArrayList<Business> resultList;
+	private ArrayList<Rest> resultList;
 	
 	public RestaurantDropDownAdapter(Context context, int resource) {
 		super(context, resource);
@@ -56,7 +55,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
 		TextView venueAddress = (TextView) convertView
 				.findViewById(R.id.search_item_venue_address);
  
-		Business venue = getItem(position);
+		Rest venue = getItem(position);
 		convertView.setTag(venue);
 		 
 			venueName.setText(" " + venue.getName());
@@ -72,7 +71,7 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
     }
 
     @Override
-    public Business getItem(int index) {
+    public Rest getItem(int index) {
         return resultList.get(index);
     }
 
@@ -107,8 +106,8 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
         return filter;
     }
     
-    private ArrayList<Business> autocomplete(String input) {
-        ArrayList<Business> resultList = null;
+    private ArrayList<Rest> autocomplete(String input) {
+        ArrayList<Rest> resultList = null;
 
         HttpURLConnection conn = null;
         StringBuilder jsonResults = new StringBuilder();
@@ -146,9 +145,9 @@ public class RestaurantDropDownAdapter extends ArrayAdapter<Business> implements
             JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
 
             // Extract the Place descriptions from the results
-            resultList = new ArrayList<Business>(predsJsonArray.length());
+            resultList = new ArrayList<Rest>(predsJsonArray.length());
             for (int i = 0; i < predsJsonArray.length(); i++) {
-            	Business b = Business.fromAutoCompleteJson(predsJsonArray.getJSONObject(i));
+            	Rest b = Rest.fromAutoCompleteJson(predsJsonArray.getJSONObject(i));
                 resultList.add(b);
             }
             Log.d("debug", resultList.toString());
