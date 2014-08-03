@@ -261,6 +261,8 @@ public class RestarauntListFragment extends Fragment {
 		// restaurant ( BUG FIX: Doesn't update if another user has made the
 		// same selection as you )
 		Rest rest;
+		restInfo.addUser(userId);
+		restInfo.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
 		if (Restaurants.containsKey(restId)) { // preexisting restaurant
 			rest = Restaurants.get(restId);
 		} else { // new restaurant
@@ -270,8 +272,7 @@ public class RestarauntListFragment extends Fragment {
 			restaurants.add(restInfo);
 		}
 		mySelection.add(restId);
-		restInfo.addUser(userId);
-		restInfo.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
+		
 		restAdapter.notifyDataSetChanged();
 		// }
 	}
@@ -320,7 +321,7 @@ public class RestarauntListFragment extends Fragment {
 						Log.d("debug",
 								"Business Object in Voting: " + r.toString());
 						res.inflateRestaurantDetails(r);
-						restMap.put(r.getId(), r); // for the Search Activity
+						restMap.put(res.getId(), res); // for the Search Activity
 						restAdapter.notifyDataSetChanged(); // Notify the
 															// ListView
 						// updateDeciderView(); TODO has to be a callback

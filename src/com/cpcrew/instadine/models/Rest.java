@@ -258,7 +258,7 @@ public class Rest implements Serializable{
 	
 	@Override
     public String toString() {
-    	return "Id: " + id + " Name: " + name + " City: " + city + " Phone: " + phone + "Userids:" + userids;
+    	return "Id: " + id + " Name: " + name + " City: " + city + " Phone: " + phone + "Userids:" + groupUserFacebookIds;
     }
 	
 }
