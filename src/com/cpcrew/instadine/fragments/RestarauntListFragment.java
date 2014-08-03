@@ -38,6 +38,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * @author raji
@@ -47,6 +48,8 @@ public class RestarauntListFragment extends Fragment {
 
 	private static String TAG = RestarauntListFragment.class.getSimpleName();
 	private String selectedRestaurant = null;
+	
+	private RefreshListener  refreshListener;
 
 	private HashMap<String, Rest> Restaurants;
 	private HashMap<String, Rest> restMap;
@@ -57,11 +60,14 @@ public class RestarauntListFragment extends Fragment {
 	protected PullToRefreshListView lvRestaurants;
 	private HashMap<String, String> groupUsersFacebookIds;
 
-
-	private Button btnSearch;
+//	private Button btnSearch;
 
 	Rest userChoice;
 
+	public interface RefreshListener {
+		public void onParentRefresh() ;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -74,9 +80,9 @@ public class RestarauntListFragment extends Fragment {
 		prevSelection = new HashSet<String>();
 		restMap = new HashMap<String, Rest>();
 		groupUsersFacebookIds = new HashMap<String,String>();
+		refreshListener = (RefreshListener) getActivity();
 		restAdapter = new RestaurantArrayAdapter(getActivity(), restaurants);
 
-		
 	}
 
 	@Override
@@ -87,35 +93,32 @@ public class RestarauntListFragment extends Fragment {
 				.findViewById(R.id.lvRestaurants);
 
 		lvRestaurants.setAdapter(restAdapter);
-		btnSearch = (Button) v.findViewById(R.id.btnSearch);
-		btnSearch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				callSearchActivity();
-			}
-
-		});
-		
-		
+//		btnSearch = (Button) v.findViewById(R.id.btnSearch);
+//		btnSearch.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				callSearchActivity();
+//			}
+//
+//		});
 
 		// TODO Cannot refresh the activity Should change to refresh only
 		// restaraunts
-		// lvRestaurants.setOnRefreshListener(new OnRefreshListener() {
-		//
-		// // doesn't work anymore
-		//
-		// @Override
-		// public void onRefresh() {
-		// findEvent(groupId);
-		// lvRestaurants.onRefreshComplete();
-		//
-		// }
-		// });
-		
+		lvRestaurants.setOnRefreshListener(new OnRefreshListener() {
+			// doesn't work anymore
+
+			@Override
+			public void onRefresh() {
+				refreshListener.onParentRefresh();
+				lvRestaurants.onRefreshComplete();
+
+			}
+		});
+
 		onRestaurantSelected();
 		return v;
 	}
-	
+
 	public void setFacebookIds(HashMap<String, String> fbMap) {
 		groupUsersFacebookIds.clear();
 		groupUsersFacebookIds.putAll(fbMap);
@@ -221,14 +224,16 @@ public class RestarauntListFragment extends Fragment {
 		for (Rest rt : restaurants) {
 			if (rt.getRestId().equals(restaurant.getRestId())) {
 				rt.addUser(LoggedInUser.getcurrentUser().getId());
-				restaurant.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
+				restaurant.addGroupUser(LoggedInUser.getcurrentUser().getId(),
+						LoggedInUser.getcurrentUser().getFacebookId());
 				isActionDone = true;
 			}
 		}
 		if (isActionDone == false) {
 			restaurants.add(restaurant);
 			restaurant.addUser(LoggedInUser.getcurrentUser().getId());
-			restaurant.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
+			restaurant.addGroupUser(LoggedInUser.getcurrentUser().getId(),
+					LoggedInUser.getcurrentUser().getFacebookId());
 		}
 		restAdapter.notifyDataSetChanged();
 	}
@@ -246,11 +251,12 @@ public class RestarauntListFragment extends Fragment {
 			rest.setRestId(restId);
 			Restaurants.put(rest.getRestId(), rest);
 			restaurants.add(rest);
-			
+
 		}
 		rest.addUser(userId);
-		assert(groupUsersFacebookIds!=null);
-		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
+		assert (groupUsersFacebookIds != null);
+		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for
+																		// images
 		// }
 	}
 
@@ -272,7 +278,9 @@ public class RestarauntListFragment extends Fragment {
 			restaurants.add(restInfo);
 		}
 		mySelection.add(restId);
-		
+		rest.addUser(userId);
+		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for
+																		// images
 		restAdapter.notifyDataSetChanged();
 		// }
 	}
@@ -341,13 +349,13 @@ public class RestarauntListFragment extends Fragment {
 	}
 
 	// currently does not handle ties
-	public String highestVotedRestaraunt() {
+	public Rest highestVotedRestaraunt() {
 		int votes = 0;
-		String restarauntSelected = null;
+		Rest restarauntSelected = null;
 		for (Rest rest : restaurants) {
 			if (rest.getCount() > votes) {
 				votes = rest.getCount();
-				restarauntSelected = rest.getName();
+				return rest;
 			}
 		}
 		return restarauntSelected;

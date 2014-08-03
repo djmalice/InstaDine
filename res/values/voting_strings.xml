@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+   <string name="doneAction">Make my choices</string>
+    <string name="undoneAction">Change my choices</string>
+    
  <string-array name="list_of_cities">
 <item>Alameda</item>
 <item>Albany </item>

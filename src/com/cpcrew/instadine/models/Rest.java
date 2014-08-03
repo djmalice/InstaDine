@@ -3,6 +3,7 @@
  */
 package com.cpcrew.instadine.models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.io.Serializable;
@@ -17,7 +18,7 @@ import android.util.Log;
  * @author raji
  *
  */
-public class Rest implements Serializable{
+public class Rest implements Serializable {
 	
 	/**
 	 * 

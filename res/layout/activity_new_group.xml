@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
     tools:context="${packageName}.${activityClass}" >
     
    <ImageView
@@ -12,7 +13,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/group_red" />
+        android:background="@drawable/curved_rectangle_border_lightred"
+        android:src="@drawable/group_happyred" />
    
     <TextView
         android:id="@+id/tvLabel"
@@ -36,7 +38,7 @@
         android:layout_marginTop="72dp"
         android:layout_marginRight="15dp"
         android:hint="@string/group_name_subject_hint"
-        android:textColorHint="@color/grey"
+        android:textColorHint="@color/appGrey"
         android:ems="10" >
 
         <requestFocus />

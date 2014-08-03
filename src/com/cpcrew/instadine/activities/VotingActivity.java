@@ -22,7 +22,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +34,8 @@ import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.fragments.RestarauntListFragment;
+import com.cpcrew.instadine.fragments.RestarauntListFragment.RefreshListener;
+import com.cpcrew.instadine.models.Business;
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
@@ -43,7 +45,6 @@ import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Utils;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-import com.google.android.gms.internal.mf;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -55,10 +56,12 @@ import com.parse.SaveCallback;
 
 public class VotingActivity extends FragmentActivity implements
 		ParseEventApiListener, CalendarDatePickerDialog.OnDateSetListener,
-		RadialTimePickerDialog.OnTimeSetListener, ParseGroupsApiListener {
+		RadialTimePickerDialog.OnTimeSetListener, ParseGroupsApiListener,
+		RefreshListener {
 
 	private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
 	private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
+	private static String TAG = VotingActivity.class.getSimpleName();
 
 	// Rest userChoice;
 	private HashMap<String, Rest> Restaurants;
@@ -81,7 +84,7 @@ public class VotingActivity extends FragmentActivity implements
 	TextView tvExpiryTime;
 	TextView tvExpiryDate;
 
-	EditText etLocation;
+	TextView etLocation;
 	private String timeOfEvent;
 	private String dateOfEvent;
 	private String timeOfExpiry;
@@ -91,16 +94,16 @@ public class VotingActivity extends FragmentActivity implements
 
 	private boolean eventSelected = false;
 	private boolean expirySelected = false;
+	private boolean isEnabledExpiryTime = false;
 
 	private ParseEventsApi parseEventApi;
 	private ParseGroupsApi parseGroupsApi;
 	private Event currentEvent;
 	private Group currentGroup;
 	private String groupId = null;
-
 	private ArrayList<User> usersOfGroup;
 	private HashMap<String, String> groupUsersFacebookIds;
-	
+
 	private RestarauntListFragment restFragment;
 
 	public static final int NOTIFICATION_ID = 45;
@@ -188,6 +191,7 @@ public class VotingActivity extends FragmentActivity implements
 		if (eventSelected) {
 			this.timeOfEvent = eventTime;
 			tvEventTime.setText(eventTime);
+			timeOfExpiry = eventTime;  // same as event time
 		} else if (expirySelected) {
 			timeOfExpiry = eventTime;
 			tvExpiryTime.setText(eventTime);
@@ -260,7 +264,7 @@ public class VotingActivity extends FragmentActivity implements
 	}
 
 	public void getViews() {
-		etLocation = (EditText) findViewById(R.id.etLocation);
+		etLocation = (TextView) findViewById(R.id.etLocation);
 
 		eventTimeView = (RelativeLayout) findViewById(R.id.rlEventTime);
 		eventDateView = (RelativeLayout) findViewById(R.id.rlEventDate);
@@ -304,40 +308,47 @@ public class VotingActivity extends FragmentActivity implements
 	}
 
 	public void updateDeciderView() {
-		// Decider Message
-		String deciderMessage = null;
-		String expiryTime = "on " + currentEvent.getExpiryDate() + " "
-				+ currentEvent.getExpiryTime();
-		if (currentEvent.getDate() != null
-				&& currentEvent.getExpiryDate() != null) {
-			if (Utils.isTimeGreaterThanNow(currentEvent.getExpiryDate() + " "
-					+ currentEvent.getExpiryTime())) {
-				// Has Expired
-				deciderMessage = "Voting is complete. "
-						+ currentGroup.getGroupName() + " is going to "
-						+ restFragment.highestVotedRestaraunt() + " on "
-						+ currentEvent.getDate() + " " + currentEvent.getTime();
+
+		if (isEnabledExpiryTime) {
+			// Decider Message
+			String deciderMessage = null;
+			String expiryTime = "on " + currentEvent.getExpiryDate() + " "
+					+ currentEvent.getExpiryTime();
+			if (currentEvent.getDate() != null
+					&& currentEvent.getExpiryDate() != null) {
+				if (Utils.isTimeGreaterThanNow(currentEvent.getExpiryDate()
+						+ " " + currentEvent.getExpiryTime())) {
+					// Has Expired
+					deciderMessage = "Voting is complete. "
+							+ currentGroup.getGroupName() + " is going to "
+							+ restFragment.highestVotedRestaraunt().getName()
+							+ " on " + currentEvent.getDate() + " "
+							+ currentEvent.getTime();
+				} else {
+					// Still voting going on.
+					deciderMessage = currentGroup.getGroupName()
+							+ " is still voting. See results when voting expires "
+							+ expiryTime;
+				}
 			} else {
-				// Still voting going on.
+				// No event date and expiry date
 				deciderMessage = currentGroup.getGroupName()
-						+ " is still voting. See results when voting expires "
-						+ expiryTime;
+						+ " is deciding a Restaraunt ";
 			}
-		} else {
-			// No event date and expiry date
-			deciderMessage = currentGroup.getGroupName()
-					+ " is deciding a Restaraunt ";
+			// Event Message to the group
+			TextView tvEventSummary = (TextView) findViewById(R.id.tvEventSummary);
+			tvEventSummary.setText(deciderMessage);
 		}
-		// Event Message to the group
-		TextView tvEventSummary = (TextView) findViewById(R.id.tvEventSummary);
-		tvEventSummary.setText(deciderMessage);
 	}
 
 	public void onDone(View v) {
 		// Toast.makeText(this,"Sending out invitations to " +
 		// currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
+
+		final Button btnDone = (Button) findViewById(R.id.btnDone);
 		if (currentEvent == null) {
-			// updateDeciderView(); //Data is still not in the database. Cannot
+			// updateDeciderView(); //Data is still not in the database.
+			// Cannot
 			// be done.
 			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent,
 					dateOfExpiry, timeOfExpiry,
@@ -360,6 +371,11 @@ public class VotingActivity extends FragmentActivity implements
 						finish();
 					}
 				});
+
+	}
+
+	public Rest getHighestVotedRestaraunt() {
+		return restFragment.highestVotedRestaraunt();
 	}
 
 	public void pushToVotingActivity() {
@@ -419,33 +435,39 @@ public class VotingActivity extends FragmentActivity implements
 			for (User u : usersOfGroup) {
 				firstNames.add(u.getFirstName());
 			}
-			
-			/*JSONArray firstNamesJSON = new JSONArray();
-			for(User u:usersOfGroup){
-				firstNamesJSON.put(u.getFirstName());
-			}*/
-			
-			ParseInstallation.getCurrentInstallation().put("usersofgroup", firstNames);
-			ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
-				@Override
-				public void done(ParseException e) {
-					if (e == null) {
-						//Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Saved!", Toast.LENGTH_SHORT);
-						//toast.show();
-					} else {
-						e.printStackTrace();
 
-						//Toast toast = Toast.makeText(getApplicationContext(), "ParseInstallation Save Failed :(" , Toast.LENGTH_SHORT);
-						//toast.show();
-					}
-				}
-			});
-			
-			
-			
 			/*
-			 * Once you have your data stored on your Installation objects, 
-			 * you can use a ParseQuery to target a subset of these devices. 
+			 * JSONArray firstNamesJSON = new JSONArray(); for(User
+			 * u:usersOfGroup){ firstNamesJSON.put(u.getFirstName()); }
+			 */
+
+			ParseInstallation.getCurrentInstallation().put("usersofgroup",
+					firstNames);
+			ParseInstallation.getCurrentInstallation().saveInBackground(
+					new SaveCallback() {
+						@Override
+						public void done(ParseException e) {
+							if (e == null) {
+								// Toast toast =
+								// Toast.makeText(getApplicationContext(),
+								// "ParseInstallation Saved!",
+								// Toast.LENGTH_SHORT);
+								// toast.show();
+							} else {
+								e.printStackTrace();
+
+								// Toast toast =
+								// Toast.makeText(getApplicationContext(),
+								// "ParseInstallation Save Failed :(" ,
+								// Toast.LENGTH_SHORT);
+								// toast.show();
+							}
+						}
+					});
+
+			/*
+			 * Once you have your data stored on your Installation objects, you
+			 * can use a ParseQuery to target a subset of these devices.
 			 * 
 			 * Installation queries work just like any other Parse query, but we
 			 * use the special static method ParseInstallation.getQuery() to
@@ -522,8 +544,13 @@ public class VotingActivity extends FragmentActivity implements
 
 		}
 	}
+	
+	public void onSearchActivity() {
+		restFragment.callSearchActivity();
+	}
 
 	public void newEventView() {
+
 		getViews();
 		LinearLayout ll = (LinearLayout) findViewById(R.id.llexpiryDT);
 		ll.setVisibility(View.VISIBLE);
@@ -531,44 +558,48 @@ public class VotingActivity extends FragmentActivity implements
 		// Event Time
 
 		tvEventTime = (TextView) eventTimeView.findViewById(R.id.tvContent);
-		tvEventTime.setText("");
+		tvEventTime.setText("+");
 		tvEventTime.setTag("event");
-		TextView tvEventTimeLabel = (TextView) eventTimeView
-				.findViewById(R.id.tvContentLabel);
-		tvEventTimeLabel.setText("Set Time");
-		tvEventTimeLabel.setTag("event");
-		createTimePicker(tvEventTimeLabel);
+//		TextView tvEventTimeLabel = (TextView) eventTimeView
+//				.findViewById(R.id.tvContentLabel);
+//		tvEventTimeLabel.setText("+");
+//		tvEventTimeLabel.setTag("event");
+		createTimePicker(tvEventTime);
 
 		// Event Date
 
 		tvEventDate = (TextView) eventDateView.findViewById(R.id.tvContent);
-		tvEventDate.setText("");
+		tvEventDate.setText(Utils.toDisplayNow());
 		tvEventDate.setTag("event");
-		TextView tvEventDateLabel = (TextView) eventDateView
-				.findViewById(R.id.tvContentLabel);
-		tvEventDateLabel.setText("Set Date");
-		tvEventDateLabel.setTag("event");
-		createDatePicker(tvEventDateLabel);
+//		TextView tvEventDateLabel = (TextView) eventDateView
+//				.findViewById(R.id.tvContentLabel);
+//		tvEventDateLabel.setText("+");
+//		tvEventDateLabel.setTag("event");
+		createDatePicker(tvEventDate);
 
-		// Expiry Time
-		tvExpiryTime = (TextView) expiryTimeView.findViewById(R.id.tvContent);
-		tvExpiryTime.setText("");
-		tvExpiryTime.setTag("expiry");
-		TextView tvExpiryTimeLabel = (TextView) expiryTimeView
-				.findViewById(R.id.tvContentLabel);
-		tvExpiryTimeLabel.setText("Expiry Time");
-		tvExpiryTimeLabel.setTag("expiry");
-		createTimePicker(tvExpiryTimeLabel);
+		if (isEnabledExpiryTime) {
+			// Expiry Time
+			tvExpiryTime = (TextView) expiryTimeView
+					.findViewById(R.id.tvContent);
+			tvExpiryTime.setText("");
+			tvExpiryTime.setTag("expiry");
+			TextView tvExpiryTimeLabel = (TextView) expiryTimeView
+					.findViewById(R.id.tvContentLabel);
+			tvExpiryTimeLabel.setText("Expiry Time");
+			tvExpiryTimeLabel.setTag("expiry");
+			createTimePicker(tvExpiryTimeLabel);
 
-		// Expiry Date
-		tvExpiryDate = (TextView) expiryDateView.findViewById(R.id.tvContent);
-		tvExpiryDate.setText("");
-		tvExpiryDate.setTag("expiry");
-		TextView tvExpiryDateLabel = (TextView) expiryDateView
-				.findViewById(R.id.tvContentLabel);
-		tvExpiryDateLabel.setText("Expiry Date");
-		tvExpiryDateLabel.setTag("expiry");
-		createDatePicker(tvExpiryDateLabel);
+			// Expiry Date
+			tvExpiryDate = (TextView) expiryDateView
+					.findViewById(R.id.tvContent);
+			tvExpiryDate.setText("");
+			tvExpiryDate.setTag("expiry");
+			TextView tvExpiryDateLabel = (TextView) expiryDateView
+					.findViewById(R.id.tvContentLabel);
+			tvExpiryDateLabel.setText("Expiry Date");
+			tvExpiryDateLabel.setTag("expiry");
+			createDatePicker(tvExpiryDateLabel);
+		}
 	}
 
 	public void existEventView() {
@@ -581,23 +612,29 @@ public class VotingActivity extends FragmentActivity implements
 		tvEventTime = (TextView) eventTimeView.findViewById(R.id.tvContent);
 		tvEventTime.setText("");
 		tvEventTime.setTag("event");
-		TextView tvEventTimeLabel = (TextView) eventTimeView
-				.findViewById(R.id.tvContentLabel);
-		tvEventTimeLabel.setText("Time");
-		tvEventTimeLabel.setTag("event");
+//		TextView tvEventTimeLabel = (TextView) eventTimeView
+//				.findViewById(R.id.tvContentLabel);
+//		tvEventTimeLabel.setText("Time");
+//		tvEventTimeLabel.setTag("event");
 
 		// Event Date
 		tvEventDate = (TextView) eventDateView.findViewById(R.id.tvContent);
 		tvEventDate.setText("");
 		tvEventDate.setTag("event");
-		TextView tvEventDateLabel = (TextView) eventDateView
-				.findViewById(R.id.tvContentLabel);
-		tvEventDateLabel.setText("Date");
-		tvEventDateLabel.setTag("event");
+//		TextView tvEventDateLabel = (TextView) eventDateView
+//				.findViewById(R.id.tvContentLabel);
+//		tvEventDateLabel.setText("Date");
+//		tvEventDateLabel.setTag("event");
 
 		etLocation.setFocusable(false);
 		etLocation.setEnabled(false);
 		// etLocation.setBackgroundResource("#00000000");
+	}
+
+	public void refreshEvent() {
+		if (groupId != null) {
+			findEvent(groupId);
+		}
 	}
 
 	@Override
@@ -627,14 +664,16 @@ public class VotingActivity extends FragmentActivity implements
 			usersOfGroup.clear();
 			usersOfGroup.addAll(users);
 		}
-		if (groupUsersFacebookIds != null) groupUsersFacebookIds.clear();
-		else groupUsersFacebookIds = new HashMap<String, String>();
+		if (groupUsersFacebookIds != null)
+			groupUsersFacebookIds.clear();
+		else
+			groupUsersFacebookIds = new HashMap<String, String>();
 		for (User user : usersOfGroup) {
 			groupUsersFacebookIds.put(user.getId(), user.getFacebookId());
 		}
 		restFragment.setFacebookIds(groupUsersFacebookIds);
 		Log.d("debug", "usersOfGroup size: " + usersOfGroup.size());
-		
+
 		// Get the Events
 		parseEventApi.getEventsForGroup(currentGroup);
 
@@ -661,6 +700,13 @@ public class VotingActivity extends FragmentActivity implements
 	@Override
 	public void retrieveUser(User user) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onParentRefresh() {
+		Log.d(TAG, "Refreshing the Event");
+		refreshEvent();
 
 	}
 }

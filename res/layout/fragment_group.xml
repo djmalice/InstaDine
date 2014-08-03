@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
+    android:padding="2dp"
     android:orientation="vertical" >
 
     <ProgressBar
@@ -14,7 +15,10 @@
     <eu.erikw.PullToRefreshListView
         android:id="@+id/lvGroups"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:divider="@color/white"
+        android:fadingEdge="none"
+        android:dividerHeight="3dip" />
 
 </LinearLayout>

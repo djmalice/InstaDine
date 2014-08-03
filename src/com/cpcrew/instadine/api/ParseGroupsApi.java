@@ -69,6 +69,7 @@ public class ParseGroupsApi {
 		// now we will query the users relation to see if the user object we
 		// have is contained therein
 		query.whereEqualTo("users", user.getParseUser());
+		query.orderByDescending("createdAt");
 		Log.d(TAG, "Starting async getGroupsForUser");
 		// execute the query
 		query.findInBackground(new FindCallback<Group>() {
