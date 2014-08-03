@@ -298,12 +298,12 @@ public class MapActivity extends FragmentActivity implements
 		}
 	    markerMap.put(res, rest.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
-	    
+	    searchBusiness.put(rest.getId(), rest);
 		
 	    res.showInfoWindow();
 	    // Add to temporary search business map for all markers in the system
 	    
-	    searchBusiness.put(rest.getId(), rest);
+	    
 	    
 	}
 	
@@ -524,7 +524,16 @@ public void setupCustomInfoWindowForMap(){
 
             // Getting reference to the TextView to set Restaurant Name
             TextView tvInfoWindowRestName = (TextView) v.findViewById(R.id.tvInfoWindowRestName);
-            Rest thisRest = restMap.get(markerMap.get(arg0));
+            Rest thisRest = new Rest();
+            
+            if(restMap.get(markerMap.get(arg0)) == null) {
+				thisRest = searchBusiness.get(markerMap.get(arg0));
+			} else {
+//				Log.d("debug","restMap: " + restMap.toString());
+				thisRest = restMap.get(markerMap.get(arg0));
+			}
+            
+            
             Log.d("debug", "thisRest: " + thisRest.toString());
             HashMap<String, String> fbidmap = thisRest.getGroupUserFacebookIds();
             	
