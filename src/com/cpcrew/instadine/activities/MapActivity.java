@@ -31,6 +31,7 @@ import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ImageAdapter;
 import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
 
+import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView;
@@ -528,6 +529,7 @@ public void setupCustomInfoWindowForMap(){
             
             if(restMap.get(markerMap.get(arg0)) == null) {
 				thisRest = searchBusiness.get(markerMap.get(arg0));
+				thisRest.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
 			} else {
 //				Log.d("debug","restMap: " + restMap.toString());
 				thisRest = restMap.get(markerMap.get(arg0));
