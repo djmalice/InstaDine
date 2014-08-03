@@ -23,7 +23,6 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,7 +33,6 @@ import com.cpcrew.instadine.api.ParseEventsApi;
 import com.cpcrew.instadine.api.ParseEventsApi.ParseEventApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
-import com.cpcrew.instadine.fragments.DeciderViewFragment;
 import com.cpcrew.instadine.fragments.RestarauntListFragment;
 import com.cpcrew.instadine.fragments.RestarauntListFragment.RefreshListener;
 import com.cpcrew.instadine.models.Business;
@@ -138,37 +136,6 @@ public class VotingActivity extends FragmentActivity implements
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flRestContainer, restFragment);
 		ft.commit();
-
-		mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_panel);
-		mLayout.setPanelSlideListener(new PanelSlideListener() {
-			@Override
-			public void onPanelSlide(View panel, float slideOffset) {
-				Log.i(TAG, "onPanelSlide, offset " + slideOffset);
-				// setActionBarTranslation(mLayout.getCurrentParalaxOffset());
-			}
-
-			@Override
-			public void onPanelExpanded(View panel) {
-				Log.i(TAG, "onPanelExpanded");
-
-			}
-
-			@Override
-			public void onPanelCollapsed(View panel) {
-				Log.i(TAG, "onPanelCollapsed");
-
-			}
-
-			@Override
-			public void onPanelAnchored(View panel) {
-				Log.i(TAG, "onPanelAnchored");
-			}
-
-			@Override
-			public void onPanelHidden(View panel) {
-				Log.i(TAG, "onPanelHidden");
-			}
-		});
 
 		// Specify an Activity to handle all pushes by default
 		PushService.setDefaultPushCallback(this, VotingActivity.class);
@@ -386,68 +353,32 @@ public class VotingActivity extends FragmentActivity implements
 		// currentGroup.getGroupName() , Toast.LENGTH_SHORT).show();
 
 		final Button btnDone = (Button) findViewById(R.id.btnDone);
-		if (panelCollapsed) {
-			if (currentEvent == null) {
-				// updateDeciderView(); //Data is still not in the database.
-				// Cannot
-				// be done.
-				parseEventApi.createEvent(currentGroup, dateOfEvent,
-						timeOfEvent, dateOfExpiry, timeOfExpiry, etLocation
-								.getText().toString(), LoggedInUser
-								.getcurrentUser().getId(), restFragment
-								.newSelections());
-			} else {
-				parseEventApi
-						.updateEvent(currentEvent, LoggedInUser
-								.getcurrentUser().getId(), restFragment
-								.newSelections());
-			}
-			// Get the latest values from the ParseInstallation object.
-			ParseInstallation.getCurrentInstallation().refreshInBackground(
-					new RefreshCallback() {
-
-						@Override
-						public void done(ParseObject object, ParseException e) {
-							if (e == null) {
-								pushToVotingActivity();
-							}
-							if (isEnabledSlidingPanel) {
-								// if (isPanelCollapsed) {
-								btnDone.setCompoundDrawablesWithIntrinsicBounds(
-										R.drawable.ic_action_drop_list, 0, 0, 0);
-								btnDone.setText(R.string.undoneAction);
-								// Rest rest =
-								// restFragment.highestVotedRestaraunt();
-								// Bundle args = new Bundle();
-								// args.putSerializable("votedRest", rest);
-								// args.putSerializable("groupmap",
-								// rest.getGroupUserFacebookIds());
-								DeciderViewFragment deciderFragment = new DeciderViewFragment();
-								// deciderFragment.setArguments(args);
-								FragmentTransaction ft = getSupportFragmentManager()
-										.beginTransaction();
-								ft.replace(R.id.flDeciderContainer,
-										deciderFragment);
-								ft.commit();
-								mLayout.expandPanel();
-								panelCollapsed = false;
-							} else {
-								finish();
-							}
-						}
-					});
+		if (currentEvent == null) {
+			// updateDeciderView(); //Data is still not in the database.
+			// Cannot
+			// be done.
+			parseEventApi.createEvent(currentGroup, dateOfEvent, timeOfEvent,
+					dateOfExpiry, timeOfExpiry,
+					etLocation.getText().toString(), LoggedInUser
+							.getcurrentUser().getId(), restFragment
+							.newSelections());
 		} else {
-			if (isEnabledSlidingPanel) {
-				// Return to main activity
-				// Refresh main activity
-				refreshEvent();
-				btnDone.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.ic_yes, 0, 0, 0);
-				btnDone.setText(R.string.doneAction);
-				mLayout.collapsePanel();
-				panelCollapsed = true;
-			}
+			parseEventApi.updateEvent(currentEvent, LoggedInUser
+					.getcurrentUser().getId(), restFragment.newSelections());
 		}
+		// Get the latest values from the ParseInstallation object.
+		ParseInstallation.getCurrentInstallation().refreshInBackground(
+				new RefreshCallback() {
+
+					@Override
+					public void done(ParseObject object, ParseException e) {
+						if (e == null) {
+							pushToVotingActivity();
+						}
+						finish();
+					}
+				});
+
 	}
 
 	public Rest getHighestVotedRestaraunt() {
