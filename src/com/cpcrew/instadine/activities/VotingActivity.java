@@ -271,7 +271,6 @@ public class VotingActivity extends FragmentActivity implements
 		if (eventSelected) {
 			dateOfEvent = monthOfYear + "/" + dayOfMonth + "/" + year;
 			tvEventDate.setText(Utils.toDisplayDate(dateOfEvent));
-			tvExpiryDate.setText(Utils.toDisplayDate(dateOfEvent)); // expiry same as event by default
 		} else if (expirySelected) {
 			dateOfExpiry = monthOfYear + "/" + dayOfMonth + "/" + year;
 			tvExpiryDate.setText(Utils.toDisplayDate(dateOfExpiry));
