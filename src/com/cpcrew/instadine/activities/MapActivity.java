@@ -1,5 +1,6 @@
 package com.cpcrew.instadine.activities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -29,11 +30,10 @@ import android.widget.Toast;
 
 import com.cpcrew.instadine.R;
 import com.cpcrew.instadine.adapters.ImageAdapter;
+import com.cpcrew.instadine.adapters.InfoWindowImageAdapter;
 import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
-
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
-import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView.OnClearListener;
 import com.google.android.gms.common.ConnectionResult;
@@ -301,7 +301,7 @@ public class MapActivity extends FragmentActivity implements
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
 	    searchBusiness.put(rest.getId(), rest);
 		
-	    res.showInfoWindow();
+	    // res.showInfoWindow();
 	    // Add to temporary search business map for all markers in the system
 	    
 	    
@@ -539,15 +539,15 @@ public void setupCustomInfoWindowForMap(){
             Log.d("debug", "thisRest: " + thisRest.toString());
             HashMap<String, String> fbidmap = thisRest.getGroupUserFacebookIds();
             	
-            
+          
             //Getting reference to GirdView to set User Images
-//            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
-           /* if(!fbidmap.values().isEmpty()) { 
-            	gvInfoWindowUserImages.setAdapter(new ImageAdapter(getBaseContext(), new ArrayList<String>(fbidmap.values())));
-            }*/
+            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
+           if(!fbidmap.values().isEmpty()) { 
+            	gvInfoWindowUserImages.setAdapter(new InfoWindowImageAdapter(getBaseContext(), new ArrayList<String>(fbidmap.values())));
+            }
             // Setting the rest name
             tvInfoWindowRestName.setText(restName);
-
+           
             // Returning the view containing InfoWindow contents
             return v;
 		}
