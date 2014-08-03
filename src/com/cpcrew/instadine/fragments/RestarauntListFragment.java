@@ -61,7 +61,7 @@ public class RestarauntListFragment extends Fragment {
 	protected PullToRefreshListView lvRestaurants;
 	private HashMap<String, String> groupUsersFacebookIds;
 
-	private Button btnSearch;
+//	private Button btnSearch;
 
 	Business userChoice;
 
@@ -94,14 +94,14 @@ public class RestarauntListFragment extends Fragment {
 				.findViewById(R.id.lvRestaurants);
 
 		lvRestaurants.setAdapter(restAdapter);
-		btnSearch = (Button) v.findViewById(R.id.btnSearch);
-		btnSearch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				callSearchActivity();
-			}
-
-		});
+//		btnSearch = (Button) v.findViewById(R.id.btnSearch);
+//		btnSearch.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				callSearchActivity();
+//			}
+//
+//		});
 
 		// TODO Cannot refresh the activity Should change to refresh only
 		// restaraunts

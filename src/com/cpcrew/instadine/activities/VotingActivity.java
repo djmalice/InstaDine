@@ -53,8 +53,6 @@ import com.parse.ParseQuery;
 import com.parse.PushService;
 import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class VotingActivity extends FragmentActivity implements
 		ParseEventApiListener, CalendarDatePickerDialog.OnDateSetListener,
@@ -96,7 +94,6 @@ public class VotingActivity extends FragmentActivity implements
 
 	private boolean eventSelected = false;
 	private boolean expirySelected = false;
-	private boolean isEnabledSlidingPanel = false;
 	private boolean isEnabledExpiryTime = false;
 
 	private ParseEventsApi parseEventApi;
@@ -108,10 +105,6 @@ public class VotingActivity extends FragmentActivity implements
 	private HashMap<String, String> groupUsersFacebookIds;
 
 	private RestarauntListFragment restFragment;
-
-	// SlidingUp Panel
-	private SlidingUpPanelLayout mLayout;
-	private boolean panelCollapsed = true;
 
 	public static final int NOTIFICATION_ID = 45;
 
@@ -550,6 +543,10 @@ public class VotingActivity extends FragmentActivity implements
 			newEventView();
 
 		}
+	}
+	
+	public void onSearchActivity() {
+		restFragment.callSearchActivity();
 	}
 
 	public void newEventView() {

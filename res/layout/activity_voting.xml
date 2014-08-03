@@ -232,21 +232,47 @@
         android:layout_below="@+id/llEventSummary"
         android:orientation="vertical" >
 
-        <FrameLayout
-            android:id="@+id/flRestContainer"
+        <LinearLayout
+            android:id="@+id/llRview"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </FrameLayout>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btnDone"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:onClick="onDone"
-        android:text="Share my choices"
-        android:textColor="@color/white" />
+            <FrameLayout
+                android:id="@+id/flRestContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1" >
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llButtons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/container_dropshadow"
+                android:onClick="callSearchActivity"
+                android:padding="5dp"
+                android:text="+ Add Restaurant"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnDone"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:onClick="onDone"
+                android:text="DONE"
+                android:textColor="@color/white" />
+>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
