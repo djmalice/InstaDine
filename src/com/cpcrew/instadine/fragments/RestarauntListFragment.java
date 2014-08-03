@@ -266,21 +266,17 @@ public class RestarauntListFragment extends Fragment {
 		// if (!mySelection.contains(restId)) { // user already selected
 		// restaurant ( BUG FIX: Doesn't update if another user has made the
 		// same selection as you )
-		Rest rest;
+		Rest rest = null;
 		restInfo.addUser(userId);
 		restInfo.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
 		if (Restaurants.containsKey(restId)) { // preexisting restaurant
 			rest = Restaurants.get(restId);
 		} else { // new restaurant
-			
 			restMap.put(restInfo.getId(), restInfo);
 			Restaurants.put(restInfo.getId(), restInfo);
 			restaurants.add(restInfo);
 		}
 		mySelection.add(restId);
-		rest.addUser(userId);
-		rest.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for
-																		// images
 		restAdapter.notifyDataSetChanged();
 		// }
 	}
