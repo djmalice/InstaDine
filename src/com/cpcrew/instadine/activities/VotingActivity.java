@@ -1,6 +1,8 @@
 package com.cpcrew.instadine.activities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -357,6 +359,8 @@ public class VotingActivity extends FragmentActivity implements
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser
 					.getcurrentUser().getId(), restFragment.newSelections());
+//			parseEventApi.removePrevSelectionsToEvent(currentEvent, LoggedInUser
+//					.getcurrentUser().getId(), restFragment.removeSelections());
 		}
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(
@@ -544,7 +548,7 @@ public class VotingActivity extends FragmentActivity implements
 		}
 	}
 	
-	public void onSearchActivity() {
+	public void callSearchActivity(View v) {
 		restFragment.callSearchActivity();
 	}
 
@@ -569,6 +573,15 @@ public class VotingActivity extends FragmentActivity implements
 
 		tvEventDate = (TextView) eventDateView.findViewById(R.id.tvContent);
 		tvEventDate.setText(Utils.toDisplayNow());
+		Date date = Calendar.getInstance().getTime();
+	    Calendar cal = Calendar.getInstance();
+	    cal.setTime(date);
+	    int year = cal.get(Calendar.YEAR);
+	    int month = cal.get(Calendar.MONTH) +1 ;
+	    int day = cal.get(Calendar.DAY_OF_MONTH) ;
+		dateOfEvent = day + "/" + month + "/" + year;
+		dateOfExpiry = dateOfEvent;
+		System.out.println("Default date is " + dateOfEvent);
 		tvEventDate.setTag("event");
 //		TextView tvEventDateLabel = (TextView) eventDateView
 //				.findViewById(R.id.tvContentLabel);
