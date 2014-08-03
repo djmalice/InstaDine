@@ -48,26 +48,27 @@ public class RestarauntListFragment extends Fragment {
 
 	private static String TAG = RestarauntListFragment.class.getSimpleName();
 	private String selectedRestaurant = null;
-	
-	private RefreshListener  refreshListener;
+
+	private RefreshListener refreshListener;
 
 	private HashMap<String, Rest> Restaurants;
 	private HashMap<String, Rest> restMap;
 	private HashSet<String> mySelection;
 	private HashSet<String> prevSelection;
+	private HashSet<String> removePrevSelections;
 	private ArrayList<Rest> restaurants;
 	private RestaurantArrayAdapter restAdapter;
 	protected PullToRefreshListView lvRestaurants;
 	private HashMap<String, String> groupUsersFacebookIds;
 
-//	private Button btnSearch;
+	// private Button btnSearch;
 
 	Rest userChoice;
 
 	public interface RefreshListener {
-		public void onParentRefresh() ;
+		public void onParentRefresh();
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -79,7 +80,7 @@ public class RestarauntListFragment extends Fragment {
 		Restaurants = new HashMap<String, Rest>();
 		prevSelection = new HashSet<String>();
 		restMap = new HashMap<String, Rest>();
-		groupUsersFacebookIds = new HashMap<String,String>();
+		groupUsersFacebookIds = new HashMap<String, String>();
 		refreshListener = (RefreshListener) getActivity();
 		restAdapter = new RestaurantArrayAdapter(getActivity(), restaurants);
 
@@ -93,14 +94,14 @@ public class RestarauntListFragment extends Fragment {
 				.findViewById(R.id.lvRestaurants);
 
 		lvRestaurants.setAdapter(restAdapter);
-//		btnSearch = (Button) v.findViewById(R.id.btnSearch);
-//		btnSearch.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View arg0) {
-//				callSearchActivity();
-//			}
-//
-//		});
+		// btnSearch = (Button) v.findViewById(R.id.btnSearch);
+		// btnSearch.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View arg0) {
+		// callSearchActivity();
+		// }
+		//
+		// });
 
 		// TODO Cannot refresh the activity Should change to refresh only
 		// restaraunts
@@ -150,7 +151,7 @@ public class RestarauntListFragment extends Fragment {
 		Intent i = new Intent(getActivity(), MapActivity.class);
 		i.putExtra("rest_map", restMap);
 		i.putExtra("rest_count", restCount);
-		i.putExtra("user_fb_map",groupUsersFacebookIds);
+		i.putExtra("user_fb_map", groupUsersFacebookIds);
 		startActivityForResult(i, Constants.MAP_REQUEST_CODE);
 		getActivity().overridePendingTransition(R.anim.right_in,
 				R.anim.left_out);
@@ -207,14 +208,19 @@ public class RestarauntListFragment extends Fragment {
 	// Remove not supported in this version
 	public void removeRestaruantSelection(Rest restaurant) {
 		System.out.println("Removing restaurant not supported");
-		// mySelection.remove(restaurant.getRestId());
-		// for ( Rest rt : restaurants){
-		// if ( rt.getRestName().equals(restaurant.getRestName()) ){
-		// rt.removeUser(LoggedInUser.getcurrentUser().getId());
-		// }
-		// }
-		// // reflect in the adpater
-		// restAdapter.notifyDataSetChanged();
+		mySelection.remove(restaurant.getRestId());
+		for (Rest rt : restaurants) {
+			if (rt.getName().equals(restaurant.getName())) {
+				rt.removeUser(LoggedInUser.getcurrentUser().getId());
+				rt.removeGroupUser(LoggedInUser.getcurrentUser().getId());
+				if (rt.getCount() == 0)
+					restaurants.remove(rt);
+				break;
+			}
+		}
+		
+		// reflect in the adpater
+		restAdapter.notifyDataSetChanged();
 
 	}
 
@@ -268,7 +274,8 @@ public class RestarauntListFragment extends Fragment {
 		// same selection as you )
 		Rest rest = null;
 		restInfo.addUser(userId);
-		restInfo.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for images
+		restInfo.addGroupUser(userId, groupUsersFacebookIds.get(userId)); // for
+																			// images
 		if (Restaurants.containsKey(restId)) { // preexisting restaurant
 			rest = Restaurants.get(restId);
 		} else { // new restaurant
@@ -295,6 +302,16 @@ public class RestarauntListFragment extends Fragment {
 		System.out.println("my selections " + mySelection.size());
 		System.out.println("Num selections " + symmetricDiff.size());
 		return list;
+	}
+	
+	public ArrayList<String> removeSelections() {
+		Set<String> tmp = new HashSet<String>(mySelection);
+		ArrayList<String> removeSelectionsList = new ArrayList<String>();
+		for( String resId : prevSelection) {
+			if (!tmp.contains(resId)) 
+				removeSelectionsList.add(resId);
+		}
+		return removeSelectionsList;
 	}
 
 	public void populateBusinessInfo() {
@@ -325,7 +342,8 @@ public class RestarauntListFragment extends Fragment {
 						Log.d("debug",
 								"Business Object in Voting: " + r.toString());
 						res.inflateRestaurantDetails(r);
-						restMap.put(res.getId(), res); // for the Search Activity
+						restMap.put(res.getId(), res); // for the Search
+														// Activity
 						restAdapter.notifyDataSetChanged(); // Notify the
 															// ListView
 						// updateDeciderView(); TODO has to be a callback

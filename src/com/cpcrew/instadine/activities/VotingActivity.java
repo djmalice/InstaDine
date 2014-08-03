@@ -359,8 +359,8 @@ public class VotingActivity extends FragmentActivity implements
 		} else {
 			parseEventApi.updateEvent(currentEvent, LoggedInUser
 					.getcurrentUser().getId(), restFragment.newSelections());
-//			parseEventApi.removePrevSelectionsToEvent(currentEvent, LoggedInUser
-//					.getcurrentUser().getId(), restFragment.removeSelections());
+			parseEventApi.removePrevSelectionsToEvent(currentEvent, LoggedInUser
+					.getcurrentUser().getId(), restFragment.removeSelections());
 		}
 		// Get the latest values from the ParseInstallation object.
 		ParseInstallation.getCurrentInstallation().refreshInBackground(

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.cpcrew.instadine.models.Event;
 import com.cpcrew.instadine.models.Group;
+import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Restaurant;
 import com.cpcrew.instadine.models.User;
 import com.parse.FindCallback;
@@ -105,7 +106,9 @@ public class ParseEventsApi {
 		event.setExpiryTime(expTime);
 		event.setLocation(loc);
 		event.setGroup(group);
+		event.setOrganizer(LoggedInUser.getcurrentUser());
 		group.setEventPresent();
+		group.setLastEventDate(date);
 		for ( String rest : restid)
 			event.addSelection(userid, rest);
 		event.saveInBackground();
@@ -114,6 +117,12 @@ public class ParseEventsApi {
 	public void updateEvent(Event event, String userid, ArrayList<String> restid) {
 		for ( String rest : restid)
 			event.addSelection(userid, rest);
+		event.saveInBackground();
+	}
+	
+	public void removePrevSelectionsToEvent(Event event, String userid, ArrayList<String> restid) {
+		for ( String rest : restid)
+			event.removeSelection(userid, rest);
 		event.saveInBackground();
 	}
 	

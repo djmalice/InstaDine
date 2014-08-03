@@ -96,6 +96,13 @@ public class Group extends ParseObject {
 	  public boolean isEventPresent() {
 		  return getBoolean("isevent");
 	  }
+	  public void setLastEventDate(String dt) {
+		  put("latestevent", dt);
+	  }
+	  
+	  public String getLastEventDate(String dt) {
+		  return getString("latestevent");
+	  }
 
 
 }

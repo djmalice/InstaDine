@@ -260,6 +260,12 @@ public class Rest implements Serializable {
 		groupUserFacebookIds.put(userid, facebookId);
 	}
 	
+	public void removeGroupUser(String userid) {
+		if(groupUserFacebookIds != null) {
+			groupUserFacebookIds.remove(userid);
+		}
+	}
+	
 	@Override
     public String toString() {
     	return "Id: " + id + " Name: " + name + " City: " + city + " Phone: " + phone + "Userids:" + groupUserFacebookIds;

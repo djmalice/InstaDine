@@ -102,6 +102,10 @@ public class Event extends ParseObject {
 		
 	}
 	
+	public void removeSelection(String userid, String resid) {
+		removeAll("selections", Arrays.asList(userid + "," + resid));
+	}
+	
 //	public  List<JSONObject> getSelection() {
 //		return getList("selections");
 //	}
