@@ -541,7 +541,7 @@ public void setupCustomInfoWindowForMap(){
             	
             
             //Getting reference to GirdView to set User Images
-            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
+//            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
            /* if(!fbidmap.values().isEmpty()) { 
             	gvInfoWindowUserImages.setAdapter(new ImageAdapter(getBaseContext(), new ArrayList<String>(fbidmap.values())));
             }*/

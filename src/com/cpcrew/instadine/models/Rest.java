@@ -238,6 +238,9 @@ public class Rest implements Serializable{
 		imageUrl = r.getImageUrl();
 		id = r.getId();
 		phone = r.getPhone();
+		longi = r.getLongi();
+		lat = r.getLat();
+		
 
 	}
 	
