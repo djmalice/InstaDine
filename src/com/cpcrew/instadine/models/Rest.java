@@ -20,6 +20,23 @@ import android.util.Log;
  */
 public class Rest implements Serializable {
 	
+	public Rest(){}
+	
+	public Rest(String id, String name, String phone, String imageUrl,
+			String city, double rating, double lat, double longi) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.phone = phone;
+		this.imageUrl = imageUrl;
+		this.city = city;
+		this.rating = rating;
+		this.lat = lat;
+		this.longi = longi;
+	}
+
+
+
 	/**
 	 * 
 	 */

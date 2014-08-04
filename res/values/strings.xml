@@ -28,6 +28,7 @@
      <color name="textColorWhite">#FFFFFF</color>
      <color name="appGrey">#7e7e7e</color>
      <color name="dropDownGrey">#555555</color>
+     <color name="infoWindowGrey">#A6000000</color>
      
 
 </resources>

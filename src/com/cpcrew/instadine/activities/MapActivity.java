@@ -289,13 +289,13 @@ public class MapActivity extends FragmentActivity implements
             .position(restaurant)
             .title(rest.getName())
             .flat(true)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))); 
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_deals))); 
 		} else {
 			res = map.addMarker(new MarkerOptions()
 	                              .position(restaurant)
 	                              .title(rest.getName())
 	                              .flat(true)
-	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_map_marker)));
+	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker)));
 		}
 	    markerMap.put(res, rest.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
@@ -339,7 +339,36 @@ public class MapActivity extends FragmentActivity implements
 		for(Rest r:restMap.values()){
 			displayMapMarker(r,false);
 		}
-			
+		
+		// Display deals
+		Rest Counter = new Rest("ChIJyS7o4Zuwj4ARon29W1GsXJo", 
+				"The Counter Mountain View", 
+				"(650) 948-2333", 
+				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+				"2580 West Camino Real, Mountain View", 
+				3.9, 
+				37.400894, 
+				-122.112191);
+		displayMapMarker(Counter,true);
+		Rest Cascal = new Rest("ChIJ03QfnzO3j4ARC0p7TSYoCpA", 
+				"Cascal", 
+				"(650) 940-9500", 
+				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+				"400 Castro St, Mountain View", 
+				3.9, 
+				37.391153, 
+				-122.081467);
+		displayMapMarker(Cascal,true);
+		Rest Crepevine = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
+				"Crepevine", 
+				"(650) 969-6878", 
+				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+				"300 Castro St, Mountain View", 
+				3.8, 
+				37.39254, 
+				-122.080067);
+		displayMapMarker(Crepevine,true);
+		
 	}
 		
 	
@@ -507,51 +536,57 @@ public class MapActivity extends FragmentActivity implements
 	
 	
 public void setupCustomInfoWindowForMap(){
-	map.setInfoWindowAdapter(new InfoWindowAdapter() {
-		ImageAdapter userImages = new ImageAdapter(getBaseContext(),null);
-		
-		@Override
-		public View getInfoWindow(Marker arg0) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public View getInfoContents(Marker arg0) {
-			View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
-			 
-            // Getting the position from the marker
-            String restName = arg0.getTitle();
+		map.setInfoWindowAdapter(new InfoWindowAdapter() {
+			ImageAdapter userImages = new ImageAdapter(getBaseContext(), null);
 
-            // Getting reference to the TextView to set Restaurant Name
-            TextView tvInfoWindowRestName = (TextView) v.findViewById(R.id.tvInfoWindowRestName);
-            Rest thisRest = new Rest();
-            
-            if(restMap.get(markerMap.get(arg0)) == null) {
-				thisRest = searchBusiness.get(markerMap.get(arg0));
-				thisRest.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
-			} else {
-//				Log.d("debug","restMap: " + restMap.toString());
-				thisRest = restMap.get(markerMap.get(arg0));
+			@Override
+			public View getInfoWindow(Marker arg0) {
+				View v = getLayoutInflater().inflate(
+						R.layout.info_window_layout, null);
+
+				// Getting the position from the marker
+				String restName = arg0.getTitle();
+
+				// Getting reference to the TextView to set Restaurant Name
+				TextView tvInfoWindowRestName = (TextView) v
+						.findViewById(R.id.tvInfoWindowRestName);
+				Rest thisRest = new Rest();
+
+				if (restMap.get(markerMap.get(arg0)) == null) {
+					thisRest = searchBusiness.get(markerMap.get(arg0));
+					thisRest.addGroupUser(
+							LoggedInUser.getcurrentUser().getId(), LoggedInUser
+									.getcurrentUser().getFacebookId());
+				} else {
+					// Log.d("debug","restMap: " + restMap.toString());
+					thisRest = restMap.get(markerMap.get(arg0));
+				}
+
+				Log.d("debug", "thisRest: " + thisRest.toString());
+				HashMap<String, String> fbidmap = thisRest
+						.getGroupUserFacebookIds();
+
+				// Getting reference to GirdView to set User Images
+				GridView gvInfoWindowUserImages = (GridView) v
+						.findViewById(R.id.gvInfoWindowUserImages);
+				if (!fbidmap.values().isEmpty()) {
+					gvInfoWindowUserImages
+							.setAdapter(new InfoWindowImageAdapter(
+									getBaseContext(), new ArrayList<String>(
+											fbidmap.values())));
+				}
+				// Setting the rest name
+				tvInfoWindowRestName.setText(restName);
+
+				// Returning the view containing InfoWindow contents
+				return v;
 			}
-            
-            
-            Log.d("debug", "thisRest: " + thisRest.toString());
-            HashMap<String, String> fbidmap = thisRest.getGroupUserFacebookIds();
-            	
-          
-            //Getting reference to GirdView to set User Images
-            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
-           if(!fbidmap.values().isEmpty()) { 
-            	gvInfoWindowUserImages.setAdapter(new InfoWindowImageAdapter(getBaseContext(), new ArrayList<String>(fbidmap.values())));
-            }
-            // Setting the rest name
-            tvInfoWindowRestName.setText(restName);
-           
-            // Returning the view containing InfoWindow contents
-            return v;
-		}
-	});
+
+			@Override
+			public View getInfoContents(Marker arg0) {
+				return null;
+			}
+		});
 }
 	
 	

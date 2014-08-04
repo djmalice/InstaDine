@@ -2,21 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/infoWindowGrey"
+    android:padding="6dp" >
     
 	<TextView
         android:id="@+id/tvInfoWindowRestName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textColor="#FFFFFF"
+        android:paddingBottom="3dp"
+         />
 
 	 <GridView
          android:id="@+id/gvInfoWindowUserImages"
-         android:layout_width="wrap_content"
+         android:layout_width="100dp"
          android:layout_height="wrap_content"
-         android:numColumns="auto_fit"
          android:stretchMode="columnWidth"
-         android:columnWidth="20dp"
-         
+         android:columnWidth="30dp"
+         android:numColumns="auto_fit"
+         android:layout_gravity="left"
      /> 
 
 </LinearLayout>
