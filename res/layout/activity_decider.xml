@@ -17,7 +17,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="50dp"/>
 
- <!--    <ImageView
+   <ImageView
         android:id="@+id/ivRestImage"
         android:layout_width="200dp"
         android:layout_height="100dp"
@@ -25,7 +25,7 @@
         android:layout_marginTop="10dp"
         android:scaleType="fitStart"
         android:src="@drawable/group_red" />
- -->
+ 
     <ListView
         android:id="@+id/lvRestaurant"
         android:layout_width="wrap_content"

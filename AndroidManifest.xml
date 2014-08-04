@@ -97,7 +97,11 @@
             android:label="@string/title_activity_voting"
             android:configChanges="screenSize|orientation|keyboardHidden" >
         </activity>
-
+		<activity
+            android:name=".activities.DeciderViewActivity"
+            android:label="@string/title_activity_voting"
+            android:configChanges="screenSize|orientation|keyboardHidden" >
+        </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDyYzF-r8eEQZWqmWb5NmlZltdN1_XmM7o" />

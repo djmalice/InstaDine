@@ -131,6 +131,7 @@ public class VotingActivity extends FragmentActivity implements
 		restFragment = new RestarauntListFragment();
 		// Fetch the Event
 		findEvent(groupId);
+		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flRestContainer, restFragment);
 		ft.commit();
@@ -331,7 +332,7 @@ public class VotingActivity extends FragmentActivity implements
 		etLocation.setText(currentEvent.getLocation());
 		tvEventDate.setText(Utils.toDisplayDate(currentEvent.getDate()));
 		tvEventTime.setText(currentEvent.getTime());
-
+		
 		// load the restaurant id and count
 		List<String> prevSelections = currentEvent.getSelection();
 		if (prevSelections != null) {
@@ -355,10 +356,19 @@ public class VotingActivity extends FragmentActivity implements
 			restFragment.populateBusinessInfo();
 
 		}
-
+		Date currentDate = new Date();
+		long startOfTimer = Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()) 
+				- STATIC_EXPIRY 
+				- currentDate.getTime();
+		if(startOfTimer <= 0){
+			Intent i = new Intent(this,DeciderViewActivity.class);
+			i.putExtra("rest",getHighestVotedRestaraunt().getId());
+			startActivity(i);
+			
+		}
 		// Show in the listView
 		setupTimer();
-
+		
 	}
 
 	public void updateDeciderView() {
