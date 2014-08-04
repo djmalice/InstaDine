@@ -622,7 +622,7 @@ public class VotingActivity extends FragmentActivity implements
 		// Event Time
 
 		tvEventTime = (TextView) eventTimeView.findViewById(R.id.tvContent);
-		tvEventTime.setText("+");
+		tvEventTime.setText("     +");
 		tvEventTime.setTag("event");
 //		TextView tvEventTimeLabel = (TextView) eventTimeView
 //				.findViewById(R.id.tvContentLabel);

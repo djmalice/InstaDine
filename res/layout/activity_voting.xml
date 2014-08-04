@@ -83,11 +83,10 @@
                 android:id="@+id/tvContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/ivImage"
-                android:text=""
+                android:text="+"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
