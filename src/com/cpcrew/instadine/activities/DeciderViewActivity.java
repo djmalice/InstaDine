@@ -87,6 +87,12 @@ public class DeciderViewActivity extends Activity {
 		tvMessage.setText("You are going to \n" + rest.getName() + "\n with your group");
 		
 		
+		TextView tvDeciderRestaurantName = (TextView)findViewById(R.id.tvDeciderRestaurantName);
+		TextView tvDeciderLocation = (TextView)findViewById(R.id.tvDeciderLocation);
+		tvDeciderRestaurantName.setText(rest.getName());
+		tvDeciderLocation.setText(rest.getCity());
+		
+		
 		// Rest image Big
 		ImageView ivRest = (ImageView) findViewById(R.id.ivRestImage);
 		String photoFile = rest.getImageUrl();
