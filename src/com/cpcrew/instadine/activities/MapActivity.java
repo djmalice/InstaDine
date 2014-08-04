@@ -289,7 +289,7 @@ public class MapActivity extends FragmentActivity implements
             .position(restaurant)
             .title(rest.getName())
             .flat(true)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))); 
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_deals))); 
 		} else {
 			res = map.addMarker(new MarkerOptions()
 	                              .position(restaurant)
@@ -339,7 +339,36 @@ public class MapActivity extends FragmentActivity implements
 		for(Rest r:restMap.values()){
 			displayMapMarker(r,false);
 		}
-			
+		
+		// Display deals
+		Rest Counter = new Rest("ChIJyS7o4Zuwj4ARon29W1GsXJo", 
+				"The Counter Mountain View", 
+				"(650) 948-2333", 
+				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+				"2580 West Camino Real, Mountain View", 
+				3.9, 
+				37.400894, 
+				-122.112191);
+		displayMapMarker(Counter,true);
+		Rest Cascal = new Rest("ChIJ03QfnzO3j4ARC0p7TSYoCpA", 
+				"Cascal", 
+				"(650) 940-9500", 
+				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+				"400 Castro St, Mountain View", 
+				3.9, 
+				37.391153, 
+				-122.081467);
+		displayMapMarker(Cascal,true);
+		Rest Crepevine = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
+				"Crepevine", 
+				"(650) 969-6878", 
+				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+				"300 Castro St, Mountain View", 
+				3.8, 
+				37.39254, 
+				-122.080067);
+		displayMapMarker(Crepevine,true);
+		
 	}
 		
 	
