@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import android.animation.Keyframe;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -20,10 +23,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 
 import com.cpcrew.instadine.R;
-import com.cpcrew.instadine.api.CacheApi;
-import com.cpcrew.instadine.api.CacheApi.CacheApiListener;
 import com.cpcrew.instadine.api.ParseGroupsApi;
 import com.cpcrew.instadine.api.ParseGroupsApi.ParseGroupsApiListener;
 import com.cpcrew.instadine.fragments.ContactsListFragment;
@@ -32,30 +34,34 @@ import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Constants;
 
-public class AddContactActivity extends FragmentActivity implements ParseGroupsApiListener {
+public class AddContactActivity extends FragmentActivity implements
+		ParseGroupsApiListener {
 
 	private static String TAG = AddContactActivity.class.getSimpleName();
 	private String groupName;
 	private AutoCompleteTextView tvAddContact;
 	ArrayList<User> selectedUsers;
-	ArrayList<String> selectedUserids; // for transferring between  activities/fragments
+	ArrayList<String> selectedUserids; // for transferring between
+										// activities/fragments
 	HashSet<String> selectedSet;
 	ParseGroupsApi parseApi;
 	ContactsListFragment mFragment;
 	ArrayAdapter<String> autoCompleteAdapter;
 	ArrayList<String> autocompleteList;
-    boolean isActivityResult  = false;
-    Map<String, User> friendsMap;
+	boolean isActivityResult = false;
+	Map<String, User> friendsMap;
+	ImageButton userButton;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Get from previous activity
 		groupName = getIntent().getStringExtra("group_name");
 		setContentView(R.layout.activity_add_contact);
 		tvAddContact = (AutoCompleteTextView) findViewById(R.id.tvAddContact);
 		addTextWatcherToAddContact();
-		
+
 		// initialize
 		parseApi = new ParseGroupsApi(this);
 		selectedUsers = new ArrayList<User>();
@@ -64,6 +70,9 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 
 		showFragment();
 		showSelectedContacts();
+		userButton = (ImageButton)findViewById(R.id.btnOpenContacts);
+		tada(userButton).start();
+		
 	}
 
 	@Override
@@ -74,9 +83,10 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 
 	// Create a group
 	public void onCreateGroup(MenuItem item) {
-		if( selectedUsers != null && selectedUsers.size() > 0) {
+		if (selectedUsers != null && selectedUsers.size() > 0) {
 			selectedUsers.add(LoggedInUser.getcurrentUser());
-			ParseGroupsApi.createGroup(groupName, selectedUsers, LoggedInUser.getcurrentUser());
+			ParseGroupsApi.createGroup(groupName, selectedUsers,
+					LoggedInUser.getcurrentUser());
 		}
 		// Now go back to Groups list screen
 		Intent intent = new Intent(this, GroupsListActivity.class);
@@ -86,7 +96,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 	// Open contacts list
 	public void onOpenContacts(View v) {
 		// CacheApi.cacheSelectedUsers(selectedUsers);
-		
+
 		Intent intent = new Intent(this, ContactsListActivity.class);
 		intent.putStringArrayListExtra("selectedusers", selectedUserids);
 		startActivityForResult(intent, Constants.REQUEST_CODE);
@@ -100,14 +110,15 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 			// Extract name value from result extras
 			isActivityResult = true;
 			selectedUserids = data.getStringArrayListExtra("selusers");
-			Log.d(TAG, "Num selected users back from ContactList " + selectedUserids.size());
+			Log.d(TAG, "Num selected users back from ContactList "
+					+ selectedUserids.size());
 			showSelectedContacts();
 		}
 	}
-	
+
 	public void showSelectedContacts() {
 		User currentUser = LoggedInUser.getcurrentUser();
-		if ( currentUser != null ) {
+		if (currentUser != null) {
 			parseApi.getFriendsOfUser(currentUser);
 		}
 	}
@@ -117,7 +128,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				
+
 			}
 
 			@Override
@@ -133,43 +144,40 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 			}
 		});
 	}
-		
+
 	public void showFragment() {
 		mFragment = new ContactsListFragment();
 		Bundle args = new Bundle();
 		args.putStringArrayList("selectedusers", selectedUserids);
 		args.putString("parent_activity", Constants.GROUP_ADD_CONTACT);
 		mFragment.setArguments(args);
-		FragmentTransaction ft = getSupportFragmentManager()
-				.beginTransaction();
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContactsContainer, mFragment);
 		ft.commit();
 	}
-	
-	
+
 	@Override
 	public void onallUsersResults(List<User> users) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onGetUserOfGroupResults(List<User> users) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onGetGroupsForUserResults(List<Group> groups) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void onGetGroupResult(List<Group> group) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -197,7 +205,7 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 			autocompleteList = new ArrayList<String>();
 			for (User user : friends) {
 				String name = user.getFirstName() + " " + user.getLastName();
-				
+
 				friendsMap.put(name, user);
 				autocompleteList.add(name);
 			}
@@ -206,10 +214,11 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 					android.R.layout.simple_dropdown_item_1line,
 					autocompleteList);
 			tvAddContact.setAdapter(autoCompleteAdapter);
-			
+
 			// ON selection of item
 			tvAddContact.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> adapterView, View view, int pos, long arg3) {
+				public void onItemClick(AdapterView<?> adapterView, View view,
+						int pos, long arg3) {
 					String name = (String) adapterView.getItemAtPosition(pos);
 					User user = friendsMap.get(name);
 					selectedUsers.add(user);
@@ -220,13 +229,52 @@ public class AddContactActivity extends FragmentActivity implements ParseGroupsA
 				}
 			});
 		}
-		
+
 	}
-	
+
 	@Override
 	public void retrieveUser(User user) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public static ObjectAnimator tada(View view) {
+		return tada(view, 2f);
+	}
+
+	public static ObjectAnimator tada(View view, float shakeFactor) {
+
+		PropertyValuesHolder pvhScaleX = PropertyValuesHolder.ofKeyframe(
+				View.SCALE_X, Keyframe.ofFloat(0f, 1f),
+				Keyframe.ofFloat(.1f, .9f), Keyframe.ofFloat(.2f, .9f),
+				Keyframe.ofFloat(.3f, 1.1f), Keyframe.ofFloat(.4f, 1.1f),
+				Keyframe.ofFloat(.5f, 1.1f), Keyframe.ofFloat(.6f, 1.1f),
+				Keyframe.ofFloat(.7f, 1.1f), Keyframe.ofFloat(.8f, 1.1f),
+				Keyframe.ofFloat(.9f, 1.1f), Keyframe.ofFloat(1f, 1f));
+
+		PropertyValuesHolder pvhScaleY = PropertyValuesHolder.ofKeyframe(
+				View.SCALE_Y, Keyframe.ofFloat(0f, 1f),
+				Keyframe.ofFloat(.1f, .9f), Keyframe.ofFloat(.2f, .9f),
+				Keyframe.ofFloat(.3f, 1.1f), Keyframe.ofFloat(.4f, 1.1f),
+				Keyframe.ofFloat(.5f, 1.1f), Keyframe.ofFloat(.6f, 1.1f),
+				Keyframe.ofFloat(.7f, 1.1f), Keyframe.ofFloat(.8f, 1.1f),
+				Keyframe.ofFloat(.9f, 1.1f), Keyframe.ofFloat(1f, 1f));
+
+		PropertyValuesHolder pvhRotate = PropertyValuesHolder.ofKeyframe(
+				View.ROTATION, Keyframe.ofFloat(0f, 0f),
+				Keyframe.ofFloat(.1f, -3f * shakeFactor),
+				Keyframe.ofFloat(.2f, -3f * shakeFactor),
+				Keyframe.ofFloat(.3f, 3f * shakeFactor),
+				Keyframe.ofFloat(.4f, -3f * shakeFactor),
+				Keyframe.ofFloat(.5f, 3f * shakeFactor),
+				Keyframe.ofFloat(.6f, -3f * shakeFactor),
+				Keyframe.ofFloat(.7f, 3f * shakeFactor),
+				Keyframe.ofFloat(.8f, -3f * shakeFactor),
+				Keyframe.ofFloat(.9f, 3f * shakeFactor),
+				Keyframe.ofFloat(1f, 0));
+
+		return ObjectAnimator.ofPropertyValuesHolder(view, pvhScaleX,
+				pvhScaleY, pvhRotate).setDuration(1000);
 	}
 
 }
