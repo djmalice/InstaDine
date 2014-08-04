@@ -41,8 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvRestname"
         android:layout_below="@+id/tvRestname"
-        android:text=""
-        android:textSize="10sp" />
+        android:text="" />
 
     <LinearLayout
         android:id="@+id/llRating"
