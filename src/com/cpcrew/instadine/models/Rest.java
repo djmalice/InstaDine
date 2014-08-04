@@ -214,11 +214,12 @@ public class Rest implements Serializable {
 		
 		
 		try {
-			JSONArray photos = jsonObject.getJSONArray("photos");
+			/*JSONArray photos = jsonObject.getJSONArray("photos");
 			String photo_reference = photos.getJSONObject(0).getString("photo_reference");
 			r.imageUrl = com.cpcrew.instadine.utils.Constants.GOOGLE_PHOTO_SEARCH + "&photoreference=" + 
 							photo_reference + "&key=" + 
-							com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;
+							com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;*/
+			r.imageUrl = jsonObject.getString("icon");
 		} catch (JSONException e){
 			r.imageUrl = null;
 		}
