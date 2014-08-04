@@ -507,51 +507,57 @@ public class MapActivity extends FragmentActivity implements
 	
 	
 public void setupCustomInfoWindowForMap(){
-	map.setInfoWindowAdapter(new InfoWindowAdapter() {
-		ImageAdapter userImages = new ImageAdapter(getBaseContext(),null);
-		
-		@Override
-		public View getInfoWindow(Marker arg0) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public View getInfoContents(Marker arg0) {
-			View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
-			 
-            // Getting the position from the marker
-            String restName = arg0.getTitle();
+		map.setInfoWindowAdapter(new InfoWindowAdapter() {
+			ImageAdapter userImages = new ImageAdapter(getBaseContext(), null);
 
-            // Getting reference to the TextView to set Restaurant Name
-            TextView tvInfoWindowRestName = (TextView) v.findViewById(R.id.tvInfoWindowRestName);
-            Rest thisRest = new Rest();
-            
-            if(restMap.get(markerMap.get(arg0)) == null) {
-				thisRest = searchBusiness.get(markerMap.get(arg0));
-				thisRest.addGroupUser(LoggedInUser.getcurrentUser().getId(), LoggedInUser.getcurrentUser().getFacebookId());
-			} else {
-//				Log.d("debug","restMap: " + restMap.toString());
-				thisRest = restMap.get(markerMap.get(arg0));
+			@Override
+			public View getInfoWindow(Marker arg0) {
+				View v = getLayoutInflater().inflate(
+						R.layout.info_window_layout, null);
+
+				// Getting the position from the marker
+				String restName = arg0.getTitle();
+
+				// Getting reference to the TextView to set Restaurant Name
+				TextView tvInfoWindowRestName = (TextView) v
+						.findViewById(R.id.tvInfoWindowRestName);
+				Rest thisRest = new Rest();
+
+				if (restMap.get(markerMap.get(arg0)) == null) {
+					thisRest = searchBusiness.get(markerMap.get(arg0));
+					thisRest.addGroupUser(
+							LoggedInUser.getcurrentUser().getId(), LoggedInUser
+									.getcurrentUser().getFacebookId());
+				} else {
+					// Log.d("debug","restMap: " + restMap.toString());
+					thisRest = restMap.get(markerMap.get(arg0));
+				}
+
+				Log.d("debug", "thisRest: " + thisRest.toString());
+				HashMap<String, String> fbidmap = thisRest
+						.getGroupUserFacebookIds();
+
+				// Getting reference to GirdView to set User Images
+				GridView gvInfoWindowUserImages = (GridView) v
+						.findViewById(R.id.gvInfoWindowUserImages);
+				if (!fbidmap.values().isEmpty()) {
+					gvInfoWindowUserImages
+							.setAdapter(new InfoWindowImageAdapter(
+									getBaseContext(), new ArrayList<String>(
+											fbidmap.values())));
+				}
+				// Setting the rest name
+				tvInfoWindowRestName.setText(restName);
+
+				// Returning the view containing InfoWindow contents
+				return v;
 			}
-            
-            
-            Log.d("debug", "thisRest: " + thisRest.toString());
-            HashMap<String, String> fbidmap = thisRest.getGroupUserFacebookIds();
-            	
-          
-            //Getting reference to GirdView to set User Images
-            GridView gvInfoWindowUserImages = (GridView) v.findViewById(R.id.gvInfoWindowUserImages);
-           if(!fbidmap.values().isEmpty()) { 
-            	gvInfoWindowUserImages.setAdapter(new InfoWindowImageAdapter(getBaseContext(), new ArrayList<String>(fbidmap.values())));
-            }
-            // Setting the rest name
-            tvInfoWindowRestName.setText(restName);
-           
-            // Returning the view containing InfoWindow contents
-            return v;
-		}
-	});
+
+			@Override
+			public View getInfoContents(Marker arg0) {
+				return null;
+			}
+		});
 }
 	
 	
