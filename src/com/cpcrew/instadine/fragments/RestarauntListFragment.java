@@ -205,7 +205,8 @@ public class RestarauntListFragment extends Fragment {
 		});
 	}
 
-	// Remove not supported in this version
+	// Remove adding support
+	// Handles corner cases - When the votes reduce to zero, removes from the Rest ListView
 	public void removeRestaruantSelection(Rest restaurant) {
 		System.out.println("Removing restaurant not supported");
 		mySelection.remove(restaurant.getRestId());
