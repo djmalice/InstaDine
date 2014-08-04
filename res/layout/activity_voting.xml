@@ -38,6 +38,28 @@
         android:layout_toRightOf="@+id/tvLocationLabel"
         android:text="Sunnyvale CA" >
     </TextView>
+    
+    <ImageView
+        android:id="@+id/ivTimer"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/etLocation"
+        android:src="@drawable/timer" />
+    
+   <TextView
+        android:id="@+id/etTimerExpiry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/ivTimer"
+        android:text="Time Remaining" >
+   </TextView>
+    
 
     <LinearLayout
         android:id="@+id/lleventDT"

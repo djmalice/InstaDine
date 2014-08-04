@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -86,6 +88,7 @@ public class VotingActivity extends FragmentActivity implements
 	TextView tvExpiryDate;
 
 	TextView etLocation;
+	TextView etTimerExpiry;
 	private String timeOfEvent;
 	private String dateOfEvent;
 	private String timeOfExpiry;
@@ -108,6 +111,7 @@ public class VotingActivity extends FragmentActivity implements
 	private RestarauntListFragment restFragment;
 
 	public static final int NOTIFICATION_ID = 45;
+	public static long STATIC_EXPIRY = 3600000; //set fixed expiry to be x ms before the event time
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +137,7 @@ public class VotingActivity extends FragmentActivity implements
 
 		// Specify an Activity to handle all pushes by default
 		PushService.setDefaultPushCallback(this, VotingActivity.class);
+		
 	}
 
 	// pushNotifications onPause routine
@@ -192,7 +197,7 @@ public class VotingActivity extends FragmentActivity implements
 		if (eventSelected) {
 			this.timeOfEvent = eventTime;
 			tvEventTime.setText(eventTime);
-			timeOfExpiry = eventTime;  // same as event time
+			timeOfExpiry = eventTime;  // same as event time but can change this to expiry time
 		} else if (expirySelected) {
 			timeOfExpiry = eventTime;
 			tvExpiryTime.setText(eventTime);
@@ -233,11 +238,14 @@ public class VotingActivity extends FragmentActivity implements
 			dateOfEvent = monthOfYear + "/" + dayOfMonth + "/" + year;
 			tvEventDate.setText(Utils.toDisplayDate(dateOfEvent));
 		} else if (expirySelected) {
-			dateOfExpiry = monthOfYear + "/" + dayOfMonth + "/" + year;
+			dateOfExpiry = monthOfYear + "/" + dayOfMonth + "/" + year; // same as dateOfEvent
 			tvExpiryDate.setText(Utils.toDisplayDate(dateOfExpiry));
 		}
 		eventSelected = false;
 		expirySelected = false;
+		
+
+		//setupTimer();
 	}
 
 	@Override
@@ -262,15 +270,59 @@ public class VotingActivity extends FragmentActivity implements
 		if (rtpd != null) {
 			rtpd.setOnTimeSetListener(this);
 		}
+		
 	}
 
 	public void getViews() {
 		etLocation = (TextView) findViewById(R.id.etLocation);
+		etTimerExpiry = (TextView) findViewById(R.id.etTimerExpiry);
 
 		eventTimeView = (RelativeLayout) findViewById(R.id.rlEventTime);
 		eventDateView = (RelativeLayout) findViewById(R.id.rlEventDate);
 		expiryTimeView = (RelativeLayout) findViewById(R.id.rlExpiryTime);
 		expiryDateView = (RelativeLayout) findViewById(R.id.rlExpiryDate);
+	}
+	
+	public void setupTimer() {
+		Date currentDate = new Date();
+		//currentDate.getTime()
+		// (eventtime - staticexpiry) - currenttime = start of timer
+		
+
+		long startOfTimer = Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()) 
+				- STATIC_EXPIRY 
+				- currentDate.getTime();
+		
+		/* for debug
+		 * 
+		System.out.println("current ms " + currentDate.getTime());
+		System.out.println("expiry date" + currentEvent.getExpiryDate());
+		System.out.println("expiry time" + currentEvent.getExpiryTime());
+		System.out.println("expiry in ms" + Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()));
+		System.out.println("startOfTimer" + startOfTimer);
+		*/
+		new CountDownTimer(startOfTimer, 1000) {
+			
+		     public void onTick(long millisUntilFinished) {
+		    	 
+		    	 etTimerExpiry.setText(
+	    			 
+	    			 (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) -
+	    			  TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + "h " +
+		    			 
+	    			 (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) -
+	    			  TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + "m " +
+		    			    
+	    			 (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - 
+	    			  TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "s");
+			    	 
+		     }
+		     
+	
+		     public void onFinish() {
+		    	 etTimerExpiry.setText("done!");
+		     }
+		  }.start();
 	}
 
 	public void loadEvent() {
@@ -305,6 +357,7 @@ public class VotingActivity extends FragmentActivity implements
 		}
 
 		// Show in the listView
+		setupTimer();
 
 	}
 
@@ -325,7 +378,15 @@ public class VotingActivity extends FragmentActivity implements
 							+ restFragment.highestVotedRestaraunt().getName()
 							+ " on " + currentEvent.getDate() + " "
 							+ currentEvent.getTime();
-				} else {
+				} else if (Utils.lessThanTwoMinLeft(currentEvent.getExpiryDate() + " "
+						+ currentEvent.getExpiryTime())) {
+					// Less than 2min left
+					deciderMessage = "Less than 2 minutes left!"
+							+ currentGroup.getGroupName() + " is going to "
+							+ restFragment.highestVotedRestaraunt() + " on "
+							+ currentEvent.getDate() + " " + currentEvent.getTime();
+				}				
+				else {
 					// Still voting going on.
 					deciderMessage = currentGroup.getGroupName()
 							+ " is still voting. See results when voting expires "
@@ -579,7 +640,8 @@ public class VotingActivity extends FragmentActivity implements
 	    int year = cal.get(Calendar.YEAR);
 	    int month = cal.get(Calendar.MONTH) +1 ;
 	    int day = cal.get(Calendar.DAY_OF_MONTH) ;
-		dateOfEvent = day + "/" + month + "/" + year;
+		//dateOfEvent = day + "/" + month + "/" + year; ***FOUND THE BUG: the day and month are reversed!!!*** 
+	    dateOfEvent = month + "/" + day + "/" + year;
 		dateOfExpiry = dateOfEvent;
 		System.out.println("Default date is " + dateOfEvent);
 		tvEventDate.setTag("event");
@@ -640,6 +702,12 @@ public class VotingActivity extends FragmentActivity implements
 
 		etLocation.setFocusable(false);
 		etLocation.setEnabled(false);
+		
+		/*
+		etTimerExpiry.setFocusable(false);
+		etTimerExpiry.setEnabled(false);
+		*/
+		
 		// etLocation.setBackgroundResource("#00000000");
 	}
 
