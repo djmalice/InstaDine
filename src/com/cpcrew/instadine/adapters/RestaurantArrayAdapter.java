@@ -93,7 +93,7 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Rest> {
 		if (thisRest.getCity() != null)
 			viewHolder.tvCity.setText(thisRest.getCity());
 		placeStars(viewHolder, thisRest.getRating());
-		String photoFile = thisRest.getImageUrl();
+		String photoFile = thisRest.getIcon();
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		if (photoFile != null && !(photoFile.equals(""))) {
 			imageLoader.displayImage(photoFile, viewHolder.ivRest);

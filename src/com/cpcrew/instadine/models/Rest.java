@@ -22,7 +22,7 @@ public class Rest implements Serializable {
 	
 	public Rest(){}
 	
-	public Rest(String id, String name, String phone, String imageUrl,
+	public Rest(String id, String name, String phone, String[] imageUrl,
 			String city, double rating, double lat, double longi) {
 		super();
 		this.id = id;
@@ -48,21 +48,17 @@ public class Rest implements Serializable {
 	private String id;
 	private String name;
 	private String phone;
-	private String imageUrl;
-	private String city;
+	private String[] imageUrl;
+	private String icon;
+    private String city;
 	private double rating;
 	private double lat;
 	private double longi;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public String getIcon() {
+		return icon;
+	}
+
 	public String getRestId() {
 		return id;
 	}
@@ -127,7 +123,7 @@ public class Rest implements Serializable {
 		return this.phone;
 	}
 	
-	public String getImageUrl() {
+	public String[] getImageUrl() {
 		return this.imageUrl;
 	}
 	
@@ -214,15 +210,34 @@ public class Rest implements Serializable {
 		
 		
 		try {
-			/*JSONArray photos = jsonObject.getJSONArray("photos");
-			String photo_reference = photos.getJSONObject(0).getString("photo_reference");
-			r.imageUrl = com.cpcrew.instadine.utils.Constants.GOOGLE_PHOTO_SEARCH + "&photoreference=" + 
+			
+			r.icon = jsonObject.getString("icon");
+		} catch (JSONException e){
+			r.icon = null;
+		}
+		
+		
+		try {
+			JSONArray photos = jsonObject.getJSONArray("photos");
+			String imageUrl[] = new String[photos.length()];
+			for(int i=0;i<photos.length();i++){
+				String photo_reference = photos.getJSONObject(0).getString("photo_reference");
+				imageUrl[i] = com.cpcrew.instadine.utils.Constants.GOOGLE_PHOTO_SEARCH + "&photoreference=" + 
 							photo_reference + "&key=" + 
-							com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;*/
-			r.imageUrl = jsonObject.getString("icon");
+							com.cpcrew.instadine.utils.Constants.GOOGLE_PLACES_API_KEY;
+			}
+			r.imageUrl = imageUrl;
 		} catch (JSONException e){
 			r.imageUrl = null;
 		}
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		// Return new object
 		return r;
