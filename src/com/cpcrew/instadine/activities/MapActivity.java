@@ -295,7 +295,7 @@ public class MapActivity extends FragmentActivity implements
 	                              .position(restaurant)
 	                              .title(rest.getName())
 	                              .flat(true)
-	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_map_marker)));
+	                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker)));
 		}
 	    markerMap.put(res, rest.getId());
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
