@@ -128,9 +128,10 @@
         android:layout_below="@+id/vDivider"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:columnWidth="20dp"
         android:gravity="center"
-        android:horizontalSpacing="10dp"
+        android:horizontalSpacing="20dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
