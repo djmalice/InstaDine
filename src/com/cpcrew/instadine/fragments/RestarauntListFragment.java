@@ -110,6 +110,7 @@ public class RestarauntListFragment extends Fragment {
 
 			@Override
 			public void onRefresh() {
+				restaurants.clear();
 				refreshListener.onParentRefresh();
 				lvRestaurants.onRefreshComplete();
 
