@@ -35,6 +35,7 @@ import com.cpcrew.instadine.adapters.RestaurantDropDownAdapter;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.Rest;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView;
+import com.cpcrew.instadine.utils.Utils;
 import com.cpcrew.instadine.utils.ClearableAutoCompleteTextView.OnClearListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -70,6 +71,7 @@ public class MapActivity extends FragmentActivity implements
 	TextView tvRestaurantName;
 	TextView tvLocation;
 	TextView tvVote;
+	HashMap<String,Rest> dealMap;
 	HashMap<String, Rest> restMap;
 	HashMap<String, Rest> searchBusiness;
 	HashMap<String, Integer> restCount;
@@ -124,6 +126,7 @@ public class MapActivity extends FragmentActivity implements
 		});
 		Intent intent = getIntent();
 		restMap = new HashMap<String,Rest>();
+		dealMap = new HashMap<String,Rest>();
 		restCount = new HashMap<String,Integer>();
 		markerMap = new HashMap<Marker, String>();
 		searchBusiness = new HashMap<String,Rest>();
@@ -284,6 +287,9 @@ public class MapActivity extends FragmentActivity implements
 	public void displayMapMarker(Rest rest,boolean currentUserChoice){
 		final LatLng restaurant = new LatLng(rest.getLat(), rest.getLongi());
 		Marker res;
+		if(dealMap.containsKey(rest.getId())){
+			currentUserChoice=true;
+		}
 		if(currentUserChoice) {
 			res = map.addMarker(new MarkerOptions()
             .position(restaurant)
@@ -336,38 +342,22 @@ public class MapActivity extends FragmentActivity implements
 	
 	// Setup markers on map for previously selected restaurants
 	public void displayRestOnMap(){
+		dealMap = Utils.populateDealMap();
+		
 		for(Rest r:restMap.values()){
-			displayMapMarker(r,false);
+			if(dealMap.containsKey(r.getId())){
+				displayMapMarker(r,true);
+			} else {
+				displayMapMarker(r,false);
+			}
 		}
 		
-		// Display deals
-		Rest Counter = new Rest("ChIJyS7o4Zuwj4ARon29W1GsXJo", 
-				"The Counter Mountain View", 
-				"(650) 948-2333", 
-				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
-				"2580 West Camino Real, Mountain View", 
-				3.9, 
-				37.400894, 
-				-122.112191);
-		displayMapMarker(Counter,true);
-		Rest Cascal = new Rest("ChIJ03QfnzO3j4ARC0p7TSYoCpA", 
-				"Cascal", 
-				"(650) 940-9500", 
-				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
-				"400 Castro St, Mountain View", 
-				3.9, 
-				37.391153, 
-				-122.081467);
-		displayMapMarker(Cascal,true);
-		Rest Crepevine = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
-				"Crepevine", 
-				"(650) 969-6878", 
-				"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
-				"300 Castro St, Mountain View", 
-				3.8, 
-				37.39254, 
-				-122.080067);
-		displayMapMarker(Crepevine,true);
+		for(Rest r:dealMap.values()){
+			if(!restMap.containsKey(r.getId())){
+				displayMapMarker(r,true);
+			}
+		}
+		
 		
 	}
 		

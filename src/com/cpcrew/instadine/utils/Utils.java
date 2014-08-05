@@ -7,6 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+
+import com.cpcrew.instadine.models.Rest;
 
 /**
  * @author raji
@@ -193,5 +196,53 @@ public class Utils {
 		}
 		
 	}
+	
+	public static HashMap<String,Rest> populateDealMap(){
+				HashMap<String,Rest> dealMap = new HashMap<String,Rest>();
+		       // Display deals
+				Rest Counter = new Rest("ChIJyS7o4Zuwj4ARon29W1GsXJo", 
+						"The Counter", 
+						"(650) 948-2333", 
+						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+						"2580 West Camino Real, Mountain View", 
+						3.9, 
+						37.400894, 
+						-122.112191);
+				
+				Rest Cascal = new Rest("ChIJ03QfnzO3j4ARC0p7TSYoCpA", 
+						"Cascal", 
+						"(650) 940-9500", 
+						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+						"400 Castro St, Mountain View", 
+						3.9, 
+						37.391153, 
+						-122.081467);
+				
+				Rest Crepevine = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
+						"Crepevine", 
+						"(650) 969-6878", 
+						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+						"300 Castro St, Mountain View", 
+						3.8, 
+						37.39254, 
+						-122.080067);
+				
+				Rest Athena = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
+						"Athena Grill", 
+						"(650) 969-6878", 
+						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
+						"300 Castro St, Mountain View", 
+						3.8, 
+						37.39254, 
+						-122.080067);
+			
+				dealMap.put(Counter.getId(),Counter);
+				dealMap.put(Cascal.getId(), Cascal);
+				dealMap.put(Crepevine.getId(), Crepevine);
+				
+				
+		return dealMap;
+	}
+	
 
 }
