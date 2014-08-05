@@ -218,7 +218,7 @@ public class Utils {
 				HashMap<String,Rest> dealMap = new HashMap<String,Rest>();
 		       // Display deals
 				Rest Counter = new Rest("ChIJyS7o4Zuwj4ARon29W1GsXJo", 
-						"The Counter", 
+						"The Counter Mountain View", 
 						"(650) 948-2333", 
 						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
 						"2580 West Camino Real, Mountain View", 
