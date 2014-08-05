@@ -378,7 +378,7 @@ public class RestarauntListFragment extends Fragment {
 		for (Rest rest : restaurants) {
 			if (rest.getCount() > votes) {
 				votes = rest.getCount();
-				return rest;
+				restarauntSelected = rest;
 			}
 		}
 		return restarauntSelected;
