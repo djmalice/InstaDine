@@ -272,7 +272,8 @@ public class MapActivity extends FragmentActivity implements
 						e.printStackTrace();
 					}
 		        	
-    				displayMapMarker(listSelectedRest,false);
+    				displayMapMarker(listSelectedRest,false,true);
+    				
 		        };
 		        
 
@@ -284,7 +285,7 @@ public class MapActivity extends FragmentActivity implements
 		);
     }
 	
-	public void displayMapMarker(Rest rest,boolean currentUserChoice){
+	public void displayMapMarker(Rest rest,boolean currentUserChoice, boolean showInfoWindow){
 		final LatLng restaurant = new LatLng(rest.getLat(), rest.getLongi());
 		Marker res;
 		if(dealMap.containsKey(rest.getId())){
@@ -307,7 +308,8 @@ public class MapActivity extends FragmentActivity implements
 	    map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurant, 10));
 	    searchBusiness.put(rest.getId(), rest);
 		
-	    // res.showInfoWindow();
+	    if(showInfoWindow)
+	    	res.showInfoWindow();
 	    // Add to temporary search business map for all markers in the system
 	    
 	    
@@ -346,15 +348,15 @@ public class MapActivity extends FragmentActivity implements
 		
 		for(Rest r:restMap.values()){
 			if(dealMap.containsKey(r.getId())){
-				displayMapMarker(r,true);
+				displayMapMarker(r,true,false);
 			} else {
-				displayMapMarker(r,false);
+				displayMapMarker(r,false,false);
 			}
 		}
 		
 		for(Rest r:dealMap.values()){
 			if(!restMap.containsKey(r.getId())){
-				displayMapMarker(r,true);
+				displayMapMarker(r,true,false);
 			}
 		}
 		
