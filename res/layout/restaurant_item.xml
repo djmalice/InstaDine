@@ -15,6 +15,7 @@
         android:layout_alignBottom="@+id/tvCity"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
+        android:padding="2dp"
         android:background="@drawable/ring_shape"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical" >
@@ -41,8 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvRestname"
         android:layout_below="@+id/tvRestname"
-        android:textColor="@color/appGrey"
-        android:text="" />
+        android:text=""
+        android:textColor="@color/appGrey" />
 
     <LinearLayout
         android:id="@+id/llRating"
@@ -103,36 +104,45 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="14dp"
         android:layout_toLeftOf="@+id/llCount"
-        android:layout_toRightOf="@+id/ivRest"
+        android:layout_toRightOf="@+id/flRest"
         android:text="Restaurant Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <ImageView
-        android:id="@+id/ivRest"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <FrameLayout
+        android:id="@+id/flRest"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/tvRestname"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/instadine_red" />
+        android:background="@drawable/circle" >
+
+        <ImageView
+            android:id="@+id/ivRest"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/instadine_red" />
+    </FrameLayout>
 
     <View
         android:id="@+id/vDivider"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:background="#ededed"
-        android:layout_below="@+id/llRating" />
+        android:layout_below="@+id/llRating"
+        android:background="#ededed" />
 
     <GridView
         android:id="@+id/gvUsers"
-        android:layout_alignLeft="@+id/tvRestname"
-        android:layout_below="@+id/vDivider"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:columnWidth="20dp"
+ 		android:layout_alignLeft="@+id/tvRestname"
+        android:layout_below="@+id/vDivider"
+        android:layout_marginLeft="0dp"
+        android:columnWidth="40dp"
         android:gravity="center"
-        android:horizontalSpacing="20dp"
+        android:horizontalSpacing="0dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />

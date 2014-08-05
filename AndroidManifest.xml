@@ -121,6 +121,7 @@
                 <action android:name="SEND_PUSH" />
                 <action android:name="SEND_REST" />
                 <action android:name="SEND_VOTES" />
+                <action android:name="SEND_EXPIRY" />
             </intent-filter>
         </receiver>
 

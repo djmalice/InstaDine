@@ -94,11 +94,12 @@ public class VotingActivity extends FragmentActivity implements
 	private String timeOfExpiry;
 	private String dateOfExpiry;
 
-	private String selectedRestaurant = null;
+	//private String selectedRestaurant = null;
 
 	private boolean eventSelected = false;
 	private boolean expirySelected = false;
 	private boolean isEnabledExpiryTime = false;
+	private boolean expiryPush = false;
 
 	private ParseEventsApi parseEventApi;
 	private ParseGroupsApi parseGroupsApi;
@@ -111,7 +112,7 @@ public class VotingActivity extends FragmentActivity implements
 	private RestarauntListFragment restFragment;
 
 	public static final int NOTIFICATION_ID = 45;
-	public static long STATIC_EXPIRY = 3600000; //set fixed expiry to be x ms before the event time
+	public static long STATIC_EXPIRY = 0; //3600000; //set fixed expiry to be x ms before the event time
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -284,45 +285,72 @@ public class VotingActivity extends FragmentActivity implements
 	}
 	
 	public void setupTimer() {
-		Date currentDate = new Date();
-		//currentDate.getTime()
-		// (eventtime - staticexpiry) - currenttime = start of timer
 		
-
-		long startOfTimer = Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()) 
-				- STATIC_EXPIRY 
-				- currentDate.getTime();
-		
-		/* for debug
-		 * 
-		System.out.println("current ms " + currentDate.getTime());
-		System.out.println("expiry date" + currentEvent.getExpiryDate());
-		System.out.println("expiry time" + currentEvent.getExpiryTime());
-		System.out.println("expiry in ms" + Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()));
-		System.out.println("startOfTimer" + startOfTimer);
-		*/
-		new CountDownTimer(startOfTimer, 1000) {
+		//if (expiryPush == false) {
+			Date currentDate = new Date();
+			//currentDate.getTime()
+			// (eventtime - staticexpiry) - currenttime = start of timer
 			
-		     public void onTick(long millisUntilFinished) {
-		    	 
-		    	 etTimerExpiry.setText(
-	    			 
-	    			 (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) -
-	    			  TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + "h " +
-		    			 
-	    			 (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) -
-	    			  TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + "m " +
-		    			    
-	    			 (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - 
-	    			  TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "s");
-			    	 
-		     }
-		     
 	
-		     public void onFinish() {
-		    	 etTimerExpiry.setText("done!");
-		     }
-		  }.start();
+			long startOfTimer = Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()) 
+					- STATIC_EXPIRY 
+					- currentDate.getTime();
+			
+			/* for debug
+			 * 
+			System.out.println("current ms " + currentDate.getTime());
+			System.out.println("expiry date" + currentEvent.getExpiryDate());
+			System.out.println("expiry time" + currentEvent.getExpiryTime());
+			System.out.println("expiry in ms" + Utils.eventTimeinMilliseconds(currentEvent.getExpiryDate() + " " + currentEvent.getExpiryTime()));
+			System.out.println("startOfTimer" + startOfTimer);
+			*/
+			new CountDownTimer(startOfTimer, 1000) {
+				
+			     public void onTick(long millisUntilFinished) {
+			    	 
+			    	 etTimerExpiry.setText(
+		    			 
+		    			 (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) -
+		    			  TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + "h " +
+			    			 
+		    			 (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) -
+		    			  TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + "m ");
+			    	 
+			    	 /*
+			    	  * second counter
+		    			 (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - 
+		    			  TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "s"
+			    	  */
+			    	 
+			    	 if (millisUntilFinished < 60000) {
+			    		 etTimerExpiry.setText(
+			    				 (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - 
+	    		    			  TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "s");
+			    				 
+			    	 }
+			    	 
+				    	 
+			     }
+			     
+		
+			     public void onFinish() {
+			    	 expiryPush=true;
+			    	 etTimerExpiry.setText("0s remaining");
+			    	 /*
+			 		ParseInstallation.getCurrentInstallation().refreshInBackground(
+							new RefreshCallback() {
+	
+								@Override
+								public void done(ParseObject object, ParseException e) {
+									if (e == null) {
+										pushToVotingActivity();
+									}
+									finish();
+								}
+							});*/
+			     }
+			  }.start();
+		//}
 	}
 
 	public void loadEvent() {
@@ -453,21 +481,28 @@ public class VotingActivity extends FragmentActivity implements
 			// LoggedInUser.getcurrentUser().getFirstName() +"!");
 			// obj.put("alert","");
 			// obj.put("title", "New event invite!");
-			if ((restFragment.getCount() > 1) && (selectedRestaurant != null)) {
+			if ((restFragment.getCount() > 1) && (restFragment.getSelectedRestaurant() != null)) {
 				obj.put("action",
 						VotingActivityReceiver.intentPushNewRestaurant);
-				obj.put("restname", selectedRestaurant);
+				obj.put("restname", restFragment.getSelectedRestaurant());
 				// Toast.makeText(this, selectedRestaurant,
 				// Toast.LENGTH_SHORT).show();
-				selectedRestaurant = null;
-			} else if ((restFragment.getCount() > 1)
-					&& (selectedRestaurant == null)) {
-				obj.put("action", VotingActivityReceiver.intentPushUpdateVotes);
-				// Toast.makeText(this, selectedRestaurant,
-				// Toast.LENGTH_SHORT).show();
+				restFragment.setSelectedRestaurantNull();
+			} else if ((restFragment.getCount() > 1) && (restFragment.getSelectedRestaurant() == null)) {
+				
+				if (expiryPush == true) { 
+					obj.put("action", VotingActivityReceiver.intentExpiryPush);
+					obj.put("restname", restFragment.highestVotedRestaraunt().getName());
+					}
+				else {
+					obj.put("action", VotingActivityReceiver.intentPushUpdateVotes);
+					obj.put("allusers", Utils.createDescToShow(currentGroup.getDesc()));
+						//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
+					}
+				
 			} else if (restFragment.getCount() == 1) {
 				obj.put("action", VotingActivityReceiver.intentAction);
-				obj.put("restname", selectedRestaurant);
+				obj.put("restname", restFragment.getSelectedRestaurant());
 			}
 
 			obj.put("currentuser", LoggedInUser.getcurrentUser().getFirstName());
@@ -591,7 +626,7 @@ public class VotingActivity extends FragmentActivity implements
 			parseGroupsApi.getUsersOfGroup(currentGroup);
 			// change the title of the View
 			setTitle(currentGroup.getGroupName());
-			getActionBar().setSubtitle(currentGroup.getDesc());
+			getActionBar().setSubtitle(Utils.createDescToShow(currentGroup.getDesc()) );
 		}
 	}
 

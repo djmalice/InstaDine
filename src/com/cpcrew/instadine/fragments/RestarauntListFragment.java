@@ -110,7 +110,6 @@ public class RestarauntListFragment extends Fragment {
 
 			@Override
 			public void onRefresh() {
-				restaurants.clear();
 				refreshListener.onParentRefresh();
 				lvRestaurants.onRefreshComplete();
 
@@ -141,6 +140,14 @@ public class RestarauntListFragment extends Fragment {
 
 	public int getCount() {
 		return restAdapter.getCount();
+	}
+	
+	public String getSelectedRestaurant() {
+		return selectedRestaurant;
+	}
+	
+	public void setSelectedRestaurantNull() {
+		selectedRestaurant = null;
 	}
 
 	public void callSearchActivity() {
@@ -371,7 +378,7 @@ public class RestarauntListFragment extends Fragment {
 		for (Rest rest : restaurants) {
 			if (rest.getCount() > votes) {
 				votes = rest.getCount();
-				return rest;
+				restarauntSelected = rest;
 			}
 		}
 		return restarauntSelected;

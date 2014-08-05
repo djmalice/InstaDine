@@ -29,9 +29,11 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    public static final String intentAction = "SEND_PUSH";
    public static final String intentPushNewRestaurant = "SEND_REST";
    public static final String intentPushUpdateVotes = "SEND_VOTES";
+   public static final String intentExpiryPush = "SEND_EXPIRY";
    public static final int NOTIFICATION_ID = 45;
 
    private String organizer;
+   private String allUsers;
    private String groupName;
    private String groupId;
    private String restName;
@@ -68,7 +70,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    private void processPush(Context context, Intent intent) {
        String action = intent.getAction();
        Log.d(TAG, "got action " + action );
-       if (action.equals(intentAction) || action.equals(intentPushNewRestaurant) || action.equals(intentPushUpdateVotes))
+       if (action.equals(intentAction) || action.equals(intentPushNewRestaurant) || action.equals(intentPushUpdateVotes) || action.equals(intentExpiryPush))
        {
            String channel = intent.getExtras().getString("com.parse.Channel");
            try {       	
@@ -81,7 +83,9 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 	         	   // Extract custom push data
                    if (key.equals("restname")) {
                 	   restName = json.getString(key);
-                   } else if (key.equals("currentuser")) {
+                    } else if (key.equals("allusers")) {
+	         	    	allUsers = json.getString(key);
+	         	   	} else if (key.equals("currentuser")) {
 	         	    	organizer = json.getString(key);
 	         	   	} else if (key.equals("groupid")) {    
 	         	   		groupId = json.getString(key);
@@ -102,6 +106,8 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 	        				createNotification(context); 
 	        			} else if (action.equals(intentPushUpdateVotes)) { 
 	        				createNotificationUpdateVotes(context); 
+	        			} else if (action.equals(intentExpiryPush)) { 
+	        				createNotificationExpiry(context); 
 	        			}
 	         	    } else 
 	         	    	Log.d(TAG, "..." + key + " => " + json.getString(key));
@@ -111,6 +117,28 @@ public class VotingActivityReceiver extends BroadcastReceiver {
        	    }
        }
    }
+   
+   private void createNotificationExpiry(Context context) {
+	   
+	   Intent votingIntent = new Intent(context, VotingActivity.class);
+	   votingIntent.putExtra("group_id", groupId);
+	   
+	   PendingIntent pVotingIntent = PendingIntent.getActivity(context, REQUEST_CODE, votingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("Voting has ended!")
+				.setContentText(groupName + " is going to " + restName + "!")
+				.setContentIntent(pVotingIntent)
+				 .setTicker(groupName + " has decided!")
+				 .setProgress(0, 0, true)
+				 .setAutoCancel(true);
+	
+		NotificationManager mNotificationManager = 
+	            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+    		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+       }
    
    private void createNotificationUpdateVotes(Context context) {
 	   
@@ -122,7 +150,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle(organizer + " just voted!")
-				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentText("Voting in progress with " + organizer + ", " + StringUtils.join(firstNames, ", "))
 				.setContentIntent(pVotingIntent)
 				 .setTicker(organizer + " just voted!")
 				 .setProgress(0, 0, true)
@@ -146,7 +174,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle(organizer + " added " + restName + " in " + groupName)
-				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentText("Voting in progress with " + organizer + ", " + StringUtils.join(firstNames, ", "))
 				.setContentIntent(pVotingIntent)
 				 .setTicker(organizer + " just added " + restName + "!")
 				 .setProgress(0, 0, true)
@@ -190,7 +218,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Instadine with " + groupName + "!")
-				.setContentText("Voting in progress with " + StringUtils.join(firstNames, ", "))
+				.setContentText("Voting in progress with " + organizer + ", " + StringUtils.join(firstNames, ", "))
 				.setContentIntent(pVotingIntent)
 				 .addAction(R.drawable.ic_yes, "Yes", pVotingIntent)
 				 .addAction(R.drawable.ic_no, "No", pIntentCancel)

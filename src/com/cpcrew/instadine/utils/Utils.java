@@ -7,7 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 import java.util.HashMap;
+
+import com.cpcrew.instadine.models.LoggedInUser;
 
 import com.cpcrew.instadine.models.Rest;
 
@@ -195,6 +198,20 @@ public class Utils {
 			return 0;
 		}
 		
+	}
+	public static String createDescToShow(String input) {	
+		if (input != null && !input.equals("")) {
+			String currentUser = LoggedInUser.getcurrentUser().getFirstName();
+			String result = input.replaceFirst(Pattern.quote(currentUser), "");
+			result = result.replaceAll(",$", "");
+			result = result.replaceAll(", ,", ", ");
+			result = result.replaceAll("^ ", "");
+			result = result.replaceAll("^,", "");
+			result = result.replaceAll(",,", ", ");
+			result = result.replaceAll(" ,", ", ");
+			return "Me, " + result;
+		}
+		return input;
 	}
 	
 	public static HashMap<String,Rest> populateDealMap(){
