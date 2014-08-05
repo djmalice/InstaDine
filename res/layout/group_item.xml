@@ -39,7 +39,7 @@
         android:scaleType="fitXY"
         android:background="@null"
         android:contentDescription="@string/group_image_desc"
-        android:src="@drawable/ic_right_arrow" />
+        android:src="@drawable/ic_action_right_arrow_grey" />
 
     <TextView
         android:id="@+id/tvGroupName"
