@@ -116,7 +116,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/tvRestname"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/circle" >
+        android:src="@drawable/instadine_red" >
 
         <ImageView
             android:id="@+id/ivRest"
@@ -137,12 +137,12 @@
         android:id="@+id/gvUsers"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvRestname"
+ 		android:layout_alignLeft="@+id/tvRestname"
         android:layout_below="@+id/vDivider"
-        android:layout_marginLeft="20dp"
-        android:columnWidth="20dp"
+        android:layout_marginLeft="0dp"
+        android:columnWidth="40dp"
         android:gravity="center"
-        android:horizontalSpacing="20dp"
+        android:horizontalSpacing="0dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />

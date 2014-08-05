@@ -141,6 +141,14 @@ public class RestarauntListFragment extends Fragment {
 	public int getCount() {
 		return restAdapter.getCount();
 	}
+	
+	public String getSelectedRestaurant() {
+		return selectedRestaurant;
+	}
+	
+	public void setSelectedRestaurantNull() {
+		selectedRestaurant = null;
+	}
 
 	public void callSearchActivity() {
 		HashMap<String, Integer> restCount = new HashMap<String, Integer>();
