@@ -33,7 +33,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
    public static final int NOTIFICATION_ID = 45;
 
    private String organizer;
-   private String allUsers;
+   //private String allUsers;
    private String groupName;
    private String groupId;
    private String restName;
@@ -83,9 +83,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 	         	   // Extract custom push data
                    if (key.equals("restname")) {
                 	   restName = json.getString(key);
-                    } else if (key.equals("allusers")) {
-	         	    	allUsers = json.getString(key);
-	         	   	} else if (key.equals("currentuser")) {
+                    } else if (key.equals("currentuser")) {
 	         	    	organizer = json.getString(key);
 	         	   	} else if (key.equals("groupid")) {    
 	         	   		groupId = json.getString(key);
@@ -127,10 +125,10 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
-				.setContentTitle("Voting has ended!")
-				.setContentText(groupName + " is going to " + restName + "!")
+				.setContentTitle("Instadine at " + restName + "!")
+				.setContentText("Voting has ended!")
 				.setContentIntent(pVotingIntent)
-				 .setTicker(groupName + " has decided!")
+				 .setTicker(groupName + " group has decided!")
 				 .setProgress(0, 0, true)
 				 .setAutoCancel(true);
 	
@@ -152,7 +150,7 @@ public class VotingActivityReceiver extends BroadcastReceiver {
 				.setContentTitle(organizer + " just voted!")
 				.setContentText("Voting in progress with " + organizer + ", " + StringUtils.join(firstNames, ", "))
 				.setContentIntent(pVotingIntent)
-				 .setTicker(organizer + " just voted!")
+				 .setTicker(organizer + " just voted for " + restName + "!")
 				 .setProgress(0, 0, true)
 				 .setAutoCancel(true);
 	

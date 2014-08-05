@@ -57,7 +57,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/ivTimer"
-        android:text="-- : --" >
+        android:text="Time remaining" >
    </TextView>
     
 
@@ -308,7 +308,7 @@
                     android:layout_height="50dp"
                     android:layout_weight="5"
                     android:onClick="onDone"
-                    android:text="Send!"
+                    android:text="SEND"
                     android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>

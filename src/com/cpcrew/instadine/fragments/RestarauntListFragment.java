@@ -48,6 +48,7 @@ public class RestarauntListFragment extends Fragment {
 
 	private static String TAG = RestarauntListFragment.class.getSimpleName();
 	private String selectedRestaurant = null;
+	private String lastRestaurant = null;
 
 	private RefreshListener refreshListener;
 
@@ -146,6 +147,10 @@ public class RestarauntListFragment extends Fragment {
 		return selectedRestaurant;
 	}
 	
+	public String getLastRestaurant() {
+		return lastRestaurant;
+	}
+	
 	public void setSelectedRestaurantNull() {
 		selectedRestaurant = null;
 	}
@@ -208,7 +213,8 @@ public class RestarauntListFragment extends Fragment {
 						restAdapter.flipit(llCount);
 				} else
 					removeRestaruantSelection(listItem);
-
+				
+				lastRestaurant = listItem.getName();
 			}
 		});
 	}
