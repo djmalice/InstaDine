@@ -226,14 +226,14 @@ public class Utils {
 						37.400894, 
 						-122.112191);
 				
-				Rest Cascal = new Rest("ChIJ03QfnzO3j4ARC0p7TSYoCpA", 
-						"Cascal", 
-						"(650) 940-9500", 
+				Rest Agape = new Rest("ChIJaX-pQzy2j4ARBs8FLpVaZ5w", 
+						"Agape Grill", 
+						"(408) 739-3354", 
 						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
-						"400 Castro St, Mountain View", 
-						3.9, 
-						37.391153, 
-						-122.081467);
+						"845 Stewart Dr. Suite A, Sunnyvale", 
+						4.2, 
+						37.384229, 
+						-122.007752);
 				
 				Rest Crepevine = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
 						"Crepevine", 
@@ -244,18 +244,19 @@ public class Utils {
 						37.39254, 
 						-122.080067);
 				
-				Rest Athena = new Rest("ChIJ4TTDdzS3j4AR78EQgu5EADA", 
+				Rest Athena = new Rest("ChIJH7hSMCjKj4ARGFgaleOZsZc", 
 						"Athena Grill", 
-						"(650) 969-6878", 
+						"(408) 567-9144", 
 						"http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", 
-						"300 Castro St, Mountain View", 
+						"1505 Space Park Dr, Santa Clara", 
 						3.8, 
-						37.39254, 
-						-122.080067);
+						37.376464, 
+						-121.956479);
 			
 				dealMap.put(Counter.getId(),Counter);
-				dealMap.put(Cascal.getId(), Cascal);
+				dealMap.put(Agape.getId(), Agape);
 				dealMap.put(Crepevine.getId(), Crepevine);
+				dealMap.put(Athena.getId(), Athena);
 				
 				
 		return dealMap;
