@@ -558,7 +558,7 @@ public void setupCustomInfoWindowForMap(){
 				
 				TextView tvInfoWindowDeal = (TextView)v.findViewById(R.id.tvInfoWindowDeal);
 				if(dealMap.containsKey(thisRest.getId()))
-					tvInfoWindowDeal.setText("Take 10% off tonight's meal");
+					tvInfoWindowDeal.setText("Take 10% off next meal");
 				else tvInfoWindowDeal.setVisibility(View.GONE);
 				
 				
