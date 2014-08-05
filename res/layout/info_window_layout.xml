@@ -12,13 +12,21 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:textColor="#FFFFFF"
-        android:paddingBottom="3dp"
-         />
-
+        />
+	<TextView
+        android:id="@+id/tvInfoWindowDeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp"
+        android:paddingTop="1dp"
+     />
 	 <GridView
          android:id="@+id/gvInfoWindowUserImages"
          android:layout_width="100dp"
          android:layout_height="wrap_content"
+         android:paddingTop="3dp"
          android:stretchMode="columnWidth"
          android:columnWidth="30dp"
          android:numColumns="auto_fit"

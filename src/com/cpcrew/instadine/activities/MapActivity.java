@@ -555,9 +555,17 @@ public void setupCustomInfoWindowForMap(){
 				}
 
 				Log.d("debug", "thisRest: " + thisRest.toString());
+				
+				TextView tvInfoWindowDeal = (TextView)v.findViewById(R.id.tvInfoWindowDeal);
+				if(dealMap.containsKey(thisRest.getId()))
+					tvInfoWindowDeal.setText("Take 10% off tonight's meal");
+				else tvInfoWindowDeal.setVisibility(View.GONE);
+				
+				
 				HashMap<String, String> fbidmap = thisRest
 						.getGroupUserFacebookIds();
-
+				
+				
 				// Getting reference to GirdView to set User Images
 				GridView gvInfoWindowUserImages = (GridView) v
 						.findViewById(R.id.gvInfoWindowUserImages);
