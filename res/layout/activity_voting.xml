@@ -295,16 +295,16 @@
                 android:orientation="horizontal"
                 android:weightSum="7" >
 
-                <Button
+  <!--               <Button
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="2"
                     android:text="Let's go"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"/> -->
 
                 <Button
                     android:id="@+id/btnDone"
-                    android:layout_width="0dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:layout_weight="5"
                     android:onClick="onDone"
