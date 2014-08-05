@@ -3,8 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/infoWindowGrey"
-    android:padding="6dp" >
+    android:background="@drawable/custominfowindowborder" >
     
 	<TextView
         android:id="@+id/tvInfoWindowRestName"
