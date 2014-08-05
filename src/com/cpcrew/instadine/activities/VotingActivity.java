@@ -591,7 +591,7 @@ public class VotingActivity extends FragmentActivity implements
 			parseGroupsApi.getUsersOfGroup(currentGroup);
 			// change the title of the View
 			setTitle(currentGroup.getGroupName());
-			getActionBar().setSubtitle(currentGroup.getDesc());
+			getActionBar().setSubtitle(Utils.createDescToShow(currentGroup.getDesc()) );
 		}
 	}
 
