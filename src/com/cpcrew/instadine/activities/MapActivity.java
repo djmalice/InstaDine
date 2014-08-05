@@ -269,7 +269,7 @@ public class MapActivity extends FragmentActivity implements
 						e.printStackTrace();
 					}
 		        	
-    				displayMapMarker(listSelectedRest,true);
+    				displayMapMarker(listSelectedRest,false);
 		        };
 		        
 
