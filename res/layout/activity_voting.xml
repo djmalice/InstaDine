@@ -308,7 +308,7 @@
                     android:layout_height="50dp"
                     android:layout_weight="5"
                     android:onClick="onDone"
-                    android:text="Share my choices"
+                    android:text="Send to my group"
                     android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
