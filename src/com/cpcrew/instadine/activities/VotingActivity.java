@@ -335,7 +335,7 @@ public class VotingActivity extends FragmentActivity implements
 		
 			     public void onFinish() {
 			    	 expiryPush=true;
-			    	 etTimerExpiry.setText("0s remaining");
+			    	 etTimerExpiry.setText("Voting has ended!");
 			    	 /*
 			 		ParseInstallation.getCurrentInstallation().refreshInBackground(
 							new RefreshCallback() {
@@ -496,7 +496,9 @@ public class VotingActivity extends FragmentActivity implements
 					}
 				else {
 					obj.put("action", VotingActivityReceiver.intentPushUpdateVotes);
-					obj.put("allusers", Utils.createDescToShow(currentGroup.getDesc()));
+					obj.put("restname", restFragment.getLastRestaurant());
+					
+					//obj.put("allusers", Utils.createDescToShow(currentGroup.getDesc()));
 						//Toast.makeText(this, selectedRestaurant, Toast.LENGTH_SHORT).show();
 					}
 				
