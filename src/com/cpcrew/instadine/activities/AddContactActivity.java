@@ -33,6 +33,8 @@ import com.cpcrew.instadine.models.Group;
 import com.cpcrew.instadine.models.LoggedInUser;
 import com.cpcrew.instadine.models.User;
 import com.cpcrew.instadine.utils.Constants;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 public class AddContactActivity extends FragmentActivity implements
 		ParseGroupsApiListener {
@@ -85,12 +87,21 @@ public class AddContactActivity extends FragmentActivity implements
 	public void onCreateGroup(MenuItem item) {
 		if (selectedUsers != null && selectedUsers.size() > 0) {
 			selectedUsers.add(LoggedInUser.getcurrentUser());
-			ParseGroupsApi.createGroup(groupName, selectedUsers,
+			Group g = ParseGroupsApi.setGroupItems(groupName, selectedUsers,
 					LoggedInUser.getcurrentUser());
+			g.saveInBackground(new SaveCallback() {
+				
+				@Override
+				public void done(ParseException arg0) {
+					// TODO Auto-generated method stub
+					mFragment.hideProgressBar();
+					Intent intent = new Intent(getBaseContext(), GroupsListActivity.class);
+					startActivity(intent);
+				}
+			});
 		}
-		// Now go back to Groups list screen
-		Intent intent = new Intent(this, GroupsListActivity.class);
-		startActivity(intent);
+		// Spin till async request is complete. 
+		mFragment.showProgressBar();
 	}
 
 	// Open contacts list

@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 /**
 * APIs to read, write and query from Parse
@@ -40,7 +41,7 @@ public class ParseGroupsApi {
 	 * @param groupName
 	 * @param users
 	 */
-	public static void createGroup(String groupName, List<User> users, User currentUser) {
+	public static Group setGroupItems(String groupName, List<User> users, User currentUser) {
 		Group group = new Group();
 		StringBuffer desc = new StringBuffer();
 		group.setGroupName(groupName);
@@ -52,8 +53,7 @@ public class ParseGroupsApi {
 		str = str.replaceAll(" ,$", "");
 		group.setDesc(str);
 		Log.d(TAG, "Handle groupadmin");
-		group.saveInBackground();
-
+		return group;
 	}
 	
 
